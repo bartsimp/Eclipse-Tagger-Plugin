@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tagger Plug-in
+Bundle-SymbolicName: net.sourceforge.taggerplugin
+Bundle-Version: 0.0.1
+Bundle-Activator: net.sourceforge.taggerplugin.TaggerActivator
+Bundle-Vendor: Christopher J. Stehno (chris@stehno.com)
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
