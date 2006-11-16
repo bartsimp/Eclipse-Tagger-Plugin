@@ -9,10 +9,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
-// FIXME: just a stub
+/**
+ * The view showing all available tags in the workspace. The view is rendered
+ * as a table with a name and description field.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagView extends ViewPart {
 
-	public static final String ID = "";	// FIXME: need id
+	public static final String ID = "net.sourceforge.taggerplugin.TagView";
 	private TableViewer viewer;
 
 	public void createPartControl(Composite parent) {

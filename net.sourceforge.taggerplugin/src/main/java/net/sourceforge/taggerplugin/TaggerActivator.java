@@ -1,5 +1,7 @@
 package net.sourceforge.taggerplugin;
 
+import net.sourceforge.taggerplugin.manager.TagManager;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -32,6 +34,9 @@ public class TaggerActivator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+
+		// automatically persist the tag set when plugin is stopped
+		TagManager.getInstance().saveTags();
 	}
 
 	/**
