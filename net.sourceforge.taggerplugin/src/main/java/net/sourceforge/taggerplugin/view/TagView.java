@@ -30,8 +30,8 @@ public class TagView extends ViewPart {
 		table.setHeaderVisible(true);
 //		table.setLinesVisible(true);
 
-		createTableColumn(table, "Name", 100);
-		createTableColumn(table, "Description", 100);
+		createTableColumn(table,Messages.TagView_Header_Name, 100);
+		createTableColumn(table,Messages.TagView_Header_Description, 100);
 
 		viewer.setInput(TagManager.getInstance());
 	}
