@@ -14,5 +14,21 @@
             id="net.sourceforge.taggerplugin.TagView"
             name="Tags"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="net.sourceforge.taggerplugin.TagViewActions"
+            targetID="net.sourceforge.taggerplugin.TagView">
+         <action
+               class="net.sourceforge.taggerplugin.action.NewTagAction"
+               icon="icons/Plus.gif"
+               id="net.sourceforge.taggerplugin.action.NewTagAction"
+               label="New Tag"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Create a new tag."/>
+      </viewContribution>
+   </extension>
 
 </plugin>
