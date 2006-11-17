@@ -1,5 +1,8 @@
 package net.sourceforge.taggerplugin.ui;
 
+import net.sourceforge.taggerplugin.model.Tag;
+import net.sourceforge.taggerplugin.model.TagFactory;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -8,6 +11,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -16,32 +20,66 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Dialog for creating/editing tag data.
+ *
+ * Editing:
+ * <pre>
+ * 	TagDialog dia = new TagDialog(shell);
+ * 	dia.setTag(theTag);
+ * 	if(dia.showModify() == TagDialog.OK){
+ * 		// the tag object will be updated with the new data
+ * 	}
+ * </pre>
+ *
+ * Creating:
+ * <pre>
+ * 	TagDialog dia = new TagDialog(shell);
+ * 	if(dia.showCreate() == TagDialog.OK){
+ * 		// a new tag object will be created
+ * 		Tag newTag = dia.getTag();
+ * 	}
+ * </pre>
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagDialog extends Dialog {
 
-    private String title,errorMessage,nameValue,descValue;
+    private String title,errorMessage;
+    private Tag tag;
     private Text nameTxt,descTxt,errorMessageText;
 
     public TagDialog(Shell parentShell) {
         super(parentShell);
     }
 
+    /**
+     * Used to show the tag creation dialog.
+     *
+     * @return the button id
+     */
     public int showCreate(){
     	this.title = Messages.TagDialog_Title_Create;
     	return(open());
     }
 
+    /**
+     * Used to show the tag modification dialog.
+     *
+     * @return the button id.
+     */
     public int showModify(){
     	this.title = Messages.TagDialog_Title_Modify;
     	return(open());
     }
-    
-    public String getNameValue(){
-    	return(nameValue);
-    }
-    
-    public String getDescriptionValue(){
-    	return(descValue);
-    }
+
+    public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+
+    public Tag getTag() {
+		return this.tag;
+	}
 
     /**
      * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
@@ -52,36 +90,39 @@ public class TagDialog extends Dialog {
         	shell.setText(title);
         }
     }
-    
+
     /**
-     * 
+     *
      */
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-        	nameValue = nameTxt.getText();
-        	descValue = descTxt.getText();
+        	if(tag == null){
+        		tag = TagFactory.create(nameTxt.getText(),descTxt.getText());
+        	} else {
+        		tag.setName(nameTxt.getText());
+        		tag.setDescription(descTxt.getText());
+        	}
         } else {
-            nameValue = null;
-            descValue = null;
+            tag = null;
         }
         super.buttonPressed(buttonId);
-    }    
+    }
 
     /**
      * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
      */
     protected void createButtonsForButtonBar(Composite parent) {
-        // create OK and Cancel buttons by default
+        // create OK and Cancel buttons
         createButton(parent, IDialogConstants.OK_ID,IDialogConstants.OK_LABEL, true);
         createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
-        
-        // do this here because setting the text will set enablement on the ok button
-        //text.setFocus();
-        
-//        if (value != null) {
-//            text.setText(value);
-//            text.selectAll();
-//        }
+
+        nameTxt.setFocus();
+
+        if(tag != null){
+        	// set the edit data
+        	nameTxt.setText(tag.getName());
+        	descTxt.setText(tag.getDescription());
+        }
     }
 
     /**
@@ -91,37 +132,33 @@ public class TagDialog extends Dialog {
         final GridLayout layout = (GridLayout)composite.getLayout();
         layout.numColumns = 2;
         layout.makeColumnsEqualWidth = false;
-        
-        // name label
-        final Label nameLbl = new Label(composite,SWT.LEFT);
-        nameLbl.setText(Messages.TagDialog_Label_Name);
-        nameLbl.setFont(parent.getFont());
-        
-        // name text
-        nameTxt = new Text(composite,SWT.SINGLE | SWT.BORDER);
-        final GridData nameData = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
-        nameData.widthHint = 200;
-        nameTxt.setLayoutData(nameData);
-        nameTxt.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e){
-		        validate(nameTxt,Messages.TagDialog_Error_NoName);
-			}
-        });
-        nameTxt.addFocusListener(new FocusListener(){
-			public void focusGained(FocusEvent e){}
-			public void focusLost(FocusEvent e) {
-				validate(nameTxt,Messages.TagDialog_Error_NoName);
-			}
-        });
-        
-        // description label
-        final Label descLbl = new Label(composite,SWT.LEFT);
-        descLbl.setText(Messages.TagDialog_Label_Description);
-        descLbl.setFont(parent.getFont());
-        descLbl.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-        
-        // description text
-        descTxt = new Text(composite,SWT.MULTI | SWT.WRAP | SWT.BORDER);
+
+        final Font labelFont = parent.getFont();
+
+        createNameLabel(composite, labelFont);
+        createNameText(composite);
+        createDescriptionLabel(composite, labelFont);
+        createDescriptionText(composite);
+
+        createErrorMessageText(composite);
+        setErrorMessage(errorMessage);
+
+        applyDialogFont(composite);
+        return composite;
+    }
+
+	private void createErrorMessageText(final Composite composite) {
+		errorMessageText = new Text(composite, SWT.READ_ONLY);
+        final GridData errData = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+        errData.horizontalSpan = 2;
+        errorMessageText.setLayoutData(errData);
+        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+        errorMessageText.setForeground(composite.getDisplay().getSystemColor(SWT.COLOR_RED));
+	}
+
+	private void createDescriptionText(final Composite composite) {
+		descTxt = new Text(composite,SWT.MULTI | SWT.WRAP | SWT.BORDER);
+        descTxt.setTextLimit(250);
         final GridData descData = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
         descData.widthHint = 200;
         descData.heightHint = 100;
@@ -137,36 +174,49 @@ public class TagDialog extends Dialog {
 				validate(descTxt,Messages.TagDialog_Error_NoDescription);
 			}
         });
-        
-        errorMessageText = new Text(composite, SWT.READ_ONLY);
-        final GridData errData = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
-        errData.horizontalSpan = 2;
-        errorMessageText.setLayoutData(errData);
-        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-        errorMessageText.setForeground(composite.getDisplay().getSystemColor(SWT.COLOR_RED));
-        
-        setErrorMessage(errorMessage);
+	}
 
-        applyDialogFont(composite);
-        return composite;
-    }
-    
+	private void createDescriptionLabel(final Composite composite, final Font labelFont) {
+		final Label descLbl = new Label(composite,SWT.LEFT);
+        descLbl.setText(Messages.TagDialog_Label_Description);
+        descLbl.setFont(labelFont);
+        descLbl.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+	}
+
+	private void createNameText(final Composite composite) {
+		nameTxt = new Text(composite,SWT.SINGLE | SWT.BORDER);
+        nameTxt.setTextLimit(25);
+        final GridData nameData = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
+        nameData.widthHint = 200;
+        nameTxt.setLayoutData(nameData);
+        nameTxt.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e){
+		        validate(nameTxt,Messages.TagDialog_Error_NoName);
+			}
+        });
+        nameTxt.addFocusListener(new FocusListener(){
+			public void focusGained(FocusEvent e){}
+			public void focusLost(FocusEvent e) {
+				validate(nameTxt,Messages.TagDialog_Error_NoName);
+			}
+        });
+	}
+
+	private void createNameLabel(final Composite composite, final Font labelFont) {
+		final Label nameLbl = new Label(composite,SWT.LEFT);
+        nameLbl.setText(Messages.TagDialog_Label_Name);
+        nameLbl.setFont(labelFont);
+	}
+
+    /**
+     * Used to validate the given text input. If the validation fails, the given
+     * error message will be displayed.
+     *
+     * @param txt the text input to be validated
+     * @param errMsg the error message to use if the input is invalid
+     */
     private void validate(final Text txt, final String errMsg){
     	setErrorMessage(new TextInputValidator(errMsg).isValid(txt.getText()));
-    }
-    
-    private static final class TextInputValidator implements IInputValidator {
-
-    	private final String msg;
-    	
-    	private TextInputValidator(final String msg){
-    		super();
-    		this.msg = msg;
-    	}
-    	
-		public String isValid(String newText){
-			return(newText != null && newText.length() > 0 ? null : msg);
-		}
     }
 
     /**
@@ -189,5 +239,24 @@ public class TagDialog extends Dialog {
     			button.setEnabled(errorMessage == null);
     		}
     	}
+    }
+
+    /**
+     * InputValidator implementation used to validate the text inputs.
+     *
+     * @author Christopher J. Stehno (chris@stehno.com)
+     */
+    private static final class TextInputValidator implements IInputValidator {
+
+    	private final String msg;
+
+    	private TextInputValidator(final String msg){
+    		super();
+    		this.msg = msg;
+    	}
+
+		public String isValid(String newText){
+			return(newText != null && newText.length() > 0 ? null : msg);
+		}
     }
 }

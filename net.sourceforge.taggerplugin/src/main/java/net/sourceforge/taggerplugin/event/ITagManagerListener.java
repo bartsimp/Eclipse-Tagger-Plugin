@@ -2,7 +2,12 @@ package net.sourceforge.taggerplugin.event;
 
 import java.util.EventListener;
 
-// FIXME: this is just a stub
+/**
+ * Listener for objects that need to be notified about tag manager events.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public interface ITagManagerListener extends EventListener {
 
+	public void handleTagManagerEvent(TagManagerEvent tme);
 }

@@ -32,11 +32,12 @@ public class TaggerActivator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
 		super.stop(context);
 
 		// automatically persist the tag set when plugin is stopped
 		TagManager.getInstance().saveTags();
+
+		plugin = null;
 	}
 
 	/**

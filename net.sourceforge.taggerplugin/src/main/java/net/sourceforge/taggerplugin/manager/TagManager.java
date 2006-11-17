@@ -12,13 +12,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.event.ITagManagerListener;
+import net.sourceforge.taggerplugin.event.TagManagerEvent;
 import net.sourceforge.taggerplugin.model.Tag;
+import net.sourceforge.taggerplugin.model.TagFactory;
 import net.sourceforge.taggerplugin.util.IoUtils;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 
@@ -35,7 +39,7 @@ public class TagManager {
 	private static final String TAGSETFILENAME = "tags.xml";
 	private static TagManager instance;
 	private List<ITagManagerListener> listeners;
-	private Map<Long,Tag> tags;
+	private Map<UUID,Tag> tags;
 
 	private TagManager(){
 		super();
@@ -50,6 +54,18 @@ public class TagManager {
 	public static TagManager getInstance(){
 		if(instance == null){instance = new TagManager();}
 		return(instance);
+	}
+
+	/**
+	 * Used to add a new tag to the tag set. The tag must not be null.
+	 *
+	 * @param tag the tag to be added.
+	 */
+	public void addTag(Tag tag){
+		Assert.isNotNull(tag, "Attempted to add a null tag!");
+		ensureTags();
+		tags.put(tag.getId(), tag);
+		fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.ADDED,new Tag[]{tag}));
 	}
 
 	/**
@@ -90,7 +106,7 @@ public class TagManager {
 	 */
 	private void ensureTags(){
 		if(tags == null){
-			tags = new HashMap<Long, Tag>();
+			tags = new HashMap<UUID, Tag>();
 			loadTags();
 		}
 	}
@@ -107,11 +123,7 @@ public class TagManager {
 
 				final IMemento [] children = XMLMemento.createReadRoot(reader).getChildren(TAG_TAG);
 				for (IMemento mem : children) {
-					final Tag tag = new Tag();
-					tag.setId(Long.parseLong(mem.getID()));
-					tag.setName(mem.getString(TAG_NAME));
-					tag.setDescription(mem.getTextData());
-
+					final Tag tag = TagFactory.create(mem.getID(), mem.getString(TAG_NAME), mem.getTextData());
 					tags.put(tag.getId(),tag);
 				}
 
@@ -155,5 +167,16 @@ public class TagManager {
 	 */
 	private File getTagFile() {
 		return(TaggerActivator.getDefault().getStateLocation().append(TAGSETFILENAME).toFile());
+	}
+
+	/**
+	 * Used to fire the given event to all TagManager listeners.
+	 *
+	 * @param tme the event to be fired.
+	 */
+	private void fireTagManagerEvent(TagManagerEvent tme){
+		for (ITagManagerListener listener : listeners){
+			listener.handleTagManagerEvent(tme);
+		}
 	}
 }
