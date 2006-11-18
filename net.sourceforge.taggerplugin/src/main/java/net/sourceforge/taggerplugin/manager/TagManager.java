@@ -68,6 +68,29 @@ public class TagManager {
 		fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.ADDED,new Tag[]{tag}));
 	}
 
+	public void updateTag(Tag tag){
+		Assert.isNotNull(tag, "Attempted to update a null tag!");
+		ensureTags();
+		if(tags.containsKey(tag.getId())){
+			tags.put(tag.getId(), tag);
+			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.UPDATED,new Tag[]{tag}));
+		}
+	}
+
+	/**
+	 * Used to remove the tag with the specified id from the tag set.
+	 *
+	 * @param tagId the id of the tag to be removed.
+	 */
+	public void deleteTag(UUID tagId){
+		if(tags == null) return;
+
+		final Tag removedTag = tags.remove(tagId);
+		if(removedTag != null){
+			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,new Tag[]{removedTag}));
+		}
+	}
+
 	/**
 	 * Used to retrieve an array of all tags in the tag set.
 	 *

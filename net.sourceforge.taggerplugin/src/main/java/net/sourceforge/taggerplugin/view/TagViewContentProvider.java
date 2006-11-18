@@ -16,6 +16,8 @@ import org.eclipse.jface.viewers.Viewer;
  */
 class TagViewContentProvider implements IStructuredContentProvider, ITagManagerListener {
 
+	private static final String PROPERTY_DESCRIPTION = "description";
+	private static final String PROPERTY_NAME = "name";
 	private TableViewer viewer;
 	private TagManager manager;
 
@@ -53,6 +55,10 @@ class TagViewContentProvider implements IStructuredContentProvider, ITagManagerL
 		try {
 			if(tme.getType().equals(TagManagerEvent.Type.ADDED)){
 				viewer.add(tme.getTags());
+			} else if(tme.getType().equals(TagManagerEvent.Type.REMOVED)){
+				viewer.remove(tme.getTags());
+			} else if(tme.getType().equals(TagManagerEvent.Type.UPDATED)){
+				viewer.update(tme.getTags(), new String[]{PROPERTY_NAME,PROPERTY_DESCRIPTION});
 			}
 		} finally {
 			viewer.getTable().setRedraw(true);

@@ -1,18 +1,17 @@
 package net.sourceforge.taggerplugin.resource;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-// FIXME: this is just a stub... needs to be implemented
 public class TaggableAdapterFactory implements IAdapterFactory {
 
+	private static final Class[] ADAPTERS = {ITaggable.class};
+	
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		// TODO Auto-generated method stub
-		return null;
+		return(new TaggableResource((IResource)adaptableObject));
 	}
 
 	public Class[] getAdapterList() {
-		// TODO Auto-generated method stub
-		return null;
+		return(ADAPTERS);
 	}
-
 }

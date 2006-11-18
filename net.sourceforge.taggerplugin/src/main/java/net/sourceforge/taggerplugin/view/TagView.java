@@ -1,7 +1,9 @@
 package net.sourceforge.taggerplugin.view;
 
 import net.sourceforge.taggerplugin.manager.TagManager;
+import net.sourceforge.taggerplugin.model.Tag;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -51,5 +53,10 @@ public class TagView extends ViewPart {
 
 	public void setFocus() {
 		viewer.getControl().setFocus();
+	}
+
+	public Tag getSelectedTag(){
+		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		return(!selection.isEmpty() ? (Tag)selection.getFirstElement() : null);
 	}
 }

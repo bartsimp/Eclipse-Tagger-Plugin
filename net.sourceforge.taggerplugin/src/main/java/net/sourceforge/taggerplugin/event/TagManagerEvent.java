@@ -12,7 +12,7 @@ import net.sourceforge.taggerplugin.model.Tag;
  */
 public class TagManagerEvent extends EventObject {
 
-	public static enum Type {ADDED};
+	public static enum Type {ADDED,REMOVED,UPDATED};
 
 	private static final long serialVersionUID = 1554238208483233563L;
 	private final Tag[] tags;
