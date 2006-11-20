@@ -14,6 +14,7 @@ public class Messages extends NLS {
 	public static String TagDialog_Error_NoDescription;
 	
 	public static String TagSelectionDialog_Title;
+	public static String TagSelectionDialog_Message;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -15,12 +15,10 @@
  */
 package net.sourceforge.taggerplugin.resource;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -28,7 +26,7 @@ import org.eclipse.core.runtime.QualifiedName;
 
 class TaggableResource implements ITaggable {
 	
-	private static final QualifiedName TAG_ASSOCIATIONS = new QualifiedName(TaggerActivator.PLUGIN_ID,"tag.associations");
+	private static final QualifiedName RESOURCE_ID = new QualifiedName(TaggerActivator.PLUGIN_ID,"resource.id");
 	private final IResource resource;
 
 	TaggableResource(final IResource resource) {
@@ -36,65 +34,51 @@ class TaggableResource implements ITaggable {
 	}
 
 	public void clearTag(UUID id) {
-		final Set<String> tags = loadTags();
-		tags.remove(id.toString());
-		saveTags(tags);
+		TagAssociationManager.getInstance().addAssociation(extractResourceId(), id);
 	}
 
 	public void clearTags() {
-		try {
-			resource.setPersistentProperty(TAG_ASSOCIATIONS, null);
-		} catch(CoreException ce){
-			throw new RuntimeException(ce);
-		}
+		TagAssociationManager.getInstance().clearAssociations(extractResourceId());
 	}
 
 	public boolean hasTag(UUID id) {
-		return(loadTags().contains(id.toString()));
+		return(TagAssociationManager.getInstance().hasAssociation(extractResourceId(), id));
 	}
 
 	public UUID[] listTags() {
-		final Set<String> tags = loadTags();
-		final UUID[] uuids = new UUID[tags.size()];
-		int idx = 0;
-		for (String tag : tags) {
-			uuids[idx++] = UUID.fromString(tag);
-		}
-		return(uuids);
+		return(TagAssociationManager.getInstance().getAssociations(extractResourceId()));
 	}
 
 	public void setTag(UUID id) {
-		final Set<String> tags = loadTags();
-		tags.add(id.toString());
-		saveTags(tags);
+		TagAssociationManager.getInstance().addAssociation(extractResourceId(), id);
 	}
-
-	private Set<String> loadTags(){
-		try {
-			final Set<String> tags = new HashSet<String>();
-			final String tagsStr = this.resource.getPersistentProperty(TAG_ASSOCIATIONS);
-			if(tagsStr != null){
-				tags.addAll(Arrays.asList(tagsStr.split(";")));
-			}
-			return(tags);
-		} catch(CoreException ce){
-			throw new RuntimeException(ce);	// TODO: is this the best way?
-		}
+	
+	public String getResourceId(){
+		return(extractResourceId());
 	}
-
-	private void saveTags(Set<String> tags){
+	
+	public boolean hasTags(){
+		return(TagAssociationManager.getInstance().hasAssociations(extractResourceId()));
+	}
+	
+	/**
+	 * Used to retrieve the unique resource id from the resource. If the resource
+	 * does not have one it will be created and stored.
+	 *
+	 * @return the unique resource id
+	 */
+	private String extractResourceId(){
+		String rid = null;
 		try {
-			final StringBuilder str = new StringBuilder();
-			for (String tag : tags) {
-				str.append(tag).append(";");
+			rid = resource.getPersistentProperty(RESOURCE_ID);
+			if(rid == null || rid.length() == 0){
+				rid = UUID.randomUUID().toString();
+				resource.setPersistentProperty(RESOURCE_ID, rid);
 			}
-			if(!tags.isEmpty()){
-				str.deleteCharAt(str.length()-1);
-			}
-			
-			this.resource.setPersistentProperty(TAG_ASSOCIATIONS, str.toString());
 		} catch(CoreException ce){
-			throw new RuntimeException(ce);	// TODO: is this the best way?
+			// FIXME: do something more useful
+			throw new RuntimeException(ce);
 		}
+		return(rid);
 	}
 }

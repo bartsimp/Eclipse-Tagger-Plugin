@@ -71,13 +71,31 @@
             <groupMarker name="tags"/>
          </menu>
          <action
-               class="net.sourceforge.taggerplugin.action.AddTagAction"
+               class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
                enablesFor="+"
-               id="net.sourceforge.taggerplugin.action.AddTag"
-               label="Add Tag"
+               id="net.sourceforge.taggerplugin.action.AddTagAssociation"
+               label="Add Tag Association(s)"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
                tooltip="Add tag association."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.ClearTagAssociationsAction"
+               enablesFor="+"
+               id="net.sourceforge.taggerplugin.action.ClearTagAssociations"
+               label="Clear Tag Association(s)"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="Clear tag association(s)."/>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="net.sourceforge.taggerplugin.resource.TaggedLabelDecorator"
+            id="net.sourceforge.taggerplugin.TaggedDecorator"
+            label="Tagged"
+            lightweight="true"
+            location="TOP_RIGHT"
+            objectClass="net.sourceforge.taggerplugin.resource.ITaggable"/>
    </extension>
 
 </plugin>

@@ -43,4 +43,8 @@ public interface ITaggable {
 	 * @return a value of true if the tag with the specified id is associated with the taggable object.
 	 */
 	public boolean hasTag(UUID id);
+	
+	public String getResourceId();
+	
+	public boolean hasTags();
 }

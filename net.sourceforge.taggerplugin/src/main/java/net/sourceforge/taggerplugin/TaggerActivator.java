@@ -1,5 +1,6 @@
 package net.sourceforge.taggerplugin;
 
+import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 import net.sourceforge.taggerplugin.manager.TagManager;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -36,6 +37,7 @@ public class TaggerActivator extends AbstractUIPlugin {
 
 		// automatically persist the tag set when plugin is stopped
 		TagManager.getInstance().saveTags();
+		TagAssociationManager.getInstance().saveAssociations();
 
 		plugin = null;
 	}

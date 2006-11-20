@@ -1,39 +1,61 @@
 package net.sourceforge.taggerplugin.ui;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
+import net.sourceforge.taggerplugin.model.Tag;
+
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.dialogs.ListSelectionDialog;
 
-public class TagSelectionDialog extends Dialog {
-
-	public TagSelectionDialog(Shell parentShell){
-		super(parentShell);
-	}
-
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText(Messages.TagSelectionDialog_Title);
-	}
+/**
+ * Dialog used to selecte one or more tags using check-boxes.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
+public class TagSelectionDialog extends ListSelectionDialog {
 	
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		final Composite composite = (Composite)super.createDialogArea(parent);
-		final GridLayout layout = (GridLayout)composite.getLayout();
-//		layout.numColumns = 2;
-//		layout.makeColumnsEqualWidth = false;
+	public TagSelectionDialog(Shell parentShell, Tag[] tags){
+		super(parentShell,tags, new TagListContentProvider(),new TagLabelProvider(),Messages.TagSelectionDialog_Message);
+		setTitle(Messages.TagSelectionDialog_Title);
+	}
+
+	private static final class TagListContentProvider implements IStructuredContentProvider {
 		
-		final Font labelFont = parent.getFont();
+		private Tag[] input;
+
+		public Object[] getElements(Object inputElement) {
+			return(input);
+		}
+
+		public void dispose(){}
+
+		@SuppressWarnings("unchecked")
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			this.input = (Tag[])newInput;
+		}
+	}
+
+	private static final class TagLabelProvider implements ILabelProvider {
 		
-		final Label label = new Label(composite,SWT.LEFT);
-		label.setFont(labelFont);
-		label.setText("Dummy Content for now.");
-		
-		return(composite);
+		public Image getImage(Object element) {
+			return null;
+		}
+
+		public String getText(Object element) {
+			return(((Tag)element).getName());
+		}
+
+		public void addListener(ILabelProviderListener listener) {}
+
+		public void dispose() {}
+
+		public boolean isLabelProperty(Object element, String property) {
+			return false;
+		}
+
+		public void removeListener(ILabelProviderListener listener) {}
 	}
 }

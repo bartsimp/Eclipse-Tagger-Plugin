@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +56,39 @@ public class TagManager {
 	public static TagManager getInstance(){
 		if(instance == null){instance = new TagManager();}
 		return(instance);
+	}
+	
+	/**
+	 * Used to find the the tags with the given set of tag ids. If an 
+	 * id does not map to a tag, it is ignored.
+	 *
+	 * @param tagids the tag ids to find tags for
+	 * @return the array of tags found with the given ids.
+	 */
+	public Tag[] findTags(UUID[] tagids){
+		ensureTags();
+		
+		List<Tag> list = new LinkedList<Tag>();
+		for (UUID uuid : tagids) {
+			final Tag tag = tags.get(uuid);
+			if(tag != null){
+				list.add(tag);
+			}
+		}
+		return(list.toArray(new Tag[list.size()]));
+	}
+	
+	public Tag[] findTagsNotIn(UUID[] tagids){
+		ensureTags();
+		
+		final List<UUID> ids = new ArrayList<UUID>(tags.keySet());
+		ids.removeAll(Arrays.asList(tagids));
+		
+		final Tag[] matching = new Tag[ids.size()];
+		for(int i=0; i<ids.size(); i++){
+			matching[i] = tags.get(ids.get(i));
+		}
+		return(matching);
 	}
 
 	/**
