@@ -1,0 +1,65 @@
+body {
+	margin-top:		0px;
+	margin-bottom:	0px;
+	margin-left:	0px;
+	margin-right:	0px;
+	font-family:	Bitstream Vera Sans,Tahoma,Arial,Helvetica;
+	font-size:		12pt;
+}
+
+img {
+	border:			none;
+}
+
+A {
+	text-decoration: 	none;
+	color:				#EE7600;
+}
+
+A:hover {
+	text-decoration: underline;
+	color:			#FF8C00;
+}
+
+#header {
+	background:		#8B4500;
+	color:			#FF8C00;
+	padding:		4px;
+	font-family:	Bitstream Vera Sans,Tahoma,Arial,Helvetica;
+	font-variant: 	small-caps;
+	border-bottom:	1px solid black;
+	margin-bottom:	0px;
+}
+
+#header .title {
+	font-size:		18pt;
+	font-weight: 	bold;
+}
+
+#header .menu {
+	font-size:		11pt;
+}
+
+#content {
+	margin-top:		-15px;
+	padding:		5px;
+}
+
+#content h1 {
+	font-size:		16pt;
+	font-weight:	bold;
+	color:			#CD661D;
+	border-bottom:	1px dotted black;
+}
+
+#content h2 {
+	font-size:		14pt;
+	font-weight:	bold;
+	font-style:		italic;
+	color:			#CD661D;
+}
+
+#footer {
+	padding:		4px;
+	text-align: 	right;
+}
