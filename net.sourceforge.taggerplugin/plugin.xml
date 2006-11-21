@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="net.sourceforge.taggerplugin.Category"
+            name="Resource Tagging"/>
+      <view
+            allowMultiple="false"
+            category="net.sourceforge.taggerplugin.Category"
+            class="net.sourceforge.taggerplugin.view.TagView"
+            icon="icons/GreenFlag.gif"
+            id="net.sourceforge.taggerplugin.TagView"
+            name="Tags"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="net.sourceforge.taggerplugin.TagViewActions"
+            targetID="net.sourceforge.taggerplugin.TagView">
+         <action
+               class="net.sourceforge.taggerplugin.action.DeleteTagAction"
+               icon="icons/Delete.gif"
+               id="net.sourceforge.taggerplugin.action.DeleteTagAction"
+               label="Delete Tag"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Delete tag from tag set.">
+         </action>
+         <action
+               class="net.sourceforge.taggerplugin.action.NewTagAction"
+               icon="icons/Plus.gif"
+               id="net.sourceforge.taggerplugin.action.NewTagAction"
+               label="New Tag"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Create a new tag."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.ModifyTagAction"
+               icon="icons/Draw.gif"
+               id="net.sourceforge.taggerplugin.action.ModifyTagAction"
+               label="Modify Tag"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Modify the selected tag."/>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.core.resources.IResource"
+            class="net.sourceforge.taggerplugin.resource.TaggableAdapterFactory">
+         <adapter type="net.sourceforge.taggerplugin.resource.ITaggable"/>
+      </factory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="net.sourceforge.taggerplugin.ContextMenuPopup"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               id="net.sourceforge.taggerplugin.ContextMenu"
+               label="Tags"
+               path="additions">
+            <separator name="additions"/>
+            <groupMarker name="tags"/>
+         </menu>
+         <action
+               class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
+               enablesFor="+"
+               id="net.sourceforge.taggerplugin.action.AddTagAssociation"
+               label="Add Tag Association(s)"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="Add tag association."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.ClearTagAssociationsAction"
+               enablesFor="+"
+               id="net.sourceforge.taggerplugin.action.ClearTagAssociations"
+               label="Clear Tag Association(s)"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="Clear tag association(s)."/>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="net.sourceforge.taggerplugin.resource.TaggedLabelDecorator"
+            id="net.sourceforge.taggerplugin.TaggedDecorator"
+            label="Tagged"
+            lightweight="true"
+            location="TOP_RIGHT"
+            objectClass="net.sourceforge.taggerplugin.resource.ITaggable"/>
+   </extension>
+
+</plugin>
