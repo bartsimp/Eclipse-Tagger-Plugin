@@ -44,7 +44,5 @@ public interface ITaggable {
 	 */
 	public boolean hasTag(UUID id);
 	
-	public String getResourceId();
-	
 	public boolean hasTags();
 }

@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 
 public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAssociationManagerListener {
 
-	private static final ImageDescriptor OVERLAY = TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.getDefault().getBundle().getSymbolicName(),"icons/labeldeco.png");
+	private static final ImageDescriptor OVERLAY = TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.getDefault().getBundle().getSymbolicName(),"icons/labeldeco.gif");
 
 	private final List<ILabelProviderListener> labelProviderListeners = new LinkedList<ILabelProviderListener>();
 
@@ -54,32 +54,12 @@ public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAsso
 		labelProviderListeners.remove(listener);
 	}
 
-//	public void favoritesChanged(FavoritesManagerEvent favoritesEvent) {
-//		Collection elements = new HashSet();
-//		addResourcesTo(favoritesEvent.getItemsAdded(), elements);
-//		addResourcesTo(favoritesEvent.getItemsRemoved(), elements);
-//		LabelProviderChangedEvent labelEvent = new LabelProviderChangedEvent(this, elements.toArray());
-//		Iterator iter = labelProviderListeners.iterator();
-//		while (iter.hasNext())
-//			((ILabelProviderListener) iter.next()).labelProviderChanged(labelEvent);
-//	}
-//
-//	private void addResourcesTo(IFavoriteItem[] items,Collection elements){
-//		for (int i = 0; i < items.length; i++) {
-//			IFavoriteItem item = items[i];
-//			Object res = item.getAdapter(IResource.class);
-//			if (res != null)
-//				elements.add(res);
-//		}
-//	}
-
 	public boolean isLabelProperty(Object element, String property) {
 		return false;
 	}
 
 	public void handleTagAssociationEvent(TagAssociationEvent tme) {
-		// TODO Auto-generated method stub
-		
+		fireLabelProviderEvent(new LabelProviderChangedEvent(this,tme.getResource()));
 	}
 	
 	private void fireLabelProviderEvent(LabelProviderChangedEvent evt){
