@@ -38,13 +38,11 @@ public class AddTagAssociationAction implements IObjectActionDelegate {
 				try {
 					final Object[] resources = sel.toArray();
 					final ITaggable[] taggables = new ITaggable[resources.length];
-					final String[] resourceIds = new String[resources.length];
 					for(int i=0; i<resources.length; i++){
 						taggables[i] = (ITaggable)((IResource)(resources[i])).getAdapter(ITaggable.class);
-						resourceIds[i] = taggables[i].getResourceId();
 					}
 					
-					final Set<UUID> sharedAssociations = TagAssociationManager.getInstance().findSharedAssociations(resourceIds);
+					final Set<UUID> sharedAssociations = TagAssociationManager.getInstance().findSharedAssociations(resources);
 					final Tag[] taglist = TagManager.getInstance().findTagsNotIn(sharedAssociations.toArray(new UUID[sharedAssociations.size()]));
 				
 					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
