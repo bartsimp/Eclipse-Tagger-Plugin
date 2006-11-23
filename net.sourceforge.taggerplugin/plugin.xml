@@ -90,7 +90,7 @@
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
-            class="net.sourceforge.taggerplugin.resource.TaggedLabelDecorator"
+            class="net.sourceforge.taggerplugin.ui.TaggedLabelDecorator"
             id="net.sourceforge.taggerplugin.TaggedDecorator"
             label="Tagged"
             lightweight="true"
@@ -105,6 +105,16 @@
       <persistent value="true"/>
       <super type="org.eclipse.core.resources.marker"/>
       <attribute name="resourceId"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="true"
+            class="net.sourceforge.taggerplugin.ui.TaggableResourcePropertyPage"
+            icon="icons/taggerview.gif"
+            id="net.sourceforge.taggerplugin.TaggedResourceProperties"
+            name="Tagger Plug-in"
+            objectClass="org.eclipse.core.resources.IResource"/>
    </extension>
 
 </plugin>

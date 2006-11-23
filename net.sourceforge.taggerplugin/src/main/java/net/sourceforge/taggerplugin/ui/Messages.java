@@ -16,6 +16,9 @@ public class Messages extends NLS {
 	public static String TagSelectionDialog_Title;
 	public static String TagSelectionDialog_Message;
 	
+	public static String TaggableResourcePropertyPage_NoAssociations;
+	public static String TaggableResourcePropertyPage_Label_Associations;
+	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
