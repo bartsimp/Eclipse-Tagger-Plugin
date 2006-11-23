@@ -7,7 +7,7 @@ import java.util.UUID;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-public class Tag {
+public class Tag implements Comparable<Tag> {
 
 	private UUID id;
 	private String name, description;
@@ -96,5 +96,9 @@ public class Tag {
 		} else if (!this.name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public int compareTo(Tag tag){
+		return(name.compareTo(tag.getName()));
 	}
 }
