@@ -1,4 +1,4 @@
-package net.sourceforge.taggerplugin.resource;
+package net.sourceforge.taggerplugin.ui;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,7 @@ import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
+import net.sourceforge.taggerplugin.resource.ITaggable;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
