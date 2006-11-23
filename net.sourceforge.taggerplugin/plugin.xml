@@ -116,5 +116,18 @@
             name="Tagger Plug-in"
             objectClass="org.eclipse.core.resources.IResource"/>
    </extension>
+   <extension
+         point="org.eclipse.search.searchPages">
+      <page
+            canSearchEnclosingProjects="true"
+            class="net.sourceforge.taggerplugin.ui.TagSearchPage"
+            enabled="true"
+            extensions="*"
+            icon="icons/taggerview.gif"
+            id="net.sourceforge.taggerplugin.TagSearchPage"
+            label="Tag Search"
+            showScopeSection="true"
+            tabPosition="2"/>
+   </extension>
 
 </plugin>
