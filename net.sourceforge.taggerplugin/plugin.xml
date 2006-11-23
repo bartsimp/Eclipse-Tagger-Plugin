@@ -120,7 +120,7 @@
          point="org.eclipse.search.searchPages">
       <page
             canSearchEnclosingProjects="true"
-            class="net.sourceforge.taggerplugin.ui.TagSearchPage"
+            class="net.sourceforge.taggerplugin.search.TagSearchPage"
             enabled="true"
             extensions="*"
             icon="icons/taggerview.gif"
@@ -128,6 +128,15 @@
             label="Tag Search"
             showScopeSection="true"
             tabPosition="2"/>
+   </extension>
+   <extension
+         point="org.eclipse.search.searchResultViewPages">
+      <viewPage
+            class="net.sourceforge.taggerplugin.search.TagSearchResultPage"
+            icon="icons/taggerview.gif"
+            id="net.sourceforge.taggerplugin.search.TagSearchResultPage"
+            label="Tag Search Results"
+            searchResultClass="net.sourceforge.taggerplugin.search.TagSearchResult"/>
    </extension>
 
 </plugin>
