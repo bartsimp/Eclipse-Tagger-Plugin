@@ -15,6 +15,7 @@
  */
 package net.sourceforge.taggerplugin.search;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,28 +31,36 @@ import org.eclipse.search.ui.SearchResultEvent;
 class TagSearchResult implements ISearchResult {
 	
 	private final Set<ISearchResultListener> listeners;
-	private final ISearchQuery query;
+//	private final ISearchQuery query;
+	private ISearchQuery query;
 	private Set<IResource> matches;
 	
 	TagSearchResult(final ISearchQuery query){
 		super();
 		this.listeners = new HashSet<ISearchResultListener>();
 		this.query = query;
-		this.matches = new HashSet<IResource>();
+		this.matches = Collections.synchronizedSet(new HashSet<IResource>());
 	}
 	
-	public synchronized void addMatch(IResource resource){
-		if(!matches.contains(resource)){
-			matches.add(resource);
+	TagSearchResult(){
+		super();
+		this.listeners = new HashSet<ISearchResultListener>();
+		this.matches = Collections.synchronizedSet(new HashSet<IResource>());
+	}
+	
+	void setQuery(ISearchQuery query){this.query = query;}
+	
+	public void addMatch(IResource resource){
+		if(matches.add(resource)){
 			fireSearchResultEvent(new TagSearchResultEvent(this,resource));
 		}
 	}
 	
-	public synchronized int getMatchCount(){
+	public int getMatchCount(){
 		return(matches.size());
 	}
 	
-	public synchronized IResource[] getMatches(){
+	public IResource[] getMatches(){
 		return(matches.toArray(new IResource[matches.size()]));
 	}
 
