@@ -76,7 +76,8 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 	
 	private ISearchQuery newQuery() throws CoreException {
 		final TagSearchInput input = new TagSearchInput(extractSelectedTagIds(),requireAllBtn.getSelection());
-		final ISearchQuery query = new TagSearchQuery(input);
+		final TagSearchResult result = new TagSearchResult();
+		final ISearchQuery query = new TagSearchQuery(input,result);
 		return(query);
 	}
 	

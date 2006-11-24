@@ -34,10 +34,12 @@ class TagSearchQuery implements ISearchQuery {
 	private final TagSearchInput input;
 	private final ISearchResult result;
 	
-	TagSearchQuery(final TagSearchInput input){
+	TagSearchQuery(final TagSearchInput input, final TagSearchResult result){
 		super();
 		this.input = input;
-		this.result = new TagSearchResult(this);
+		
+		this.result = result;
+		result.setQuery(this);
 	}
 	
 	public boolean canRerun() {return true;}
