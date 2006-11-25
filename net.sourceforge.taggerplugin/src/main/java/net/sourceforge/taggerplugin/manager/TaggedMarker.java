@@ -12,9 +12,10 @@ import org.eclipse.core.runtime.CoreException;
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 public class TaggedMarker {
+
+	public static final String MARKER_TYPE = "com.sourceforge.taggerplugin.tagged";
 	
 	private static final String ATTR_RESOURCEID = "resourceId";
-	private static final String MARKER_TYPE = "com.sourceforge.taggerplugin.tagged";
 	
 	private TaggedMarker(){super();}
 	

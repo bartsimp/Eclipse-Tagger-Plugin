@@ -47,6 +47,15 @@
                style="push"
                toolbarPath="additions"
                tooltip="Modify the selected tag."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.CreateWorkingSetFromTagsAction"
+               icon="icons/NewFolder.gif"
+               id="net.sourceforge.taggerplugin.action.CreateWorkingSet"
+               label="Create Working Set"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Create a working set from the selected tags."/>
       </viewContribution>
    </extension>
    <extension
