@@ -19,15 +19,18 @@ package net.sourceforge.taggerplugin.search;
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
+import org.eclipse.ui.IWorkingSet;
 
 /**
  * Tag Search Query object.
@@ -57,8 +60,40 @@ class TagSearchQuery implements ISearchQuery {
 
 	public IStatus run(IProgressMonitor monitor) throws OperationCanceledException {
 		try {
+			// TODO: may want to break visitor apart so that there is one per search type
 			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input,(TagSearchResult)result);
-			ResourcesPlugin.getWorkspace().getRoot().accept(visitor, IResource.NONE);
+			
+			if(input.isProjectsScope()){
+				final String[] projectNames = input.getProjectNames();
+				for (String projectName : projectNames) {
+					final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(projectName);
+					if(resource.getAdapter(IProject.class) != null){
+						resource.accept(visitor,IResource.NONE);
+					}
+				}
+				
+			} else if(input.isWorkingSetScope()){
+				final IWorkingSet[] workingSets = input.getWorkingSets();
+				for (IWorkingSet workingSet : workingSets) {
+					IAdaptable[] elems = workingSet.getElements();
+					for (IAdaptable adaptable : elems) {
+						final IResource resource = (IResource)adaptable.getAdapter(IResource.class);
+						if(resource != null){
+							visitor.visit(resource.createProxy());
+						}
+					}
+				}
+				
+			} else if(input.isSelectionScope()){
+				for(IResource resource : input.getSelectedResources()){
+					visitor.visit(resource.createProxy());
+				}
+				
+			} else {
+				// workspace scope
+				ResourcesPlugin.getWorkspace().getRoot().accept(visitor, IResource.NONE);	
+			}
+			
 			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,Messages.TagSearchQuery_Status_Complete,null));
 		} catch(CoreException ce){
 			// FIXME: send to user

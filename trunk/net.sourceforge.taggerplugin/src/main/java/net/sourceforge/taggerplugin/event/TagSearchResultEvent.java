@@ -20,16 +20,24 @@ import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.SearchResultEvent;
 
 public class TagSearchResultEvent extends SearchResultEvent {
+	
+	public static enum Type {ADDED,REMOVED};
 
 	private static final long serialVersionUID = -5424223750735617727L;
-	private final IResource resource;
+	private final IResource[] resources;
+	private final Type type;
 	
-	public TagSearchResultEvent(ISearchResult searchResult, IResource resource){
+	public TagSearchResultEvent(ISearchResult searchResult, IResource[] resources, Type type){
 		super(searchResult);
-		this.resource = resource;
+		this.resources = resources;
+		this.type = type;
 	}
 	
-	public IResource getResource() {
-		return this.resource;
+	public Type getType() {
+		return this.type;
+	}
+	
+	public IResource[] getResources() {
+		return this.resources;
 	}
 }
