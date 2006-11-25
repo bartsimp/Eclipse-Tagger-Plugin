@@ -34,8 +34,9 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 	private Table tagList;
 	private TableItem[] tableItems;
 	private Button requireAllBtn;
+	private ISearchPageContainer searchPageContainer;
 	
-	public void setContainer(ISearchPageContainer container) {}
+	public void setContainer(ISearchPageContainer container) {this.searchPageContainer = container;}
 
 	public void createControl(Composite parent) {
 		final Group panel = new Group(parent,SWT.SHADOW_ETCHED_IN);
@@ -76,7 +77,7 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 	}
 	
 	private ISearchQuery newQuery() throws CoreException {
-		final TagSearchInput input = new TagSearchInput(extractSelectedTagIds(),requireAllBtn.getSelection());
+		final TagSearchInput input = new TagSearchInput(extractSelectedTagIds(),requireAllBtn.getSelection(),searchPageContainer);
 		final TagSearchResult result = new TagSearchResult();
 		final ISearchQuery query = new TagSearchQuery(input,result);
 		return(query);

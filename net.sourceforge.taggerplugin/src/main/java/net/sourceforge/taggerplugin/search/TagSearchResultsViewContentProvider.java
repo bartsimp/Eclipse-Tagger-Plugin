@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.search;
 
 import net.sourceforge.taggerplugin.event.TagSearchResultEvent;
+import net.sourceforge.taggerplugin.event.TagSearchResultEvent.Type;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -67,7 +68,11 @@ class TagSearchResultsViewContentProvider implements IStructuredContentProvider,
 			public void run() {
 				viewer.getTable().setRedraw(false);
 				try {
-					viewer.add(evt.getResource());
+					if(evt.getType().equals(Type.ADDED)){
+						viewer.add(evt.getResources());	
+					} else if(evt.getType().equals(Type.REMOVED)){
+						viewer.remove(evt.getResources());
+					}
 				} finally {
 					viewer.getTable().setRedraw(true);
 				}		

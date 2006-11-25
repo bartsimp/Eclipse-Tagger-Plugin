@@ -49,7 +49,7 @@ class TagSearchResult implements ISearchResult {
 	
 	public void addMatch(IResource resource){
 		if(matches.add(resource)){
-			fireSearchResultEvent(new TagSearchResultEvent(this,resource));
+			fireSearchResultEvent(new TagSearchResultEvent(this,new IResource[]{resource},TagSearchResultEvent.Type.ADDED));
 		}
 	}
 	
@@ -59,6 +59,14 @@ class TagSearchResult implements ISearchResult {
 	
 	public IResource[] getMatches(){
 		return(matches.toArray(new IResource[matches.size()]));
+	}
+	
+	public void clearMatches(){
+		if(!matches.isEmpty()){
+			final IResource[] removedResources = matches.toArray(new IResource[matches.size()]);
+			matches.clear();
+			fireSearchResultEvent(new TagSearchResultEvent(this,removedResources,TagSearchResultEvent.Type.REMOVED));			
+		}
 	}
 
 	public void addListener(ISearchResultListener l) {

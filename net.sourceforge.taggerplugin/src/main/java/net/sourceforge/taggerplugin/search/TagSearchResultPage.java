@@ -31,6 +31,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 	private IPageSite site;
 	private TableViewer resultViewer;
 	private TagSearchResultsViewContentProvider viewContentProvider;
+	private ISearchResult result;
 	
 	public String getID() {return id;}
 
@@ -51,13 +52,18 @@ public class TagSearchResultPage implements ISearchResultPage {
 	}
 
 	public void setInput(ISearchResult newSearch, Object uiState) {
-		if(newSearch == null){return;}
+		if(newSearch == null){
+			((TagSearchResult)result).clearMatches();
+			return;
+		}
+		
+		this.result = newSearch;
 
 		if(viewContentProvider == null){
 			this.viewContentProvider = new TagSearchResultsViewContentProvider();	
 		}
 		
-		viewContentProvider.inputChanged(resultViewer,null,newSearch);
+		viewContentProvider.inputChanged(resultViewer,result,newSearch);
 		
 		// TODO: what to do with state
 	}
@@ -74,15 +80,13 @@ public class TagSearchResultPage implements ISearchResultPage {
 		final Composite panel = new Composite(parent,SWT.NONE);
 		panel.setLayout(new GridLayout(1,false));
 		
-		final GridData viewerGridData = new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL);
-		
-		resultViewer = new TableViewer(panel, SWT.SINGLE | SWT.FULL_SELECTION);
+		resultViewer = new TableViewer(panel, SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		resultViewer.setContentProvider(new TagSearchResultsViewContentProvider());
 		resultViewer.setLabelProvider(new TagSearchResultsViewLabelProvider());
 		resultViewer.setSorter(new ViewerSorter(){});
 
 		final Table table = resultViewer.getTable();
-		table.setLayoutData(viewerGridData);
+		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		table.setHeaderVisible(true);
 
 		createTableColumn(table,Messages.TagSearchResultPage_Column_Name, 100);
@@ -101,13 +105,13 @@ public class TagSearchResultPage implements ISearchResultPage {
 	}
 
 	public void dispose() {
-		// TODO: should I clean up results?
+		viewContentProvider.dispose();
+		control.dispose();
 	}
 
 	public Control getControl() {return control;}
 
-	public void setActionBars(IActionBars actionBars) {/* nothing for now */
-	}
+	public void setActionBars(IActionBars actionBars) {/* nothing for now */}
 
 	public void setFocus() {resultViewer.getTable().setFocus();}
 }
