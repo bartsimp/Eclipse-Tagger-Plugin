@@ -44,10 +44,8 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 		panel.setText(Messages.TagSearchPage_Label_TagList);
 		
 		// list of tags
-		tagList = new Table(panel,SWT.CHECK | SWT.MULTI | SWT.V_SCROLL);
-		final GridData listData = new GridData(GridData.FILL_HORIZONTAL);
-		listData.heightHint = 100;
-		tagList.setLayoutData(listData);
+		tagList = new Table(panel,SWT.CHECK | SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+		tagList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		
 		final Tag[] tags = TagManager.getInstance().getTags();
 		Arrays.sort(tags);

@@ -1,6 +1,10 @@
 package net.sourceforge.taggerplugin.search;
 
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.search.ui.ISearchResult;
@@ -16,6 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.OpenFileAction;
 import org.eclipse.ui.part.IPageSite;
 
 /**
@@ -35,16 +40,18 @@ public class TagSearchResultPage implements ISearchResultPage {
 	
 	public String getID() {return id;}
 
-	public String getLabel() {return Messages.TagSearchResultPage_Label;}
+	public String getLabel() {return(Messages.TagSearchResultPage_Label);}
 
 	public Object getUIState() {return uiState;}
 
 	public void restoreState(IMemento memento) {
 		// TODO Auto-generated method stub
+		System.out.println("Restoring: " + memento);
 	}
 
 	public void saveState(IMemento memento) {
 		// TODO Auto-generated method stub
+		System.out.println("Saving: " + memento);
 	}
 
 	public void setID(String id) {
@@ -94,6 +101,20 @@ public class TagSearchResultPage implements ISearchResultPage {
 		createTableColumn(table,Messages.TagSearchResultPage_Column_Tags, 100);
 
 		resultViewer.setInput(null);
+		
+		resultViewer.addDoubleClickListener(new IDoubleClickListener(){
+			public void doubleClick(DoubleClickEvent event) {
+				final ISelection selection = event.getSelection();
+				if(!selection.isEmpty() && selection instanceof IStructuredSelection){
+					final IStructuredSelection iss = (IStructuredSelection)selection;
+					
+					// FIXME: pull this out and share the instance
+					final OpenFileAction action = new OpenFileAction(site.getWorkbenchWindow().getActivePage());
+					action.selectionChanged(iss);
+					action.run();
+				}
+			}
+		});
 		
 		this.control = panel;
 	}
