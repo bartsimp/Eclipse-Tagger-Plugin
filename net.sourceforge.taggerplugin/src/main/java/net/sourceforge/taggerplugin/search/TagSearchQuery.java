@@ -29,6 +29,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
 
+/**
+ * Tag Search Query object.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagSearchQuery implements ISearchQuery {
 	
 	private final TagSearchInput input;
@@ -46,7 +51,7 @@ class TagSearchQuery implements ISearchQuery {
 
 	public boolean canRunInBackground() {return true;}
 
-	public String getLabel() {return("Tag Search Query");}	// TODO: externalize
+	public String getLabel() {return(Messages.TagSearchQuery_Label);}
 
 	public ISearchResult getSearchResult() {return(result);}
 
@@ -54,11 +59,11 @@ class TagSearchQuery implements ISearchQuery {
 		try {
 			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input,(TagSearchResult)result);
 			ResourcesPlugin.getWorkspace().getRoot().accept(visitor, IResource.NONE);
-			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,"Tag search completed.",null));
+			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,Messages.TagSearchQuery_Status_Complete,null));
 		} catch(CoreException ce){
 			// FIXME: send to user
 			TaggerLog.error("Unable to perform search: " + ce.getMessage(), ce);
-			return(new Status(IStatus.ERROR,TaggerActivator.PLUGIN_ID,ce.getStatus().getCode(),"Tag search error.",ce));
+			return(new Status(IStatus.ERROR,TaggerActivator.PLUGIN_ID,ce.getStatus().getCode(),Messages.TagSearchQuery_Status_Error,ce));
 		}
 	}
 }

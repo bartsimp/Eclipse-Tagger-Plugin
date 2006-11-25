@@ -24,6 +24,11 @@ import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 
+/**
+ * Visitor used to walk the workspace resource tree.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TaggableResourceVisitor implements IResourceProxyVisitor {
 	
 	private final TagSearchInput input;
