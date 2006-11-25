@@ -24,16 +24,18 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+/**
+ * Search page that adds tag search support.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagSearchPage extends DialogPage implements ISearchPage {
 
 	private Table tagList;
 	private TableItem[] tableItems;
 	private Button requireAllBtn;
-	private ISearchPageContainer container;
 	
-	public void setContainer(ISearchPageContainer container) {
-		this.container = container;
-	}
+	public void setContainer(ISearchPageContainer container) {}
 
 	public void createControl(Composite parent) {
 		final Group panel = new Group(parent,SWT.SHADOW_ETCHED_IN);
@@ -58,7 +60,7 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 		
 		// require all
 		requireAllBtn = new Button(panel,SWT.CHECK);
-		requireAllBtn.setText("All tags required for match.");
+		requireAllBtn.setText(Messages.TagSearchPage_Label_AllRequired);
 		
 		setControl(panel);
 	}
@@ -67,8 +69,7 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 		try {
 			NewSearchUI.runQueryInBackground(newQuery());
 		} catch (CoreException e) {
-			// TODO: externalize
-			ErrorDialog.openError(getShell(), "Tag Search Error","Unable to run Tag Search query: " + e.getMessage(), e.getStatus());
+			ErrorDialog.openError(getShell(),Messages.TagSearchPage_Error_Title,Messages.bind(Messages.TagSearchPage_Error_Message, e.getMessage()), e.getStatus());
 			return false;
 		}
  		return true;

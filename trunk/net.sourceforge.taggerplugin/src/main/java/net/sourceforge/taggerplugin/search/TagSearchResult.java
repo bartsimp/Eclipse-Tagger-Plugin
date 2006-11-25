@@ -28,19 +28,16 @@ import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.ISearchResultListener;
 import org.eclipse.search.ui.SearchResultEvent;
 
+/**
+ * Tag Search Result container.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagSearchResult implements ISearchResult {
 	
 	private final Set<ISearchResultListener> listeners;
-//	private final ISearchQuery query;
 	private ISearchQuery query;
 	private Set<IResource> matches;
-	
-	TagSearchResult(final ISearchQuery query){
-		super();
-		this.listeners = new HashSet<ISearchResultListener>();
-		this.query = query;
-		this.matches = Collections.synchronizedSet(new HashSet<IResource>());
-	}
 	
 	TagSearchResult(){
 		super();
@@ -73,7 +70,7 @@ class TagSearchResult implements ISearchResult {
 	}
 
 	public String getLabel() {
-		return "Tag Search Results";
+		return Messages.TagSearchResult_Label;
 	}
 
 	public ISearchQuery getQuery() {
@@ -81,7 +78,7 @@ class TagSearchResult implements ISearchResult {
 	}
 
 	public String getTooltip() {
-		return "Tag search results.";
+		return Messages.TagSearchResult_Tooltip;
 	}
 
 	public void removeListener(ISearchResultListener l) {

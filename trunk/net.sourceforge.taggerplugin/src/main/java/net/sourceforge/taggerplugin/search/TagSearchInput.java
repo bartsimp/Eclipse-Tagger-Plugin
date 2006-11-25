@@ -17,6 +17,11 @@ package net.sourceforge.taggerplugin.search;
 
 import java.util.UUID;
 
+/**
+ * Tag Search page input object. Used to store the input values from the UI form.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagSearchInput {
 	
 	private final UUID[] tagIds;
