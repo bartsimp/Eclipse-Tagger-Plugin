@@ -147,5 +147,17 @@
             label="Tag Search Results"
             searchResultClass="net.sourceforge.taggerplugin.search.TagSearchResult"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="net.sourceforge.taggerplugin.TagExportCategory"
+            class="net.sourceforge.taggerplugin.wizard.TagExportWizard"
+            icon="icons/DataExtract.gif"
+            id="net.sourceforge.taggerplugin.wizard.TagSetExport"
+            name="Export Resource Tag Set"/>
+      <category
+            id="net.sourceforge.taggerplugin.TagExportCategory"
+            name="Resource Tagging"/>
+   </extension>
 
 </plugin>
