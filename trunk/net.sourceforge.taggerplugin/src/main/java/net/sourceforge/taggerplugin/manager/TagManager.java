@@ -57,9 +57,9 @@ public class TagManager {
 		if(instance == null){instance = new TagManager();}
 		return(instance);
 	}
-	
+
 	/**
-	 * Used to find the the tags with the given set of tag ids. If an 
+	 * Used to find the the tags with the given set of tag ids. If an
 	 * id does not map to a tag, it is ignored.
 	 *
 	 * @param tagids the tag ids to find tags for
@@ -67,7 +67,7 @@ public class TagManager {
 	 */
 	public Tag[] findTags(UUID[] tagids){
 		ensureTags();
-		
+
 		List<Tag> list = new LinkedList<Tag>();
 		for (UUID uuid : tagids) {
 			final Tag tag = tags.get(uuid);
@@ -77,13 +77,13 @@ public class TagManager {
 		}
 		return(list.toArray(new Tag[list.size()]));
 	}
-	
+
 	public Tag[] findTagsNotIn(UUID[] tagids){
 		ensureTags();
-		
+
 		final List<UUID> ids = new ArrayList<UUID>(tags.keySet());
 		ids.removeAll(Arrays.asList(tagids));
-		
+
 		final Tag[] matching = new Tag[ids.size()];
 		for(int i=0; i<ids.size(); i++){
 			matching[i] = tags.get(ids.get(i));
@@ -215,6 +215,11 @@ public class TagManager {
 		} finally {
 			IoUtils.closeQuietly(writer);
 		}
+	}
+
+	public boolean tagExists(UUID tagId) {
+		ensureTags();
+		return(tags.containsKey(tagId));
 	}
 
 	/**

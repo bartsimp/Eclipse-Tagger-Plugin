@@ -1,5 +1,5 @@
 package net.sourceforge.taggerplugin.wizard;
 
-enum ExternalTagFormat {
+enum TagIoFormat {
 	XML,CSV
 }
