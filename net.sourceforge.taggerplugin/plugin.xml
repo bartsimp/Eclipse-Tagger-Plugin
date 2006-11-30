@@ -154,10 +154,22 @@
             class="net.sourceforge.taggerplugin.wizard.TagExportWizard"
             icon="icons/DataExtract.gif"
             id="net.sourceforge.taggerplugin.wizard.TagSetExport"
-            name="Export Resource Tag Set"/>
+            name="Resource Tag Set"/>
       <category
             id="net.sourceforge.taggerplugin.TagExportCategory"
             name="Resource Tagging"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="net.sourceforge.taggerplugin.TagImportCategory"
+            name="Resource Tagging"/>
+      <wizard
+            category="net.sourceforge.taggerplugin.TagImportCategory"
+            class="net.sourceforge.taggerplugin.wizard.TagImportWizard"
+            icon="icons/DataStore.gif"
+            id="net.sourceforge.taggerplugin.wizard.TagSetImport"
+            name="Resource Tag Set"/>
    </extension>
 
 </plugin>

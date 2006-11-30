@@ -16,24 +16,35 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-class TagExportWizardPage extends WizardPage {
+class TagIoWizardPage extends WizardPage {
 
-	private Text exportPathTxt;
+	private static final String EMPTY_STRING = "";
+	private Text filePath;
 	private Button xmlFormatBtn,csvFormatBtn;
+	private final TagIoWizardType descriptor;
 
-	TagExportWizardPage(){
-		super("TagExportWizard","Resource Tag Export",null);	// TODO: externalize me
+	TagIoWizardPage(final TagIoWizardType descriptor){
+		super(descriptor.getPageId(),descriptor.equals(TagIoWizardType.IMPORT) ? Messages.TagImportWizardPage_Title : Messages.TagExportWizardPage_Title,null);
+		this.descriptor = descriptor;
 	}
 
-	String getExportPath(){
-		return(exportPathTxt.getText());
-	}
+	/**
+	 * Used to retrieve the file path selected by the user.
+	 *
+	 * @return the selected file path.
+	 */
+	String getFilePath(){return(filePath.getText());}
 
-	ExternalTagFormat getExportFormat(){
+	/**
+	 * Used to retrieve the import/export file format selected by the user.
+	 *
+	 * @return the import/export file format
+	 */
+	TagIoFormat getTagFormat(){
 		if(xmlFormatBtn.getSelection()){
-			return((ExternalTagFormat)xmlFormatBtn.getData());
+			return((TagIoFormat)xmlFormatBtn.getData());
 		} else if(csvFormatBtn.getSelection()){
-			return((ExternalTagFormat)csvFormatBtn.getData());
+			return((TagIoFormat)csvFormatBtn.getData());
 		} else {
 			return(null);
 		}
@@ -43,49 +54,47 @@ class TagExportWizardPage extends WizardPage {
 		final Composite panel = new Composite(parent, SWT.NULL);
 		panel.setLayout(new GridLayout(3,false));
 
-		// directory
-		createLabel(panel, "File:", "Choose the file that the tags will be exported into.",1);	// TODO: externalize me
+		// path
+		createLabel(panel,Messages.TagIoWizardPage_Label_File,descriptor.equals(TagIoWizardType.IMPORT) ? Messages.TagImportWizardPage_Tooltip_File : Messages.TagExportWizardPage_Tooltip_File,1);
 
-		exportPathTxt = new Text(panel,SWT.BORDER | SWT.SINGLE);
-		exportPathTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		exportPathTxt.setEditable(false);
-		exportPathTxt.addModifyListener(new ModifyListener(){
+		filePath = new Text(panel,SWT.BORDER | SWT.SINGLE);
+		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		filePath.setEditable(false);
+		filePath.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){dialogChanged();}
 		});
 
 		final Button directoryBtn = new Button(panel,SWT.PUSH);
-		directoryBtn.setText("Browse");
+		directoryBtn.setText(Messages.TagIoWizardPage_Button_Browse);
 		directoryBtn.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				final FileDialog dialog = new FileDialog(getShell(),SWT.SAVE);
 				final String path = dialog.open();
-				exportPathTxt.setText(path != null ? path : "");
+				filePath.setText(path != null ? path : EMPTY_STRING);
 			}
 		});
 
 		// export format
-		createLabel(panel, "Export file format:", "Select a format for the export file data.",3);
+		createLabel(panel,Messages.TagIoWizardPage_Label_Format,Messages.TagIoWizardPage_Tooltip_Format,3);
 
 		xmlFormatBtn = new Button(panel,SWT.RADIO);
 		xmlFormatBtn.setLayoutData(createGridData(3));
-		xmlFormatBtn.setText("XML");
-		xmlFormatBtn.setData(ExternalTagFormat.XML);
+		xmlFormatBtn.setText(Messages.TagIoWizardPage_Format_Xml);
+		xmlFormatBtn.setData(TagIoFormat.XML);
 		xmlFormatBtn.setSelection(true);
 
 		csvFormatBtn = new Button(panel,SWT.RADIO);
 		csvFormatBtn.setLayoutData(createGridData(3));
-		csvFormatBtn.setText("Comma-separated values (CSV)");
-		csvFormatBtn.setData(ExternalTagFormat.CSV);
+		csvFormatBtn.setText(Messages.TagIoWizardPage_Format_Xml);
+		csvFormatBtn.setData(TagIoFormat.CSV);
 
 		dialogChanged();
 		setControl(panel);
 	}
 
 	private void dialogChanged(){
-		// project
-		final String directory = exportPathTxt.getText();
-		if(StringUtils.isBlank(directory)){
-			updateStatus("The export file must be specified.");
+		if(StringUtils.isBlank(filePath.getText())){
+			updateStatus(Messages.TagIoWizardPage_Error_NoFile);
 			return;
 		}
 
