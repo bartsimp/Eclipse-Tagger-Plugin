@@ -40,6 +40,7 @@ import net.sourceforge.taggerplugin.event.ITagManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.event.TagManagerEvent;
 import net.sourceforge.taggerplugin.model.TagAssociation;
+import net.sourceforge.taggerplugin.resource.ITaggable;
 import net.sourceforge.taggerplugin.resource.ITaggedMarker;
 import net.sourceforge.taggerplugin.resource.RemovedResourceDeltaVisitor;
 import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
@@ -94,26 +95,26 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resourceIds
 	 * @return
 	 */
-	public Set<UUID> findSharedAssociations(Object[] resources){
+	public Set<UUID> findSharedAssociations(ITaggable[] taggables){
 		ensureAssociations();
 
 		final Set<UUID> shared = new HashSet<UUID>();
 		try {
 			final Set<UUID> masterSet = new HashSet<UUID>();
-			for (Object resource : resources){
-				final ITaggedMarker marker = TaggedMarkerHelper.getMarker((IResource)resource);
+			for (ITaggable taggable : taggables){
+				final ITaggedMarker marker = TaggedMarkerHelper.getMarker(taggable.getResource());
 				if(marker != null){
-					final TagAssociation vals = associations.get(marker.getResourceId());
-					if(vals != null && vals.hasAssociations()){
-						masterSet.addAll(Arrays.asList(vals.getAssociations()));
+					final TagAssociation assocs = associations.get(marker.getResourceId());
+					if(assocs != null && assocs.hasAssociations()){
+						masterSet.addAll(Arrays.asList(assocs.getAssociations()));
 					}	
 				}
 			}
 
 			for(UUID uuid : masterSet){
 				boolean allhave = false;
-				for(Object resource : resources){
-					final ITaggedMarker marker = TaggedMarkerHelper.getMarker((IResource)resource);
+				for(ITaggable taggable : taggables){
+					final ITaggedMarker marker = TaggedMarkerHelper.getMarker(taggable.getResource());
 					if(marker != null){
 						final TagAssociation assocs = associations.get(marker.getResourceId());
 						if(assocs != null && assocs.hasAssociations()){
@@ -140,6 +141,15 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 		return(shared);
 	}
+	
+	public Set<UUID> findAllAssociations(ITaggable[] taggables){
+		final Set<UUID> set = new HashSet<UUID>();
+		for(ITaggable taggable : taggables){
+			set.addAll(Arrays.asList(taggable.listTags()));
+		}
+		return(set);
+	}
+	
 
 	/**
 	 * Used to clear all associations of the given resource.
