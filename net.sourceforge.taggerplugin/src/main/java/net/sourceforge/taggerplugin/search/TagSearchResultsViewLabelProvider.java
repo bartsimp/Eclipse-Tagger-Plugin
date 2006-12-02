@@ -52,19 +52,8 @@ class TagSearchResultsViewLabelProvider extends LabelProvider implements ITableL
 			case COLUMN_PATH:
 				return(String.valueOf(resource.getLocation()));
 			case COLUMN_TAGS:
-				final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
-				final Tag[] tags = TagManager.getInstance().findTags(taggable.listTags());
-
-				final StringBuilder str = new StringBuilder();
-				for (Tag tag : tags) {
-					str.append(tag.getName()).append(DELIM);
-				}
-
-				if(tags.length > 0){
-					str.delete(str.length() - 2, str.length());
-				}
-
-				return(str.toString());
+				final Tag[] tags = TagManager.getInstance().findTags(((ITaggable)resource.getAdapter(ITaggable.class)).listTags());
+				return(TagManager.extractTagNames(tags,DELIM));
 			default:
 				return("???");
 		}

@@ -15,11 +15,15 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
+import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.resource.ITaggable;
+import net.sourceforge.taggerplugin.resource.ITaggedMarker;
+import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -60,22 +64,17 @@ public class TaggableResourcePropertyPage extends PropertyPage {
 	 * @return a comma-separated list of tagnames associated with the selected resource.
 	 */
 	private String extractTagAssociations(){
-		final ITaggable taggable = (ITaggable)getElement().getAdapter(ITaggable.class);
-		if(taggable != null){
-			final StringBuilder str = new StringBuilder();
-			final Tag[] tags = TagManager.getInstance().findTags(taggable.listTags());
-			for (Tag tag : tags){
-				str.append(tag.getName()).append(LIST_SEPARATOR);
+		try {
+			final ITaggedMarker marker = TaggedMarkerHelper.getMarker((IResource)getElement().getAdapter(IResource.class));
+			if(marker != null){
+				final Tag[] tags = TagManager.getInstance().findTags(marker.getTaggableResource().listTags());
+				if(tags.length > 0){
+					return(TagManager.extractTagNames(tags,LIST_SEPARATOR));
+				}	
 			}
-			if(tags.length > 0){
-				str.deleteCharAt(str.length()-1);
-				str.deleteCharAt(str.length()-1);
-				return(str.toString());
-			} else {
-				return(TaggerMessages.TaggableResourcePropertyPage_NoAssociations);
-			}
-		} else {
-			return(TaggerMessages.TaggableResourcePropertyPage_NoAssociations);
+		} catch(CoreException ce){
+			TaggerLog.error("Unable to display properties: " + ce.getMessage(),ce);
 		}
+		return(TaggerMessages.TaggableResourcePropertyPage_NoAssociations);
 	}
 }

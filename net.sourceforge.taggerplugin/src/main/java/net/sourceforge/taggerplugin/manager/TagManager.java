@@ -184,6 +184,17 @@ public class TagManager {
 	public void removeTagManagerListener(ITagManagerListener listener){
 		listeners.remove(listener);
 	}
+	
+	public static String extractTagNames(Tag[] tags, String delim){
+		final StringBuilder str = new StringBuilder();
+		for (Tag tag : tags){
+			str.append(tag.getName()).append(delim);
+		}
+		if(tags.length > 0){
+			str.delete(str.length()-delim.length(),str.length());
+		}
+		return(str.toString());
+	}
 
 	/**
 	 * Used to ensure that the tag map exists and has been loaded from its persisted state (if
