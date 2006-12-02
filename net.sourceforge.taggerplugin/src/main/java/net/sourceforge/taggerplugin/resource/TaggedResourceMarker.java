@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.CoreException;
 
 public class TaggedResourceMarker implements ITaggedMarker {
 
-	private static final String ATTR_RESOURCEID = "resourceId";
 	private final IMarker marker;
 	
 	TaggedResourceMarker(final IMarker marker){
@@ -17,10 +16,10 @@ public class TaggedResourceMarker implements ITaggedMarker {
 	}
 
 	public UUID getResourceId() throws CoreException {
-		final String rcid = (String)marker.getAttribute(ATTR_RESOURCEID);
+		final String rcid = (String)marker.getAttribute(KEY_RESOURCEID);
 		if(rcid == null){
 			final UUID resourceId = UUID.randomUUID();
-			marker.setAttribute(ATTR_RESOURCEID, resourceId.toString());
+			marker.setAttribute(KEY_RESOURCEID, resourceId.toString());
 			return(resourceId);
 		} else {
 			return(UUID.fromString(rcid));
