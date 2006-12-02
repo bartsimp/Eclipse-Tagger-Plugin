@@ -116,6 +116,7 @@ public class TagManager {
 		ensureTags();
 		tags.put(tag.getId(), tag);
 		fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.ADDED,new Tag[]{tag}));
+		saveTags();
 	}
 
 	public void updateTag(Tag tag){
@@ -124,6 +125,7 @@ public class TagManager {
 		if(tags.containsKey(tag.getId())){
 			tags.put(tag.getId(), tag);
 			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.UPDATED,new Tag[]{tag}));
+			saveTags();
 		}
 	}
 
@@ -138,6 +140,7 @@ public class TagManager {
 		final Tag removedTag = tags.remove(tagId);
 		if(removedTag != null){
 			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,new Tag[]{removedTag}));
+			saveTags();
 		}
 	}
 	
@@ -150,6 +153,7 @@ public class TagManager {
 		
 		if(ts.length != 0){
 			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,ts));
+			saveTags();
 		}
 	}
 
@@ -194,6 +198,14 @@ public class TagManager {
 			str.delete(str.length()-delim.length(),str.length());
 		}
 		return(str.toString());
+	}
+	
+	public static UUID[] extractTagIds(Tag[] tags){
+		final UUID[] uuids = new UUID[tags.length];
+		for(int i=0; i<tags.length; i++){
+			uuids[i] = tags[i].getId();
+		}
+		return(uuids);
 	}
 
 	/**

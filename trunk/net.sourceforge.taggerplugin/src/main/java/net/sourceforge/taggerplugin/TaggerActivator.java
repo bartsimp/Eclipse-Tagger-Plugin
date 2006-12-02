@@ -18,6 +18,8 @@ package net.sourceforge.taggerplugin;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 import net.sourceforge.taggerplugin.manager.TagManager;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -41,6 +43,10 @@ public class TaggerActivator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		
+		TagAssociationManager tagAssocMgr = TagAssociationManager.getInstance();
+		TagManager.getInstance().addTagManagerListener(tagAssocMgr);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(tagAssocMgr, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/**
@@ -49,6 +55,10 @@ public class TaggerActivator extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
+		
+		TagAssociationManager tagAssocMgr = TagAssociationManager.getInstance();
+		TagManager.getInstance().removeTagManagerListener(tagAssocMgr);
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(tagAssocMgr);
 
 		// automatically persist the tag set when plugin is stopped
 		TagManager.getInstance().saveTags();

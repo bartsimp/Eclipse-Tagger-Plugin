@@ -1,5 +1,6 @@
 package net.sourceforge.taggerplugin.model;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -50,6 +51,10 @@ public class TagAssociation implements Iterable<UUID> {
 	
 	public boolean removeAssociation(UUID tagid){
 		return(tagIds.remove(tagid));
+	}
+	
+	public boolean removeAssociations(UUID[] tagids){
+		return(tagIds.removeAll(Arrays.asList(tagids)));
 	}
 
 	/* (non-Javadoc)
