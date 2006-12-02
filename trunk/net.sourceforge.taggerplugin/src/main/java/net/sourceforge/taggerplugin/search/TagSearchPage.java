@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
 import java.util.Arrays;
@@ -5,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 
@@ -35,52 +51,52 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 	private TableItem[] tableItems;
 	private Button requireAllBtn;
 	private ISearchPageContainer searchPageContainer;
-	
+
 	public void setContainer(ISearchPageContainer container) {this.searchPageContainer = container;}
 
 	public void createControl(Composite parent) {
 		final Group panel = new Group(parent,SWT.SHADOW_ETCHED_IN);
 		panel.setLayout(new GridLayout(1,false));
-		panel.setText(Messages.TagSearchPage_Label_TagList);
-		
+		panel.setText(TaggerMessages.TagSearchPage_Label_TagList);
+
 		// list of tags
 		tagList = new Table(panel,SWT.CHECK | SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
 		tagList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
-		
+
 		final Tag[] tags = TagManager.getInstance().getTags();
 		Arrays.sort(tags);
-		
+
 		tableItems = new TableItem[tags.length];
 		for (int t=0; t<tags.length; t++) {
 			tableItems[t] = new TableItem(tagList,SWT.NONE);
 			tableItems[t].setText(tags[t].getName());
 			tableItems[t].setData(tags[t].getId());
 		}
-		
+
 		// require all
 		requireAllBtn = new Button(panel,SWT.CHECK);
-		requireAllBtn.setText(Messages.TagSearchPage_Label_AllRequired);
-		
+		requireAllBtn.setText(TaggerMessages.TagSearchPage_Label_AllRequired);
+
 		setControl(panel);
 	}
-	
+
 	public boolean performAction() {
 		try {
 			NewSearchUI.runQueryInBackground(newQuery());
 		} catch (CoreException e) {
-			ErrorDialog.openError(getShell(),Messages.TagSearchPage_Error_Title,Messages.bind(Messages.TagSearchPage_Error_Message, e.getMessage()), e.getStatus());
+			ErrorDialog.openError(getShell(),TaggerMessages.TagSearchPage_Error_Title,TaggerMessages.bind(TaggerMessages.TagSearchPage_Error_Message, e.getMessage()), e.getStatus());
 			return false;
 		}
  		return true;
 	}
-	
+
 	private ISearchQuery newQuery() throws CoreException {
 		final TagSearchInput input = new TagSearchInput(extractSelectedTagIds(),requireAllBtn.getSelection(),searchPageContainer);
 		final TagSearchResult result = new TagSearchResult();
 		final ISearchQuery query = new TagSearchQuery(input,result);
 		return(query);
 	}
-	
+
 	private UUID[] extractSelectedTagIds(){
 		final List<UUID> ids = new LinkedList<UUID>();
 		for(TableItem item : tableItems){

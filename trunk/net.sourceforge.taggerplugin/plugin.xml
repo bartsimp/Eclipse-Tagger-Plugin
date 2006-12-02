@@ -21,6 +21,7 @@
             targetID="net.sourceforge.taggerplugin.TagView">
          <action
                class="net.sourceforge.taggerplugin.action.DeleteTagAction"
+               helpContextId="net.sourceforge.taggerplugin.help.DeleteTagAction"
                icon="icons/Delete.gif"
                id="net.sourceforge.taggerplugin.action.DeleteTagAction"
                label="Delete Tag"
@@ -82,6 +83,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
                enablesFor="+"
+               helpContextId="net.sourceforge.taggerplugin.help.AddTagAssociation"
                id="net.sourceforge.taggerplugin.action.AddTagAssociation"
                label="Add Tag Association(s)"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
@@ -170,6 +172,19 @@
             icon="icons/DataStore.gif"
             id="net.sourceforge.taggerplugin.wizard.TagSetImport"
             name="Resource Tag Set"/>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true"/>
+      <toc file="tocconcepts.xml"/>
+      <toc file="tocreference.xml"/>
+      <toc file="toctasks.xml"/>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts file="contexthelp.xml"/>
    </extension>
 
 </plugin>

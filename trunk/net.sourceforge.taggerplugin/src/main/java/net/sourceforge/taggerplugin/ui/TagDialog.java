@@ -1,5 +1,21 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.model.TagFactory;
 
@@ -59,7 +75,7 @@ public class TagDialog extends Dialog {
      * @return the button id
      */
     public int showCreate(){
-    	this.title = Messages.TagDialog_Title_Create;
+    	this.title = TaggerMessages.TagDialog_Title_Create;
     	return(open());
     }
 
@@ -69,7 +85,7 @@ public class TagDialog extends Dialog {
      * @return the button id.
      */
     public int showModify(){
-    	this.title = Messages.TagDialog_Title_Modify;
+    	this.title = TaggerMessages.TagDialog_Title_Modify;
     	return(open());
     }
 
@@ -165,20 +181,20 @@ public class TagDialog extends Dialog {
         descTxt.setLayoutData(descData);
         descTxt.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
-		        validate(descTxt,Messages.TagDialog_Error_NoDescription);
+		        validate(descTxt,TaggerMessages.TagDialog_Error_NoDescription);
 			}
         });
         descTxt.addFocusListener(new FocusListener(){
 			public void focusGained(FocusEvent e){}
 			public void focusLost(FocusEvent e) {
-				validate(descTxt,Messages.TagDialog_Error_NoDescription);
+				validate(descTxt,TaggerMessages.TagDialog_Error_NoDescription);
 			}
         });
 	}
 
 	private void createDescriptionLabel(final Composite composite, final Font labelFont) {
 		final Label descLbl = new Label(composite,SWT.LEFT);
-        descLbl.setText(Messages.TagDialog_Label_Description);
+        descLbl.setText(TaggerMessages.TagDialog_Label_Description);
         descLbl.setFont(labelFont);
         descLbl.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 	}
@@ -191,20 +207,20 @@ public class TagDialog extends Dialog {
         nameTxt.setLayoutData(nameData);
         nameTxt.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
-		        validate(nameTxt,Messages.TagDialog_Error_NoName);
+		        validate(nameTxt,TaggerMessages.TagDialog_Error_NoName);
 			}
         });
         nameTxt.addFocusListener(new FocusListener(){
 			public void focusGained(FocusEvent e){}
 			public void focusLost(FocusEvent e) {
-				validate(nameTxt,Messages.TagDialog_Error_NoName);
+				validate(nameTxt,TaggerMessages.TagDialog_Error_NoName);
 			}
         });
 	}
 
 	private void createNameLabel(final Composite composite, final Font labelFont) {
 		final Label nameLbl = new Label(composite,SWT.LEFT);
-        nameLbl.setText(Messages.TagDialog_Label_Name);
+        nameLbl.setText(TaggerMessages.TagDialog_Label_Name);
         nameLbl.setFont(labelFont);
 	}
 

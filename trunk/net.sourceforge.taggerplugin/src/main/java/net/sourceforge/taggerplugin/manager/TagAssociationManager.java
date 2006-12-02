@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.manager;
 
 import java.io.BufferedReader;
@@ -45,22 +60,22 @@ public class TagAssociationManager {
 	private static TagAssociationManager instance;
 	private Map<String, Set<UUID>> associations;
 	private final List<ITagAssociationManagerListener> listeners;
-	
+
 	private TagAssociationManager(){
 		super();
 		this.listeners = new LinkedList<ITagAssociationManagerListener>();
 	}
-	
+
 	public static final TagAssociationManager getInstance(){
 		if(instance == null){
 			instance = new TagAssociationManager();
 		}
 		return(instance);
 	}
-	
+
 	/**
-	 * Used to find all associations (tag ids) that are shared by all of the resources with 
-	 * the given ids. An association will ONLY appear in the resulting set if it is shared by 
+	 * Used to find all associations (tag ids) that are shared by all of the resources with
+	 * the given ids. An association will ONLY appear in the resulting set if it is shared by
 	 * all resources in the id list.
 	 *
 	 * @param resourceIds
@@ -68,17 +83,17 @@ public class TagAssociationManager {
 	 */
 	public Set<UUID> findSharedAssociations(Object[] resources){
 		ensureAssociations();
-		
+
 		final Set<UUID> shared = new HashSet<UUID>();
 		try {
 			final Set<UUID> masterSet = new HashSet<UUID>();
 			for (Object resource : resources){
 				Set<UUID> vals = associations.get(TaggedMarker.getResourceId((IResource)resource));
 				if(vals != null && !vals.isEmpty()){
-					masterSet.addAll(vals);	
+					masterSet.addAll(vals);
 				}
 			}
-			
+
 			for(UUID uuid : masterSet){
 				boolean allhave = false;
 				for(Object resource : resources){
@@ -93,7 +108,7 @@ public class TagAssociationManager {
 						break;
 					}
 				}
-				
+
 				if(allhave){
 					shared.add(uuid);
 				}
@@ -104,7 +119,7 @@ public class TagAssociationManager {
 		}
 		return(shared);
 	}
-	
+
 	/**
 	 * Used to clear all associations of the given resource.
 	 *
@@ -112,7 +127,7 @@ public class TagAssociationManager {
 	 */
 	public void clearAssociations(IResource resource){
 		ensureAssociations();
-		
+
 		try {
 			final IMarker marker = TaggedMarker.getMarker(resource);
 			if(marker != null){
@@ -120,9 +135,9 @@ public class TagAssociationManager {
 				final Set<UUID> tags = associations.get(resourceId);
 				if(tags != null && !tags.isEmpty()){
 					associations.remove(resourceId);
-					
+
 					TaggedMarker.deleteMarker(resource);
-					
+
 					fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.REMOVED,resource));
 				}
 			}
@@ -131,7 +146,7 @@ public class TagAssociationManager {
 			TaggerLog.error("Unable to clear tag associations: " + ce.getMessage(), ce);
 		}
 	}
-	
+
 	/**
 	 * Used to clear (remove) the association of the tag with the given id
 	 * with the specified resource.
@@ -141,37 +156,37 @@ public class TagAssociationManager {
 	 */
 	public void clearAssociation(IResource resource, UUID tagid){
 		ensureAssociations();
-		
+
 		try {
 			final IMarker marker = TaggedMarker.getMarker(resource);
 			if(marker != null){
 				final Set<UUID> tags = associations.get(TaggedMarker.getResourceId(marker));
 				if(tags != null && !tags.isEmpty()){
 					tags.remove(tagid);
-					
+
 					if(tags.isEmpty()){
 						// there are no more associations, clear the marker
 						TaggedMarker.deleteMarker(resource);
 					}
-					
+
 					fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.REMOVED,resource));
-				}	
+				}
 			}
 		} catch(CoreException ce){
 			// FIXME: pass to user
 			TaggerLog.error("Unable to clear tag association: " + ce.getMessage(), ce);
 		}
 	}
-	
+
 	public boolean hasAssociation(IResource resource, UUID tagid){
 		ensureAssociations();
-		
+
 		boolean hasAssoc = false;
 		try {
 			final IMarker marker = TaggedMarker.getMarker(resource);
 			if(marker != null){
 				final Set<UUID> tags = associations.get(TaggedMarker.getResourceId(marker));
-				hasAssoc = tags != null && !tags.isEmpty() && tags.contains(tagid); 
+				hasAssoc = tags != null && !tags.isEmpty() && tags.contains(tagid);
 			}
 		} catch(CoreException ce){
 			// FIXME: send to user
@@ -179,10 +194,10 @@ public class TagAssociationManager {
 		}
 		return(hasAssoc);
 	}
-	
+
 	public boolean hasAssociations(IResource resource){
 		ensureAssociations();
-		
+
 		boolean hasAssoc = false;
 		try {
 			hasAssoc = TaggedMarker.getMarker(resource) != null;
@@ -192,7 +207,7 @@ public class TagAssociationManager {
 		}
 		return(hasAssoc);
 	}
-	
+
 	/**
 	 * Used to associate the tag with the specified id to the given resource.
 	 *
@@ -201,26 +216,26 @@ public class TagAssociationManager {
 	 */
 	public void addAssociation(IResource resource, UUID tagid){
 		ensureAssociations();
-		
+
 		try {
 			final Set<UUID> tags = getOrCreateAssociationSet(TaggedMarker.getResourceId(TaggedMarker.getOrCreateMarker(resource)));
 			tags.add(tagid);
-			
+
 			fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.ADDED,resource));
-			
+
 		} catch(CoreException ce){
 			// FIXME: this should be passed to user
 			TaggerLog.error("Unable to create tag association: " + ce.getMessage(),ce);
 		}
 	}
-	
+
 	public UUID[] getAssociations(IResource resource){
 		ensureAssociations();
-		
+
 		try {
 			final IMarker marker = TaggedMarker.getMarker(resource);
 			if(marker != null){
-				return(associations.get(TaggedMarker.getResourceId(marker)).toArray(new UUID[0]));		
+				return(associations.get(TaggedMarker.getResourceId(marker)).toArray(new UUID[0]));
 			}
 		} catch(CoreException ce){
 			// FIXME: send to user
@@ -228,17 +243,17 @@ public class TagAssociationManager {
 		}
 		return(new UUID[0]);
 	}
-	
+
 	private void ensureAssociations(){
 		if(associations == null){
 			associations = new HashMap<String, Set<UUID>>();
 			loadAssociations();
 		}
 	}
-	
+
 	/**
 	 * Used to retrieve the set of tag ids associated with the given resource id. If the set
-	 * does not exist, one will be created, added to the associations map, and returned 
+	 * does not exist, one will be created, added to the associations map, and returned
 	 * for use.
 	 *
 	 * @param resourceId
@@ -263,14 +278,14 @@ public class TagAssociationManager {
 				final IMemento[] children = XMLMemento.createReadRoot(reader).getChildren(TAG_ASSOCIATION);
 				for (IMemento mem : children) {
 					final String resourceId = mem.getID();
-					
+
 					Set<UUID> list = associations.get(resourceId);
 					if(list == null){
 						list = new HashSet<UUID>();
 						associations.put(resourceId, list);
 					}
-					
-					final IMemento[] resourceChildren = mem.getChildren(TAG_TAG); 
+
+					final IMemento[] resourceChildren = mem.getChildren(TAG_TAG);
 					for(IMemento rchild : resourceChildren){
 						list.add(UUID.fromString(rchild.getString(TAG_REFID)));
 					}
@@ -283,14 +298,14 @@ public class TagAssociationManager {
 			}
 		}
 	}
-	
+
 	public void saveAssociations(){
 		if(associations == null){return;}
 
 		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_ASSOCIATIONS);
 		for (Entry<String, Set<UUID>> entry : associations.entrySet()) {
 			final IMemento mem = memento.createChild(TAG_ASSOCIATION,String.valueOf(entry.getKey()));
-			
+
 			for (UUID tagid : entry.getValue()) {
 				final IMemento tagMem = mem.createChild(TAG_TAG);
 				tagMem.putString(TAG_REFID, tagid.toString());
@@ -307,7 +322,7 @@ public class TagAssociationManager {
 			IoUtils.closeQuietly(writer);
 		}
 	}
-	
+
 	/**
 	 * Used to retrieve the file in the plugin state directory used to store the tag association
 	 * information.
@@ -323,11 +338,11 @@ public class TagAssociationManager {
 			listeners.add(listener);
 		}
 	}
-	
+
 	public void removeTagAssociationListener(ITagAssociationManagerListener listener){
 		listeners.remove(listener);
 	}
-	
+
 	private void fireTagAssociationEvent(TagAssociationEvent event){
 		for(ITagAssociationManagerListener listener : listeners){
 			listener.handleTagAssociationEvent(event);

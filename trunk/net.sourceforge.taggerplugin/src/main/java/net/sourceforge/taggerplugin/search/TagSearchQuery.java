@@ -1,23 +1,24 @@
-/*
- *	Copyright 2006 Christopher J. Stehno (chris@stehno.com)
- *
- * 	Licensed under the Apache License, Version 2.0 (the "License");
- *	you may not use this file except in compliance with the License.
- *	You may obtain a copy of the License at
- *
- *		http://www.apache.org/licenses/LICENSE-2.0
- *
- *	Unless required by applicable law or agreed to in writing, software
- *	distributed under the License is distributed on an "AS IS" BASIS,
- * 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	See the License for the specific language governing permissions and
- *	limitations under the License.
- */
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
+import net.sourceforge.taggerplugin.TaggerMessages;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -38,23 +39,23 @@ import org.eclipse.ui.IWorkingSet;
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 class TagSearchQuery implements ISearchQuery {
-	
+
 	private final TagSearchInput input;
 	private final ISearchResult result;
-	
+
 	TagSearchQuery(final TagSearchInput input, final TagSearchResult result){
 		super();
 		this.input = input;
-		
+
 		this.result = result;
 		result.setQuery(this);
 	}
-	
+
 	public boolean canRerun() {return true;}
 
 	public boolean canRunInBackground() {return true;}
 
-	public String getLabel() {return(Messages.TagSearchQuery_Label);}
+	public String getLabel() {return(TaggerMessages.TagSearchQuery_Label);}
 
 	public ISearchResult getSearchResult() {return(result);}
 
@@ -62,7 +63,7 @@ class TagSearchQuery implements ISearchQuery {
 		try {
 			// TODO: may want to break visitor apart so that there is one per search type
 			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input,(TagSearchResult)result);
-			
+
 			if(input.isProjectsScope()){
 				final String[] projectNames = input.getProjectNames();
 				for (String projectName : projectNames) {
@@ -71,7 +72,7 @@ class TagSearchQuery implements ISearchQuery {
 						resource.accept(visitor,IResource.NONE);
 					}
 				}
-				
+
 			} else if(input.isWorkingSetScope()){
 				final IWorkingSet[] workingSets = input.getWorkingSets();
 				for (IWorkingSet workingSet : workingSets) {
@@ -83,22 +84,22 @@ class TagSearchQuery implements ISearchQuery {
 						}
 					}
 				}
-				
+
 			} else if(input.isSelectionScope()){
 				for(IResource resource : input.getSelectedResources()){
 					visitor.visit(resource.createProxy());
 				}
-				
+
 			} else {
 				// workspace scope
-				ResourcesPlugin.getWorkspace().getRoot().accept(visitor, IResource.NONE);	
+				ResourcesPlugin.getWorkspace().getRoot().accept(visitor, IResource.NONE);
 			}
-			
-			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,Messages.TagSearchQuery_Status_Complete,null));
+
+			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,TaggerMessages.TagSearchQuery_Status_Complete,null));
 		} catch(CoreException ce){
 			// FIXME: send to user
 			TaggerLog.error("Unable to perform search: " + ce.getMessage(), ce);
-			return(new Status(IStatus.ERROR,TaggerActivator.PLUGIN_ID,ce.getStatus().getCode(),Messages.TagSearchQuery_Status_Error,ce));
+			return(new Status(IStatus.ERROR,TaggerActivator.PLUGIN_ID,ce.getStatus().getCode(),TaggerMessages.TagSearchQuery_Status_Error,ce));
 		}
 	}
 }
