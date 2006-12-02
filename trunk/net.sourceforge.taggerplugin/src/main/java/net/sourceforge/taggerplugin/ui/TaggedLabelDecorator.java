@@ -19,12 +19,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
-import net.sourceforge.taggerplugin.resource.ITaggable;
+import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -46,17 +48,12 @@ public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAsso
 	}
 
 	public void decorate(Object element, IDecoration decoration) {
-		boolean decorate = false;
-		if(element instanceof ITaggable){
-			decorate = ((ITaggable)element).hasTags();
-		} else if(element instanceof IResource){
-			final IResource resource = (IResource)element;
-			final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
-			decorate = taggable.hasTags();
-		}
-		
-		if(decorate){
-			decoration.addOverlay(OVERLAY);
+		try {
+			if(TaggedMarkerHelper.getMarker((IResource)element) != null){
+				decoration.addOverlay(OVERLAY);
+			}
+		} catch(CoreException ce){
+			TaggerLog.error("Unable to decorate resource: " + ce.getMessage(),ce);
 		}
 	}
 

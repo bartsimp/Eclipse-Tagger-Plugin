@@ -67,6 +67,11 @@
             class="net.sourceforge.taggerplugin.resource.TaggableAdapterFactory">
          <adapter type="net.sourceforge.taggerplugin.resource.ITaggable"/>
       </factory>
+      <factory
+            adaptableType="org.eclipse.core.resources.IMarker"
+            class="net.sourceforge.taggerplugin.resource.TaggedMarkerAdapterFactory">
+         <adapter type="net.sourceforge.taggerplugin.resource.ITaggedMarker"/>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

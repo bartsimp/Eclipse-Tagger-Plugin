@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,9 +37,11 @@ import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
+import net.sourceforge.taggerplugin.model.TagAssociation;
+import net.sourceforge.taggerplugin.resource.ITaggedMarker;
+import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
 import net.sourceforge.taggerplugin.util.IoUtils;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMemento;
@@ -58,7 +61,7 @@ public class TagAssociationManager {
 	private static final String TAGASSOCIATIONFILENAME = "tag-associations.xml";
 	private static final String TAG_ASSOCIATION = "assoc";
 	private static TagAssociationManager instance;
-	private Map<String, Set<UUID>> associations;
+	private Map<UUID, TagAssociation> associations;
 	private final List<ITagAssociationManagerListener> listeners;
 
 	private TagAssociationManager(){
@@ -88,18 +91,18 @@ public class TagAssociationManager {
 		try {
 			final Set<UUID> masterSet = new HashSet<UUID>();
 			for (Object resource : resources){
-				Set<UUID> vals = associations.get(TaggedMarker.getResourceId((IResource)resource));
-				if(vals != null && !vals.isEmpty()){
-					masterSet.addAll(vals);
+				TagAssociation vals = associations.get(TaggedMarkerHelper.getMarker((IResource)resource).getResourceId());
+				if(vals != null && vals.hasAssociations()){
+					masterSet.addAll(Arrays.asList(vals.getAssociations()));
 				}
 			}
 
 			for(UUID uuid : masterSet){
 				boolean allhave = false;
 				for(Object resource : resources){
-					final Set<UUID> assocs = associations.get(TaggedMarker.getResourceId((IResource)resource));
-					if(assocs != null && !assocs.isEmpty()){
-						allhave = assocs.contains(uuid);
+					final TagAssociation assocs = associations.get(TaggedMarkerHelper.getMarker((IResource)resource).getResourceId());
+					if(assocs != null && assocs.hasAssociations()){
+						allhave = assocs.containsAssociation(uuid);
 						if(!allhave){
 							break;
 						}
@@ -129,14 +132,14 @@ public class TagAssociationManager {
 		ensureAssociations();
 
 		try {
-			final IMarker marker = TaggedMarker.getMarker(resource);
+			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
 			if(marker != null){
-				final String resourceId = TaggedMarker.getResourceId(marker);
-				final Set<UUID> tags = associations.get(resourceId);
-				if(tags != null && !tags.isEmpty()){
+				final UUID resourceId = marker.getResourceId();
+				final TagAssociation tags = associations.get(resourceId);
+				if(tags != null && tags.hasAssociations()){
 					associations.remove(resourceId);
 
-					TaggedMarker.deleteMarker(resource);
+					TaggedMarkerHelper.deleteMarker(resource);
 
 					fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.REMOVED,resource));
 				}
@@ -158,15 +161,15 @@ public class TagAssociationManager {
 		ensureAssociations();
 
 		try {
-			final IMarker marker = TaggedMarker.getMarker(resource);
+			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
 			if(marker != null){
-				final Set<UUID> tags = associations.get(TaggedMarker.getResourceId(marker));
-				if(tags != null && !tags.isEmpty()){
-					tags.remove(tagid);
+				final TagAssociation tags = associations.get(marker.getResourceId());
+				if(tags != null && tags.hasAssociations()){
+					tags.removeAssociation(tagid);
 
 					if(tags.isEmpty()){
 						// there are no more associations, clear the marker
-						TaggedMarker.deleteMarker(resource);
+						TaggedMarkerHelper.deleteMarker(resource);
 					}
 
 					fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.REMOVED,resource));
@@ -183,10 +186,10 @@ public class TagAssociationManager {
 
 		boolean hasAssoc = false;
 		try {
-			final IMarker marker = TaggedMarker.getMarker(resource);
+			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
 			if(marker != null){
-				final Set<UUID> tags = associations.get(TaggedMarker.getResourceId(marker));
-				hasAssoc = tags != null && !tags.isEmpty() && tags.contains(tagid);
+				final TagAssociation tags = associations.get(marker.getResourceId());
+				hasAssoc = tags != null && tags.hasAssociations() && tags.containsAssociation(tagid);
 			}
 		} catch(CoreException ce){
 			// FIXME: send to user
@@ -197,10 +200,9 @@ public class TagAssociationManager {
 
 	public boolean hasAssociations(IResource resource){
 		ensureAssociations();
-
 		boolean hasAssoc = false;
 		try {
-			hasAssoc = TaggedMarker.getMarker(resource) != null;
+			hasAssoc = TaggedMarkerHelper.getMarker(resource) != null;
 		} catch(CoreException ce){
 			// FIXME: send to user
 			TaggerLog.error("Unable to determine association: " + ce.getMessage(), ce);
@@ -216,10 +218,9 @@ public class TagAssociationManager {
 	 */
 	public void addAssociation(IResource resource, UUID tagid){
 		ensureAssociations();
-
 		try {
-			final Set<UUID> tags = getOrCreateAssociationSet(TaggedMarker.getResourceId(TaggedMarker.getOrCreateMarker(resource)));
-			tags.add(tagid);
+			final TagAssociation tags = getOrCreateAssociation(TaggedMarkerHelper.getOrCreateMarker(resource).getResourceId());
+			tags.addTagId(tagid);
 
 			fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.ADDED,resource));
 
@@ -231,11 +232,10 @@ public class TagAssociationManager {
 
 	public UUID[] getAssociations(IResource resource){
 		ensureAssociations();
-
 		try {
-			final IMarker marker = TaggedMarker.getMarker(resource);
+			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
 			if(marker != null){
-				return(associations.get(TaggedMarker.getResourceId(marker)).toArray(new UUID[0]));
+				return(associations.get(marker.getResourceId()).getAssociations());
 			}
 		} catch(CoreException ce){
 			// FIXME: send to user
@@ -246,7 +246,7 @@ public class TagAssociationManager {
 
 	private void ensureAssociations(){
 		if(associations == null){
-			associations = new HashMap<String, Set<UUID>>();
+			associations = new HashMap<UUID,TagAssociation>();
 			loadAssociations();
 		}
 	}
@@ -259,13 +259,13 @@ public class TagAssociationManager {
 	 * @param resourceId
 	 * @return
 	 */
-	private Set<UUID> getOrCreateAssociationSet(String resourceId){
-		Set<UUID> tags = associations.get(resourceId);
-		if(tags == null){
-			tags = new HashSet<UUID>();
-			associations.put(resourceId, tags);
+	private TagAssociation getOrCreateAssociation(UUID resourceId){
+		TagAssociation tagAssoc = associations.get(resourceId);
+		if(tagAssoc == null){
+			tagAssoc = new TagAssociation(resourceId);
+			associations.put(resourceId, tagAssoc);
 		}
-		return(tags);
+		return(tagAssoc);
 	}
 
 	private void loadAssociations(){
@@ -277,17 +277,17 @@ public class TagAssociationManager {
 
 				final IMemento[] children = XMLMemento.createReadRoot(reader).getChildren(TAG_ASSOCIATION);
 				for (IMemento mem : children) {
-					final String resourceId = mem.getID();
+					final UUID resourceId = UUID.fromString(mem.getID());
 
-					Set<UUID> list = associations.get(resourceId);
-					if(list == null){
-						list = new HashSet<UUID>();
-						associations.put(resourceId, list);
+					TagAssociation tagAssoc = associations.get(resourceId);
+					if(tagAssoc == null){
+						tagAssoc = new TagAssociation(resourceId);
+						associations.put(resourceId, tagAssoc);
 					}
 
 					final IMemento[] resourceChildren = mem.getChildren(TAG_TAG);
 					for(IMemento rchild : resourceChildren){
-						list.add(UUID.fromString(rchild.getString(TAG_REFID)));
+						tagAssoc.addTagId(UUID.fromString(rchild.getString(TAG_REFID)));
 					}
 				}
 
@@ -303,12 +303,12 @@ public class TagAssociationManager {
 		if(associations == null){return;}
 
 		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_ASSOCIATIONS);
-		for (Entry<String, Set<UUID>> entry : associations.entrySet()) {
+		for (Entry<UUID,TagAssociation> entry : associations.entrySet()) {
 			final IMemento mem = memento.createChild(TAG_ASSOCIATION,String.valueOf(entry.getKey()));
 
-			for (UUID tagid : entry.getValue()) {
+			for (UUID tagId : entry.getValue()){
 				final IMemento tagMem = mem.createChild(TAG_TAG);
-				tagMem.putString(TAG_REFID, tagid.toString());
+				tagMem.putString(TAG_REFID, tagId.toString());
 			}
 		}
 
