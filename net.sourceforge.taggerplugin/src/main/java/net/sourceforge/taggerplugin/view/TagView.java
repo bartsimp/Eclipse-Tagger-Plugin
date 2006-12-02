@@ -18,9 +18,13 @@ package net.sourceforge.taggerplugin.view;
 import java.util.Iterator;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.action.ModifyTagAction;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -28,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
@@ -75,6 +80,19 @@ public class TagView extends ViewPart {
 		viewer.setContentProvider(new TagViewContentProvider());
 		viewer.setLabelProvider(new TagViewLabelProvider());
 		viewer.setSorter(new TagViewSorter());
+		
+		final IViewPart viewPart = this;
+		
+		viewer.addDoubleClickListener(new IDoubleClickListener(){
+			public void doubleClick(DoubleClickEvent event) {
+				final ISelection selection = event.getSelection();
+				if(!selection.isEmpty() && selection instanceof IStructuredSelection){
+					final ModifyTagAction action = new ModifyTagAction();
+					action.init(viewPart);
+					action.run(null);
+				}
+			}
+		});		
 
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
