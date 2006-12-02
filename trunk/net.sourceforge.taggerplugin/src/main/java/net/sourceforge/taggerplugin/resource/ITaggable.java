@@ -17,6 +17,8 @@ package net.sourceforge.taggerplugin.resource;
 
 import java.util.UUID;
 
+import org.eclipse.core.resources.IResource;
+
 /**
  *	Interface used for adapting resources into taggable resources.
  *
@@ -60,4 +62,6 @@ public interface ITaggable {
 	public boolean hasTag(UUID id);
 
 	public boolean hasTags();
+	
+	public IResource getResource();
 }

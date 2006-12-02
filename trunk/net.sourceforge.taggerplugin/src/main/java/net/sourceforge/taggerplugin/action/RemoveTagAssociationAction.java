@@ -32,16 +32,14 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * This action is used to add the same tag associations to all selected resources.
- * Tag associations that are common to all selected resources will not be available
- * for selection; however, associations common to only some of the resources will
- * be available.
+ * This action is used to remove the same tag associations from all selected resources.
+ * The tag associations used by any of the selected resources will be displayed.
  *
  * This action will display the TagSelectionDialog
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-public class AddTagAssociationAction implements IObjectActionDelegate {
+public class RemoveTagAssociationAction implements IObjectActionDelegate {
 
 	private IWorkbenchPart activePart;
 	private ISelection selection;
@@ -53,8 +51,8 @@ public class AddTagAssociationAction implements IObjectActionDelegate {
 				try {
 					final ITaggable[] taggables = extractTaggables(sel);
 
-					final Set<UUID> sharedAssociations = TagAssociationManager.getInstance().findSharedAssociations(taggables);
-					final Tag[] taglist = TagManager.getInstance().findTagsNotIn(sharedAssociations.toArray(new UUID[sharedAssociations.size()]));
+					final Set<UUID> associations = TagAssociationManager.getInstance().findAllAssociations(taggables);
+					final Tag[] taglist = TagManager.getInstance().findTags(associations.toArray(new UUID[associations.size()]));
 
 					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
 					if(dialog.open() == TagSelectionDialog.OK){
@@ -62,7 +60,7 @@ public class AddTagAssociationAction implements IObjectActionDelegate {
 						for (Object tag : selectedTags) {
 							final Tag t = (Tag)tag;
 							for(ITaggable taggable : taggables){
-								taggable.setTag(t.getId());
+								taggable.clearTag(t.getId());
 							}
 						}
 					}

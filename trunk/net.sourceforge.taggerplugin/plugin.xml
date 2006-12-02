@@ -93,14 +93,21 @@
                id="net.sourceforge.taggerplugin.action.AddTagAssociation"
                label="Add Tag Association(s)"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
-               tooltip="Add tag association."/>
+               tooltip="Add tag association(s) to selected resources."/>
          <action
                class="net.sourceforge.taggerplugin.action.ClearTagAssociationsAction"
                enablesFor="+"
                id="net.sourceforge.taggerplugin.action.ClearTagAssociations"
-               label="Clear Tag Association(s)"
+               label="Clear Tag Associations"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
                tooltip="Clear tag association(s)."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.RemoveTagAssociationAction"
+               enablesFor="+"
+               id="net.sourceforge.taggerplugin.action.RemoveTagAssociation"
+               label="Remove Tag Association(s)"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="Remove tag association(s) from selected resources."/>
       </objectContribution>
    </extension>
    <extension

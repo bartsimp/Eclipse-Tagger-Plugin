@@ -58,4 +58,6 @@ class TaggableResource implements ITaggable {
 	public boolean hasTags(){
 		return(TagAssociationManager.getInstance().hasAssociations(resource));
 	}
+	
+	public IResource getResource(){return(resource);}
 }
