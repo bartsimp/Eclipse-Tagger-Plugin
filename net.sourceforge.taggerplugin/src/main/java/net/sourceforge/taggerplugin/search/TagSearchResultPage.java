@@ -47,33 +47,55 @@ import org.eclipse.ui.part.IPageSite;
  */
 public class TagSearchResultPage implements ISearchResultPage {
 
+	private static final String TAG_COLWIDTH_TAGS = "col-width-tags";
+	private static final String TAG_COLWIDTH_PATH = "col-width-path";
+	private static final String TAG_COLWIDTH_NAME = "col-width-name";
+	private static final String TAG_SEARCHVIEWSTATE = "tag-search-view-state";
 	private String id;
 	private Object uiState;
 	private Composite control;
 	private IPageSite site;
-	private TableViewer resultViewer;
 	private TagSearchResultsViewContentProvider viewContentProvider;
 	private ISearchResult result;
-
+	private TableViewer resultViewer;
+	private TableColumn nameCol,pathCol,tagsCol;
+	private int nameColWidth = 100,pathColWidth = 100,tagsColWidth = 100;
+	
 	public String getID() {return id;}
 
 	public String getLabel() {return(TaggerMessages.TagSearchResultPage_Label);}
 
 	public Object getUIState() {return uiState;}
 
+	public void saveState(IMemento memento){
+		final IMemento mem = memento.createChild(TAG_SEARCHVIEWSTATE);
+		mem.putInteger(TAG_COLWIDTH_NAME,nameCol.getWidth());
+		mem.putInteger(TAG_COLWIDTH_PATH,pathCol.getWidth());
+		mem.putInteger(TAG_COLWIDTH_TAGS,tagsCol.getWidth());
+	}
+	
 	public void restoreState(IMemento memento) {
-		// TODO Auto-generated method stub
-		System.out.println("Restoring: " + memento);
+		if(memento != null){
+			final IMemento mem = memento.getChild(TAG_SEARCHVIEWSTATE);
+			if(mem != null){
+				this.nameColWidth = extractWidth(mem,TAG_COLWIDTH_NAME);
+				this.pathColWidth = extractWidth(mem,TAG_COLWIDTH_PATH);
+				this.tagsColWidth = extractWidth(mem,TAG_COLWIDTH_TAGS);
+			}
+		}
+	}
+	
+	// FIXME: used in two places... pull into common (might not be needed though)
+	private int extractWidth(IMemento m, String key){
+		int val = 100;
+		if(m != null){
+			final int x = m.getInteger(key);
+			val = x > 5 ? x : val;
+		}
+		return(val);
 	}
 
-	public void saveState(IMemento memento) {
-		// TODO Auto-generated method stub
-		System.out.println("Saving: " + memento);
-	}
-
-	public void setID(String id) {
-		this.id = id;
-	}
+	public void setID(String id) {this.id = id;}
 
 	public void setInput(ISearchResult newSearch, Object uiState) {
 		if(newSearch == null){
@@ -113,9 +135,9 @@ public class TagSearchResultPage implements ISearchResultPage {
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		table.setHeaderVisible(true);
 
-		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Name, 100);
-		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Path, 300);
-		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Tags, 100);
+		this.nameCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Name,nameColWidth);
+		this.pathCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Path,pathColWidth);
+		this.tagsCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Tags,tagsColWidth);
 
 		resultViewer.setInput(null);
 
@@ -136,10 +158,11 @@ public class TagSearchResultPage implements ISearchResultPage {
 		this.control = panel;
 	}
 
-	private void createTableColumn(Table table, String name, int width){
+	private TableColumn createTableColumn(Table table, String name, int width){
 		final TableColumn col = new TableColumn(table,SWT.LEFT);
 		col.setText(name);
 		col.setWidth(width);
+		return(col);
 	}
 
 	public void dispose() {
