@@ -15,16 +15,15 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerLog;
-import net.sourceforge.taggerplugin.manager.TaggedMarker;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.resource.ITaggable;
+import net.sourceforge.taggerplugin.search.ITagSearchResult;
+import net.sourceforge.taggerplugin.search.TagSearchResult;
+import net.sourceforge.taggerplugin.search.TaggableResourceVisitor;
 import net.sourceforge.taggerplugin.view.TagView;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -52,12 +51,12 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 	public void run(IAction action) {
 		final TagView tagView = (TagView)viewPart;
-		final Tag selectedTag = tagView.getSelectedTag();
-		if(selectedTag != null){
+		final Tag[] selectedTags = tagView.getSelectedTags();
+		if(selectedTags != null && selectedTags.length != 0){
 			try {
 				final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
 
-				final IWorkingSet workingSet = workingSetMgr.createWorkingSet(selectedTag.getName() + " Working Set",findResourcesWithTag(selectedTag));
+				final IWorkingSet workingSet = workingSetMgr.createWorkingSet(createWsName(selectedTags),findResourcesWithTags(selectedTags));
 				workingSetMgr.addWorkingSet(workingSet);
 
 				// FIXME: needs externalization
@@ -72,16 +71,30 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 	public void selectionChanged(IAction action, ISelection selection) {}
 
-	private IResource[] findResourcesWithTag(final Tag selectedTag) throws CoreException {
-		final IMarker[] markers = ResourcesPlugin.getWorkspace().getRoot().findMarkers(TaggedMarker.MARKER_TYPE,false,IResource.DEPTH_INFINITE);
-		final List<IResource> resources = new LinkedList<IResource>();
-		for(IMarker marker : markers){
-			final IResource resource = marker.getResource();
-			final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
-			if(taggable.hasTag(selectedTag.getId())){
-				resources.add(resource);
-			}
+	private IResource[] findResourcesWithTags(final Tag[] selectedTags) throws CoreException {
+		final UUID[] tagids = new UUID[selectedTags.length];
+		for(int t=0; t<selectedTags.length; t++){
+			tagids[t] = selectedTags[t].getId();
 		}
-		return(resources.toArray(new IResource[resources.size()]));
+		
+		final ITagSearchResult result = new TagSearchResult();
+		ResourcesPlugin.getWorkspace().getRoot().accept(new TaggableResourceVisitor(tagids,false,result), IResource.NONE);
+
+		// TODO: since this uses the search it would prb be best to pull common code into a mutual helper
+		// TODO: should swtich out the search to use the marker rather than check all resources
+		
+		return(result.getMatches());
+	}
+	
+	private String createWsName(final Tag[] tags){
+		StringBuilder str = new StringBuilder("Working Set (");
+		for(Tag t : tags){
+			str.append(t.getName()).append(",");
+		}
+		if(tags.length != 0){
+			str.deleteCharAt(str.length()-1);
+		}
+		str.append(")");
+		return(str.toString());
 	}
 }

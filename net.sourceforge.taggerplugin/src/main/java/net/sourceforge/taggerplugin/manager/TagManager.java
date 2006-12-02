@@ -140,6 +140,18 @@ public class TagManager {
 			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,new Tag[]{removedTag}));
 		}
 	}
+	
+	public void deleteTags(Tag[] ts){
+		if(tags == null || ts == null) return;
+		
+		for(Tag t : ts){
+			tags.remove(t.getId());
+		}
+		
+		if(ts.length != 0){
+			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,ts));
+		}
+	}
 
 	/**
 	 * Used to retrieve an array of all tags in the tag set.

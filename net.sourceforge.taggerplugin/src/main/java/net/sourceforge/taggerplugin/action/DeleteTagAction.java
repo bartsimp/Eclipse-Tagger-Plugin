@@ -39,9 +39,9 @@ public class DeleteTagAction implements IViewActionDelegate {
 
 	public void run(IAction action) {
 		final TagView tagView = (TagView)view;
-		final Tag deletedTag = tagView.getSelectedTag();
-		if(deletedTag != null){
-			TagManager.getInstance().deleteTag(deletedTag.getId());
+		final Tag[] deletedTags = tagView.getSelectedTags();
+		if(deletedTags != null && deletedTags.length != 0){
+			TagManager.getInstance().deleteTags(deletedTags);
 		}
 	}
 

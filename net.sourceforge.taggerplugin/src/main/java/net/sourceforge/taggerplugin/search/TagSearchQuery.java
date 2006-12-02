@@ -62,7 +62,7 @@ class TagSearchQuery implements ISearchQuery {
 	public IStatus run(IProgressMonitor monitor) throws OperationCanceledException {
 		try {
 			// TODO: may want to break visitor apart so that there is one per search type
-			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input,(TagSearchResult)result);
+			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input.getTagIds(),input.isRequired(),(ITagSearchResult)result);
 
 			if(input.isProjectsScope()){
 				final String[] projectNames = input.getProjectNames();
