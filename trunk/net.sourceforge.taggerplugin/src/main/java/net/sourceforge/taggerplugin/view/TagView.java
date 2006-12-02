@@ -27,6 +27,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -37,8 +40,35 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class TagView extends ViewPart {
 
+	private static final String TAG_COLWIDTH_DESC = "col-width-desc";
+	private static final String TAG_COLWIDTH_NAME = "col-width-name";
+	private static final String TAG_VIEWSTATE = "tag-view-state";
 	public static final String ID = "net.sourceforge.taggerplugin.TagView";
 	private TableViewer viewer;
+	private TableColumn nameCol, descCol;
+	private int nameColWidth = 100,descColWidth = 100;
+	
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		
+		if(memento != null){
+			final IMemento mem = memento.getChild(TAG_VIEWSTATE);
+			if(mem != null){
+				nameColWidth = extractWidth(mem,TAG_COLWIDTH_NAME);
+				descColWidth = extractWidth(mem,TAG_COLWIDTH_DESC);
+			}
+		}
+	}
+	
+	private int extractWidth(IMemento m, String key){
+		int val = 100;
+		if(m != null){
+			final int x = m.getInteger(key);
+			val = x > 5 ? x : val;
+		}
+		return(val);
+	}
 
 	public void createPartControl(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.FULL_SELECTION);
@@ -48,10 +78,9 @@ public class TagView extends ViewPart {
 
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
-//		table.setLinesVisible(true);
 
-		createTableColumn(table,TaggerMessages.TagView_Header_Name, 100);
-		createTableColumn(table,TaggerMessages.TagView_Header_Description, 100);
+		this.nameCol = createTableColumn(table,TaggerMessages.TagView_Header_Name,nameColWidth);
+		this.descCol = createTableColumn(table,TaggerMessages.TagView_Header_Description,descColWidth);
 
 		viewer.setInput(TagManager.getInstance());
 	}
@@ -63,10 +92,11 @@ public class TagView extends ViewPart {
 	 * @param name the name (header) of the column
 	 * @param width the width of the column
 	 */
-	private void createTableColumn(Table table, String name, int width){
+	private TableColumn createTableColumn(Table table, String name, int width){
 		final TableColumn col = new TableColumn(table,SWT.LEFT);
 		col.setText(name);
 		col.setWidth(width);
+		return(col);
 	}
 
 	public void setFocus() {
@@ -89,5 +119,14 @@ public class TagView extends ViewPart {
 			}
 		}
 		return(tags);
+	}
+	
+	@Override
+	public void saveState(IMemento memento) {
+		final IMemento mem = memento.createChild(TAG_VIEWSTATE);
+		mem.putInteger(TAG_COLWIDTH_NAME, nameCol.getWidth());
+		mem.putInteger(TAG_COLWIDTH_DESC, descCol.getWidth());
+		
+		super.saveState(memento);
 	}
 }
