@@ -1,18 +1,18 @@
-/*
- *	Copyright 2006 Christopher J. Stehno (chris@stehno.com)
- *
- * 	Licensed under the Apache License, Version 2.0 (the "License");
- *	you may not use this file except in compliance with the License.
- *	You may obtain a copy of the License at
- *
- *		http://www.apache.org/licenses/LICENSE-2.0
- *
- *	Unless required by applicable law or agreed to in writing, software
- *	distributed under the License is distributed on an "AS IS" BASIS,
- * 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	See the License for the specific language governing permissions and
- *	limitations under the License.
- */
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
 import java.util.UUID;
@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkingSet;
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 class TagSearchInput {
-	
+
 	private final UUID[] tagIds;
 	private final boolean required;
 	private final int scope;
@@ -42,12 +42,12 @@ class TagSearchInput {
 		super();
 		this.tagIds = tagIds;
 		this.required = required;
-		
+
 		this.scope = container.getSelectedScope();
 		if(scope == ISearchPageContainer.SELECTED_PROJECTS_SCOPE){
-			this.projectNames = container.getSelectedProjectNames();	
+			this.projectNames = container.getSelectedProjectNames();
 		} else if(scope == ISearchPageContainer.WORKING_SET_SCOPE){
-			this.workingSets = container.getSelectedWorkingSets();	
+			this.workingSets = container.getSelectedWorkingSets();
 		} else if(scope == ISearchPageContainer.SELECTION_SCOPE){
 			final ISelection selection = container.getSelection();
 			if(selection instanceof IStructuredSelection){
@@ -62,31 +62,31 @@ class TagSearchInput {
 			// workspace scope -- nothing special
 		}
 	}
-	
+
 	public boolean isProjectsScope(){return(scope == ISearchPageContainer.SELECTED_PROJECTS_SCOPE);}
-	
+
 	public boolean isWorkingSetScope(){return(scope == ISearchPageContainer.WORKING_SET_SCOPE);}
-	
+
 	public boolean isSelectionScope(){return(scope == ISearchPageContainer.SELECTION_SCOPE);}
-	
+
 	public boolean isWorkspaceScope(){return(scope == ISearchPageContainer.WORKSPACE_SCOPE);}
-	
+
 	public String[] getProjectNames() {
 		return this.projectNames;
 	}
-	
+
 	public IWorkingSet[] getWorkingSets() {
 		return this.workingSets;
 	}
-	
+
 	public IResource[] getSelectedResources() {
 		return this.selectedResources;
 	}
-	
+
 	public UUID[] getTagIds() {
 		return this.tagIds;
 	}
-	
+
 	public boolean isRequired() {
 		return this.required;
 	}

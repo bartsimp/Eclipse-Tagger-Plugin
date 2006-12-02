@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
 import java.util.LinkedList;
@@ -30,7 +45,7 @@ import org.eclipse.ui.PlatformUI;
 public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 	private IViewPart viewPart;
-	
+
 	public void init(IViewPart view) {
 		this.viewPart = view;
 	}
@@ -44,10 +59,10 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 				final IWorkingSet workingSet = workingSetMgr.createWorkingSet(selectedTag.getName() + " Working Set",findResourcesWithTag(selectedTag));
 				workingSetMgr.addWorkingSet(workingSet);
-				
+
 				// FIXME: needs externalization
 				MessageDialog.openInformation(viewPart.getSite().getShell(), "Working Set Created","Working Set '" + workingSet.getName() + "' has been created.");
-				
+
 			} catch(CoreException ce){
 				// FIXME: send to user
 				TaggerLog.error("Unable to create working set: " + ce.getMessage(),ce);
@@ -56,7 +71,7 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {}
-	
+
 	private IResource[] findResourcesWithTag(final Tag selectedTag) throws CoreException {
 		final IMarker[] markers = ResourcesPlugin.getWorkspace().getRoot().findMarkers(TaggedMarker.MARKER_TYPE,false,IResource.DEPTH_INFINITE);
 		final List<IResource> resources = new LinkedList<IResource>();

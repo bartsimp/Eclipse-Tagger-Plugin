@@ -1,18 +1,18 @@
-/*
- *	Copyright 2006 Christopher J. Stehno (chris@stehno.com)
- *
- * 	Licensed under the Apache License, Version 2.0 (the "License");
- *	you may not use this file except in compliance with the License.
- *	You may obtain a copy of the License at
- *
- *		http://www.apache.org/licenses/LICENSE-2.0
- *
- *	Unless required by applicable law or agreed to in writing, software
- *	distributed under the License is distributed on an "AS IS" BASIS,
- * 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	See the License for the specific language governing permissions and
- *	limitations under the License.
- */
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
 import net.sourceforge.taggerplugin.event.TagSearchResultEvent;
@@ -34,11 +34,11 @@ class TagSearchResultsViewContentProvider implements IStructuredContentProvider,
 
 	private TagSearchResult result;
 	private TableViewer viewer;
-	
+
 	TagSearchResultsViewContentProvider(){
 		super();
 	}
-	
+
 	public Object[] getElements(Object inputElement) {
 		return(result.getMatches());
 	}
@@ -46,36 +46,36 @@ class TagSearchResultsViewContentProvider implements IStructuredContentProvider,
 	public void dispose() {}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		this.viewer = (TableViewer)viewer;	
-		
+		this.viewer = (TableViewer)viewer;
+
 		if(result != null){
 			// remove the listener from the old input
 			result.removeListener(this);
 		}
-		
+
 		if(newInput != null){
 			result = (TagSearchResult)newInput;
 			result.addListener(this);
 		}
 	}
-	
+
 	public void searchResultChanged(SearchResultEvent e) {
 		final TagSearchResultEvent evt = (TagSearchResultEvent)e;
 
-		// NOTE: this is a bit hacky but there are NO good search examples on line and SWT is single-threaded and 
+		// NOTE: this is a bit hacky but there are NO good search examples on line and SWT is single-threaded and
 		// throws an error if you access the ui from another thread
 		Display.getDefault().asyncExec(new Runnable(){
 			public void run() {
 				viewer.getTable().setRedraw(false);
 				try {
 					if(evt.getType().equals(Type.ADDED)){
-						viewer.add(evt.getResources());	
+						viewer.add(evt.getResources());
 					} else if(evt.getType().equals(Type.REMOVED)){
 						viewer.remove(evt.getResources());
 					}
 				} finally {
 					viewer.getTable().setRedraw(true);
-				}		
+				}
 			}
 		});
 	}

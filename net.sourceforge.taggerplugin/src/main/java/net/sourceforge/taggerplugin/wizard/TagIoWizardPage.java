@@ -1,5 +1,21 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.wizard;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.util.StringUtils;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -24,7 +40,7 @@ class TagIoWizardPage extends WizardPage {
 	private final TagIoWizardType descriptor;
 
 	TagIoWizardPage(final TagIoWizardType descriptor){
-		super(descriptor.getPageId(),descriptor.equals(TagIoWizardType.IMPORT) ? Messages.TagImportWizardPage_Title : Messages.TagExportWizardPage_Title,null);
+		super(descriptor.getPageId(),descriptor.equals(TagIoWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Title : TaggerMessages.TagExportWizardPage_Title,null);
 		this.descriptor = descriptor;
 	}
 
@@ -55,7 +71,7 @@ class TagIoWizardPage extends WizardPage {
 		panel.setLayout(new GridLayout(3,false));
 
 		// path
-		createLabel(panel,Messages.TagIoWizardPage_Label_File,descriptor.equals(TagIoWizardType.IMPORT) ? Messages.TagImportWizardPage_Tooltip_File : Messages.TagExportWizardPage_Tooltip_File,1);
+		createLabel(panel,TaggerMessages.TagIoWizardPage_Label_File,descriptor.equals(TagIoWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Tooltip_File : TaggerMessages.TagExportWizardPage_Tooltip_File,1);
 
 		filePath = new Text(panel,SWT.BORDER | SWT.SINGLE);
 		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -65,7 +81,7 @@ class TagIoWizardPage extends WizardPage {
 		});
 
 		final Button directoryBtn = new Button(panel,SWT.PUSH);
-		directoryBtn.setText(Messages.TagIoWizardPage_Button_Browse);
+		directoryBtn.setText(TaggerMessages.TagIoWizardPage_Button_Browse);
 		directoryBtn.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				final FileDialog dialog = new FileDialog(getShell(),SWT.SAVE);
@@ -75,17 +91,17 @@ class TagIoWizardPage extends WizardPage {
 		});
 
 		// export format
-		createLabel(panel,Messages.TagIoWizardPage_Label_Format,Messages.TagIoWizardPage_Tooltip_Format,3);
+		createLabel(panel,TaggerMessages.TagIoWizardPage_Label_Format,TaggerMessages.TagIoWizardPage_Tooltip_Format,3);
 
 		xmlFormatBtn = new Button(panel,SWT.RADIO);
 		xmlFormatBtn.setLayoutData(createGridData(3));
-		xmlFormatBtn.setText(Messages.TagIoWizardPage_Format_Xml);
+		xmlFormatBtn.setText(TaggerMessages.TagIoWizardPage_Format_Xml);
 		xmlFormatBtn.setData(TagIoFormat.XML);
 		xmlFormatBtn.setSelection(true);
 
 		csvFormatBtn = new Button(panel,SWT.RADIO);
 		csvFormatBtn.setLayoutData(createGridData(3));
-		csvFormatBtn.setText(Messages.TagIoWizardPage_Format_Xml);
+		csvFormatBtn.setText(TaggerMessages.TagIoWizardPage_Format_Csv);
 		csvFormatBtn.setData(TagIoFormat.CSV);
 
 		dialogChanged();
@@ -94,7 +110,7 @@ class TagIoWizardPage extends WizardPage {
 
 	private void dialogChanged(){
 		if(StringUtils.isBlank(filePath.getText())){
-			updateStatus(Messages.TagIoWizardPage_Error_NoFile);
+			updateStatus(TaggerMessages.TagIoWizardPage_Error_NoFile);
 			return;
 		}
 

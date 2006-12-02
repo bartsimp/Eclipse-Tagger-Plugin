@@ -1,5 +1,22 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
+
+import net.sourceforge.taggerplugin.TaggerMessages;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -29,7 +46,7 @@ import org.eclipse.ui.part.IPageSite;
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 public class TagSearchResultPage implements ISearchResultPage {
-	
+
 	private String id;
 	private Object uiState;
 	private Composite control;
@@ -37,10 +54,10 @@ public class TagSearchResultPage implements ISearchResultPage {
 	private TableViewer resultViewer;
 	private TagSearchResultsViewContentProvider viewContentProvider;
 	private ISearchResult result;
-	
+
 	public String getID() {return id;}
 
-	public String getLabel() {return(Messages.TagSearchResultPage_Label);}
+	public String getLabel() {return(TaggerMessages.TagSearchResultPage_Label);}
 
 	public Object getUIState() {return uiState;}
 
@@ -63,15 +80,15 @@ public class TagSearchResultPage implements ISearchResultPage {
 			((TagSearchResult)result).clearMatches();
 			return;
 		}
-		
+
 		this.result = newSearch;
 
 		if(viewContentProvider == null){
-			this.viewContentProvider = new TagSearchResultsViewContentProvider();	
+			this.viewContentProvider = new TagSearchResultsViewContentProvider();
 		}
-		
+
 		viewContentProvider.inputChanged(resultViewer,result,newSearch);
-		
+
 		// TODO: what to do with state
 	}
 
@@ -86,7 +103,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 	public void createControl(Composite parent) {
 		final Composite panel = new Composite(parent,SWT.NONE);
 		panel.setLayout(new GridLayout(1,false));
-		
+
 		resultViewer = new TableViewer(panel, SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		resultViewer.setContentProvider(new TagSearchResultsViewContentProvider());
 		resultViewer.setLabelProvider(new TagSearchResultsViewLabelProvider());
@@ -96,18 +113,18 @@ public class TagSearchResultPage implements ISearchResultPage {
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		table.setHeaderVisible(true);
 
-		createTableColumn(table,Messages.TagSearchResultPage_Column_Name, 100);
-		createTableColumn(table,Messages.TagSearchResultPage_Column_Path, 300);
-		createTableColumn(table,Messages.TagSearchResultPage_Column_Tags, 100);
+		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Name, 100);
+		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Path, 300);
+		createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Tags, 100);
 
 		resultViewer.setInput(null);
-		
+
 		resultViewer.addDoubleClickListener(new IDoubleClickListener(){
 			public void doubleClick(DoubleClickEvent event) {
 				final ISelection selection = event.getSelection();
 				if(!selection.isEmpty() && selection instanceof IStructuredSelection){
 					final IStructuredSelection iss = (IStructuredSelection)selection;
-					
+
 					// FIXME: pull this out and share the instance
 					final OpenFileAction action = new OpenFileAction(site.getWorkbenchWindow().getActivePage());
 					action.selectionChanged(iss);
@@ -115,10 +132,10 @@ public class TagSearchResultPage implements ISearchResultPage {
 				}
 			}
 		});
-		
+
 		this.control = panel;
 	}
-	
+
 	private void createTableColumn(Table table, String name, int width){
 		final TableColumn col = new TableColumn(table,SWT.LEFT);
 		col.setText(name);

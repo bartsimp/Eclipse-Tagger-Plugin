@@ -1,5 +1,21 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
 
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -16,14 +32,14 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 public class TagSelectionDialog extends ListSelectionDialog {
-	
+
 	public TagSelectionDialog(Shell parentShell, Tag[] tags){
-		super(parentShell,tags, new TagListContentProvider(),new TagLabelProvider(),Messages.TagSelectionDialog_Message);
-		setTitle(Messages.TagSelectionDialog_Title);
+		super(parentShell,tags, new TagListContentProvider(),new TagLabelProvider(),TaggerMessages.TagSelectionDialog_Message);
+		setTitle(TaggerMessages.TagSelectionDialog_Title);
 	}
 
 	private static final class TagListContentProvider implements IStructuredContentProvider {
-		
+
 		private Tag[] input;
 
 		public Object[] getElements(Object inputElement) {
@@ -39,7 +55,7 @@ public class TagSelectionDialog extends ListSelectionDialog {
 	}
 
 	private static final class TagLabelProvider implements ILabelProvider {
-		
+
 		public Image getImage(Object element) {
 			return null;
 		}
