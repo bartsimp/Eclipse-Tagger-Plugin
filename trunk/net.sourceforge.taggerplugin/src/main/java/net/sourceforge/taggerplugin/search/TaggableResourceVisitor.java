@@ -29,14 +29,16 @@ import org.eclipse.core.runtime.CoreException;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-class TaggableResourceVisitor implements IResourceProxyVisitor {
+public class TaggableResourceVisitor implements IResourceProxyVisitor {
 	
-	private final TagSearchInput input;
-	private final TagSearchResult result;
+	private final UUID[] tagIds;
+	private final boolean requireAll;
+	private final ITagSearchResult result;
 	
-	TaggableResourceVisitor(final TagSearchInput input, final TagSearchResult result){
+	public TaggableResourceVisitor(final UUID[] tagIds, final boolean requireAll, final ITagSearchResult result){
 		super();
-		this.input = input;
+		this.tagIds = tagIds;
+		this.requireAll = requireAll;
 		this.result = result;
 	}
 
@@ -44,7 +46,7 @@ class TaggableResourceVisitor implements IResourceProxyVisitor {
 		final IResource resource = proxy.requestResource();
 		final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
 		
-		if(input.isRequired() ? matchesAll(taggable,input.getTagIds()) : matchesAny(taggable,input.getTagIds())){
+		if(requireAll ? matchesAll(taggable,tagIds) : matchesAny(taggable,tagIds)){
 			result.addMatch(resource);
 		}
 		

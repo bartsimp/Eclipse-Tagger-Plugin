@@ -25,7 +25,6 @@ import net.sourceforge.taggerplugin.event.TagSearchResultEvent;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.search.ui.ISearchQuery;
-import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.ISearchResultListener;
 import org.eclipse.search.ui.SearchResultEvent;
 
@@ -34,13 +33,13 @@ import org.eclipse.search.ui.SearchResultEvent;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-class TagSearchResult implements ISearchResult {
+public class TagSearchResult implements ITagSearchResult {
 
 	private final Set<ISearchResultListener> listeners;
 	private ISearchQuery query;
 	private Set<IResource> matches;
 
-	TagSearchResult(){
+	public TagSearchResult(){
 		super();
 		this.listeners = new HashSet<ISearchResultListener>();
 		this.matches = Collections.synchronizedSet(new HashSet<IResource>());

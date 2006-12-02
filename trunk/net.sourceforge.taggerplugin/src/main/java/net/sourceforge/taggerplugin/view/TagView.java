@@ -15,6 +15,8 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.view;
 
+import java.util.Iterator;
+
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
@@ -39,7 +41,7 @@ public class TagView extends ViewPart {
 	private TableViewer viewer;
 
 	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION);
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.FULL_SELECTION);
 		viewer.setContentProvider(new TagViewContentProvider());
 		viewer.setLabelProvider(new TagViewLabelProvider());
 		viewer.setSorter(new TagViewSorter());
@@ -74,5 +76,18 @@ public class TagView extends ViewPart {
 	public Tag getSelectedTag(){
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		return(!selection.isEmpty() ? (Tag)selection.getFirstElement() : null);
+	}
+	
+	public Tag[] getSelectedTags(){
+		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		final Tag[] tags = new Tag[selection.size()];
+		if(!selection.isEmpty()){
+			int idx = 0;
+			final Iterator sels = selection.iterator();
+			while(sels.hasNext()){
+				tags[idx++] = (Tag)sels.next();
+			}
+		}
+		return(tags);
 	}
 }

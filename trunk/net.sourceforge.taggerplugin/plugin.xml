@@ -47,7 +47,8 @@
                menubarPath="additions"
                style="push"
                toolbarPath="additions"
-               tooltip="Modify the selected tag."/>
+               tooltip="Modify the selected tag.">
+         </action>
          <action
                class="net.sourceforge.taggerplugin.action.CreateWorkingSetFromTagsAction"
                icon="icons/NewFolder.gif"
