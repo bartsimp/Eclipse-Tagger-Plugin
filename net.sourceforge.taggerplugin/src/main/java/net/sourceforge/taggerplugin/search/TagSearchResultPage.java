@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.search;
 
 
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.util.MementoUtils;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -77,21 +78,11 @@ public class TagSearchResultPage implements ISearchResultPage {
 		if(memento != null){
 			final IMemento mem = memento.getChild(TAG_SEARCHVIEWSTATE);
 			if(mem != null){
-				this.nameColWidth = extractWidth(mem,TAG_COLWIDTH_NAME);
-				this.pathColWidth = extractWidth(mem,TAG_COLWIDTH_PATH);
-				this.tagsColWidth = extractWidth(mem,TAG_COLWIDTH_TAGS);
+				this.nameColWidth = MementoUtils.getInt(mem,TAG_COLWIDTH_NAME,100);
+				this.pathColWidth = MementoUtils.getInt(mem,TAG_COLWIDTH_PATH,100);
+				this.tagsColWidth = MementoUtils.getInt(mem,TAG_COLWIDTH_TAGS,100);
 			}
 		}
-	}
-	
-	// FIXME: used in two places... pull into common (might not be needed though)
-	private int extractWidth(IMemento m, String key){
-		int val = 100;
-		if(m != null){
-			final int x = m.getInteger(key);
-			val = x > 5 ? x : val;
-		}
-		return(val);
 	}
 
 	public void setID(String id) {this.id = id;}

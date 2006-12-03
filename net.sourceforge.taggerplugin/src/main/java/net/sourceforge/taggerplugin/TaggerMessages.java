@@ -71,7 +71,12 @@ public class TaggerMessages extends NLS {
 
 	public static String TagIo_Reading;
 	public static String TagIo_Writing;
-
+	
+	public static String CreateWorkingSetFromTagsAction_Dialog_Title;
+	public static String CreateWorkingSetFromTagsAction_Dialog_Text;	
+	public static String CreateWorkingSetFromTagsAction_Error_Title;
+	public static String CreateWorkingSetFromTagsAction_Error_Text;
+	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, TaggerMessages.class);
 	}

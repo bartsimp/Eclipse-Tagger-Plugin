@@ -22,6 +22,7 @@ import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.action.ModifyTagAction;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
+import net.sourceforge.taggerplugin.util.MementoUtils;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -61,19 +62,10 @@ public class TagView extends ViewPart {
 		if(memento != null){
 			final IMemento mem = memento.getChild(TAG_VIEWSTATE);
 			if(mem != null){
-				nameColWidth = extractWidth(mem,TAG_COLWIDTH_NAME);
-				descColWidth = extractWidth(mem,TAG_COLWIDTH_DESC);
+				nameColWidth = MementoUtils.getInt(mem,TAG_COLWIDTH_NAME,100);
+				descColWidth = MementoUtils.getInt(mem,TAG_COLWIDTH_DESC,100);
 			}
 		}
-	}
-	
-	private int extractWidth(IMemento m, String key){
-		int val = 100;
-		if(m != null){
-			final int x = m.getInteger(key);
-			val = x > 5 ? x : val;
-		}
-		return(val);
 	}
 
 	public void createPartControl(Composite parent) {

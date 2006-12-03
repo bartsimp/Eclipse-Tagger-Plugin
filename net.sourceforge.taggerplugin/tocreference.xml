@@ -12,5 +12,6 @@
 	<topic label="Contextual Actions">
 		<topic label="Add Tag Association(s)" href="help/reference/addassocaction.html" />
 		<topic label="Clear Tag Association(s)" href="help/reference/clearassocaction.html" />
+		<topic label="Remove Tag Association(s)" href="help/reference/removeassocaction.html" />
 	</topic>
 </toc>

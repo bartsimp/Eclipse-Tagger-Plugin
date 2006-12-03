@@ -18,6 +18,7 @@ package net.sourceforge.taggerplugin.action;
 import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerLog;
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.search.ITagSearchResult;
 import net.sourceforge.taggerplugin.search.TagSearchResult;
@@ -53,18 +54,27 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 		final TagView tagView = (TagView)viewPart;
 		final Tag[] selectedTags = tagView.getSelectedTags();
 		if(selectedTags != null && selectedTags.length != 0){
+			String wsName = null;
 			try {
 				final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
 
-				final IWorkingSet workingSet = workingSetMgr.createWorkingSet(createWsName(selectedTags),findResourcesWithTags(selectedTags));
+				wsName = createWsName(selectedTags);
+				final IWorkingSet workingSet = workingSetMgr.createWorkingSet(wsName,findResourcesWithTags(selectedTags));
 				workingSetMgr.addWorkingSet(workingSet);
 
-				// FIXME: needs externalization
-				MessageDialog.openInformation(viewPart.getSite().getShell(), "Working Set Created","Working Set '" + workingSet.getName() + "' has been created.");
+				MessageDialog.openInformation(
+					viewPart.getSite().getShell(),
+					TaggerMessages.CreateWorkingSetFromTagsAction_Dialog_Title,
+					TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromTagsAction_Dialog_Text,workingSet.getName())
+				);
 
 			} catch(CoreException ce){
-				// FIXME: send to user
 				TaggerLog.error("Unable to create working set: " + ce.getMessage(),ce);
+				MessageDialog.openError(
+					viewPart.getSite().getShell(),
+					TaggerMessages.CreateWorkingSetFromTagsAction_Error_Title,
+					TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromTagsAction_Error_Text,wsName,ce.getMessage())
+				);
 			}
 		}
 	}
