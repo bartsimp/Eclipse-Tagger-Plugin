@@ -15,28 +15,14 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.util;
 
-import java.io.Reader;
-import java.io.Writer;
+import org.eclipse.ui.IMemento;
 
-/**
- * 
- *
- * @author Christopher J. Stehno (chris@stehno.com)
- */
-public class IoUtils {
-	// may want to import equivalent jakarta-commons api, but for now...
+public class MementoUtils {
+
+	private MementoUtils(){super();}
 	
-	private IoUtils(){super();}
-
-	public static void closeQuietly(final Reader reader){
-		if(reader != null){
-			try {reader.close();} catch(Exception e){/* ignored */}
-		}
-	}
-
-	public static void closeQuietly(final Writer writer) {
-		if(writer != null){
-			try {writer.close();} catch(Exception e){/* ignored */}
-		}
+	public static int getInt(final IMemento mem, String key, int def){
+		final Integer val = mem.getInteger(key);
+		return(val != null ? val : def);
 	}
 }

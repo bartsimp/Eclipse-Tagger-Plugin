@@ -22,6 +22,7 @@ import net.sourceforge.taggerplugin.TaggerMessages;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -61,8 +62,7 @@ class TagSearchQuery implements ISearchQuery {
 
 	public IStatus run(IProgressMonitor monitor) throws OperationCanceledException {
 		try {
-			// TODO: may want to break visitor apart so that there is one per search type
-			final TaggableResourceVisitor visitor = new TaggableResourceVisitor(input.getTagIds(),input.isRequired(),(ITagSearchResult)result);
+			final IResourceProxyVisitor visitor = new TaggableResourceVisitor(input.getTagIds(),input.isRequired(),(ITagSearchResult)result);
 
 			if(input.isProjectsScope()){
 				final String[] projectNames = input.getProjectNames();
@@ -76,7 +76,7 @@ class TagSearchQuery implements ISearchQuery {
 			} else if(input.isWorkingSetScope()){
 				final IWorkingSet[] workingSets = input.getWorkingSets();
 				for (IWorkingSet workingSet : workingSets) {
-					IAdaptable[] elems = workingSet.getElements();
+					final IAdaptable[] elems = workingSet.getElements();
 					for (IAdaptable adaptable : elems) {
 						final IResource resource = (IResource)adaptable.getAdapter(IResource.class);
 						if(resource != null){
