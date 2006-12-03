@@ -15,6 +15,7 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.view;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
@@ -79,7 +80,6 @@ public class TagView extends ViewPart {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.FULL_SELECTION);
 		viewer.setContentProvider(new TagViewContentProvider());
 		viewer.setLabelProvider(new TagViewLabelProvider());
-		viewer.setSorter(new TagViewSorter());
 		
 		final IViewPart viewPart = this;
 		
@@ -100,9 +100,18 @@ public class TagView extends ViewPart {
 		this.nameCol = createTableColumn(table,TaggerMessages.TagView_Header_Name,nameColWidth);
 		this.descCol = createTableColumn(table,TaggerMessages.TagView_Header_Description,descColWidth);
 
+		viewer.setSorter(
+			new GenericViewSorter(
+				"tagview",
+				viewer,
+				new TableColumn[]{nameCol,descCol},
+				new Comparator[]{new TagComparator(TagComparator.Field.NAME),new TagComparator(TagComparator.Field.DESCRIPTION)}
+			)
+		);
+		
 		viewer.setInput(TagManager.getInstance());
 	}
-
+	
 	/**
 	 * Helper method used to create a table column for the table.
 	 *
@@ -146,5 +155,23 @@ public class TagView extends ViewPart {
 		mem.putInteger(TAG_COLWIDTH_DESC, descCol.getWidth());
 		
 		super.saveState(memento);
+	}
+	
+	private static final class TagComparator implements Comparator<Tag> {
+		
+		private static enum Field {NAME,DESCRIPTION};
+		private final Field field;
+		
+		private TagComparator(final Field field){
+			this.field = field;
+		}
+
+		public int compare(Tag o1, Tag o2) {
+			if(field.equals(Field.NAME)){
+				return(o1.getName().compareTo(o2.getName()));
+			} else {
+				return(o1.getDescription().compareTo(o2.getDescription()));
+			}
+		}
 	}
 }

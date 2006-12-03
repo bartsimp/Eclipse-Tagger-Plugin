@@ -23,7 +23,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.ISearchResultPage;
 import org.eclipse.search.ui.ISearchResultViewPart;
@@ -129,7 +128,6 @@ public class TagSearchResultPage implements ISearchResultPage {
 		resultViewer = new TableViewer(panel, SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		resultViewer.setContentProvider(new TagSearchResultsViewContentProvider());
 		resultViewer.setLabelProvider(new TagSearchResultsViewLabelProvider());
-		resultViewer.setSorter(new ViewerSorter(){});
 
 		final Table table = resultViewer.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
@@ -139,6 +137,16 @@ public class TagSearchResultPage implements ISearchResultPage {
 		this.pathCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Path,pathColWidth);
 		this.tagsCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Tags,tagsColWidth);
 
+		// FIXME: this currently does not work - when col is clicked, content disappears
+//		resultViewer.setSorter(
+//			new GenericViewSorter(
+//				"tagsearch",
+//				resultViewer,
+//				new TableColumn[]{nameCol,pathCol},
+//				new Comparator[]{new ResourceComparator(ResourceComparator.Field.NAME),new ResourceComparator(ResourceComparator.Field.PATH)}
+//			)
+//		);
+		
 		resultViewer.setInput(null);
 
 		resultViewer.addDoubleClickListener(new IDoubleClickListener(){
@@ -157,6 +165,25 @@ public class TagSearchResultPage implements ISearchResultPage {
 
 		this.control = panel;
 	}
+	
+	// FIXME: this goes with the commented out sorter code
+//	private static final class ResourceComparator implements Comparator<IResource> {
+//
+//		private static enum Field {NAME,PATH};
+//		private final Field field;
+//		
+//		private ResourceComparator(Field field){
+//			this.field = field;
+//		}
+//		
+//		public int compare(IResource r1, IResource r2){
+//			if(field.equals(Field.NAME)){
+//				return(r1.getName().compareTo(r2.getName()));
+//			} else {
+//				return(String.valueOf(r1.getLocation()).compareTo(String.valueOf(r2.getLocation())));
+//			}
+//		}
+//	}
 
 	private TableColumn createTableColumn(Table table, String name, int width){
 		final TableColumn col = new TableColumn(table,SWT.LEFT);
