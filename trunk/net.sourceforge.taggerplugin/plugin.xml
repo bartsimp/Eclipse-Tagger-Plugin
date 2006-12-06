@@ -199,5 +199,16 @@
          point="org.eclipse.help.contexts">
       <contexts file="contexthelp.xml"/>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="net.sourceforge.taggerplugin.preferences.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="net.sourceforge.taggerplugin.preferences.TaggerPreferencePage"
+            id="net.sourceforge.taggerplugin.preferences.TaggerPreferencePage"
+            name="Resource Tagger Preferences"/>
+   </extension>
 
 </plugin>
