@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Reference" link_to="toc.xml#reference">
-	<topic label="Welcome"  href="help/reference/index.html" />
+	<topic label="Introduction"  href="help/reference/index.html" />
 	<topic label="View Actions">
 		<topic label="New Tag Action" href="help/reference/newtagaction.html" />
 		<topic label="Modify Tag Action" href="help/reference/edittagaction.html" />
@@ -14,4 +14,5 @@
 		<topic label="Clear Tag Association(s)" href="help/reference/clearassocaction.html" />
 		<topic label="Remove Tag Association(s)" href="help/reference/removeassocaction.html" />
 	</topic>
+	<topic label="Search" href="help/reference/search.html" />
 </toc>
