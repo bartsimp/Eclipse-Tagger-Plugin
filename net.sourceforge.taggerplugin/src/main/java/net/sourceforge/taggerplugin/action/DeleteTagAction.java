@@ -15,11 +15,15 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
+import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
+import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
 import net.sourceforge.taggerplugin.view.TagView;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
@@ -40,8 +44,21 @@ public class DeleteTagAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		final TagView tagView = (TagView)view;
 		final Tag[] deletedTags = tagView.getSelectedTags();
-		if(deletedTags != null && deletedTags.length != 0){
-			TagManager.getInstance().deleteTags(deletedTags);
+		if(deleteConfirmed(deletedTags.length)){
+			if(deletedTags != null && deletedTags.length != 0){
+				TagManager.getInstance().deleteTags(deletedTags);
+			}
+		}
+	}
+
+	private boolean deleteConfirmed(int tagCnt){
+		if(tagCnt == 0){return(false);}
+
+		final IPreferenceStore store = TaggerActivator.getDefault().getPreferenceStore();
+		if(store.getBoolean(PreferenceConstants.CONFIRM_DELETE_TAG.getKey())){
+			return(MessageDialog.openConfirm(view.getSite().getShell(),"Confirm Tag Deletion","Are you sure you want to delete the selected tag(s)?"));
+		} else {
+			return(true);
 		}
 	}
 

@@ -23,6 +23,7 @@ import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
+import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
 import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
 
 import org.eclipse.core.resources.IResource;
@@ -50,7 +51,7 @@ public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAsso
 	public void decorate(Object element, IDecoration decoration) {
 		try {
 			if(TaggedMarkerHelper.getMarker((IResource)element) != null){
-				decoration.addOverlay(OVERLAY);
+				decoration.addOverlay(OVERLAY,TaggerActivator.getDefault().getPreferenceStore().getInt(PreferenceConstants.POSITION_LABEL_DECORATION.getKey()));
 			}
 		} catch(CoreException ce){
 			TaggerLog.error("Unable to decorate resource: " + ce.getMessage(),ce);
@@ -74,7 +75,7 @@ public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAsso
 	public void handleTagAssociationEvent(TagAssociationEvent tme) {
 		fireLabelProviderEvent(new LabelProviderChangedEvent(this,tme.getResource()));
 	}
-	
+
 	private void fireLabelProviderEvent(LabelProviderChangedEvent evt){
 		for(ILabelProviderListener listener : labelProviderListeners){
 			listener.labelProviderChanged(evt);
