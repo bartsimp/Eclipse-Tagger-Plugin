@@ -5,16 +5,13 @@
 	<topic label="Introduction"  href="help/tasks/index.html" />
 	<topic label="Viewing Workspace Tags"  href="help/tasks/viewtags.html" />
 	<topic label="View Resource Tag Associations"  href="help/tasks/viewtagassocs.html" />
+	<topic label="Adding a New Tag"  href="help/tasks/addtag.html" />
+	<topic label="Editing a Tag"  href="help/tasks/edittag.html" />
+	<topic label="Deleting a Tag"  href="help/tasks/removetag.html" />
+	<topic label="Adding Tag Associations"  href="help/tasks/addassoc.html" />
+	<topic label="Removing Tag Associations"  href="help/tasks/clearassoc.html" />
+	<topic label="Creating a Working Set From Tags"  href="help/tasks/createworkingset.html" />
+	<topic label="Finding Tagged Resources"  href="help/tasks/search.html" />
+	<topic label="Exporting Tags"  href="help/tasks/exporttags.html" />
+	<topic label="Importing Tags"  href="help/tasks/importtags.html" />
 </toc>
-
-<!--
-	-	how to add a new tag
-	-	how to remove a tag
-	-	how to edit a tag
-	-	how to create a working set from tags
-	-	how to associate tag(s) with resource(s).
-	-	how to remove tag associations from resources
-	-	how to find resources by their tags
-	-	how to import a tag set
-	-	how to export tags
--->
