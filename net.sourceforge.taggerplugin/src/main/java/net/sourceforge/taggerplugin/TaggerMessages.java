@@ -77,6 +77,18 @@ public class TaggerMessages extends NLS {
 	public static String CreateWorkingSetFromTagsAction_Error_Title;
 	public static String CreateWorkingSetFromTagsAction_Error_Text;
 	
+	public static String ClearTagAssociationsAction_Confirm_Title;
+	public static String ClearTagAssociationsAction_Confirm_Message;	
+	
+	public static String TaggerPreferencePage_Description;
+	public static String TaggerPreferencePage_Label_ConfirmClear;
+	public static String TaggerPreferencePage_Label_ConfirmDelete;
+	public static String TaggerPreferencePage_Label_LabelDecoration;
+	public static String TaggerPreferencePage_Label_LabelDecoration_TopLeft;
+	public static String TaggerPreferencePage_Label_LabelDecoration_TopRight;
+	public static String TaggerPreferencePage_Label_LabelDecoration_BottomLeft;
+	public static String TaggerPreferencePage_Label_LabelDecoration_BottomRight;	
+	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, TaggerMessages.class);
 	}

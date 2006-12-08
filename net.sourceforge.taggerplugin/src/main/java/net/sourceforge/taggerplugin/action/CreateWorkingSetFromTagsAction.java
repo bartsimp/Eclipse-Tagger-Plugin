@@ -90,9 +90,6 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 		final ITagSearchResult result = new TagSearchResult();
 		ResourcesPlugin.getWorkspace().getRoot().accept(new TaggableResourceVisitor(tagids,false,result), IResource.NONE);
 
-		// TODO: since this uses the search it would prb be best to pull common code into a mutual helper
-		// TODO: should swtich out the search to use the marker rather than check all resources
-		
 		return(result.getMatches());
 	}
 	

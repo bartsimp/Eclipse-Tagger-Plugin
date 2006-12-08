@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
 import net.sourceforge.taggerplugin.resource.ITaggable;
 
@@ -58,8 +59,8 @@ public class ClearTagAssociationsAction implements IObjectActionDelegate {
 		if(assocCnt == 0){return(false);}
 
 		final IPreferenceStore store = TaggerActivator.getDefault().getPreferenceStore();
-		if(store.getBoolean(PreferenceConstants.CONFIRM_CLEAR_ASSOCIATIONS.getKey())){	// FIXME: externalize
-			return(MessageDialog.openConfirm(workbenchPart.getSite().getShell(),"Confirm Assocatiation Clearing","Are you sure you want to clear all of the tag associations on the selected resources?"));
+		if(store.getBoolean(PreferenceConstants.CONFIRM_CLEAR_ASSOCIATIONS.getKey())){
+			return(MessageDialog.openConfirm(workbenchPart.getSite().getShell(),TaggerMessages.ClearTagAssociationsAction_Confirm_Title,TaggerMessages.ClearTagAssociationsAction_Confirm_Message));
 		} else {
 			return(true);
 		}
