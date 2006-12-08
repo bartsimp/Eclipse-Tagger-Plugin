@@ -146,7 +146,6 @@ public class TagSearchResultPage implements ISearchResultPage {
 				if(!selection.isEmpty() && selection instanceof IStructuredSelection){
 					final IStructuredSelection iss = (IStructuredSelection)selection;
 
-					// FIXME: pull this out and share the instance
 					final OpenFileAction action = new OpenFileAction(site.getWorkbenchWindow().getActivePage());
 					action.selectionChanged(iss);
 					action.run();
@@ -157,7 +156,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 		this.control = panel;
 	}
 	
-	// FIXME: this goes with the commented out sorter code
+//	This goes with the commented out sorter code above
 //	private static final class ResourceComparator implements Comparator<IResource> {
 //
 //		private static enum Field {NAME,PATH};

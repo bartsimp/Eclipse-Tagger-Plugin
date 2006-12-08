@@ -18,10 +18,12 @@ package net.sourceforge.taggerplugin.action;
 import java.util.Set;
 import java.util.UUID;
 
+import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.resource.ITaggable;
+import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.ui.TagSelectionDialog;
 
 import org.eclipse.core.resources.IResource;
@@ -59,11 +61,15 @@ public class AddTagAssociationAction implements IObjectActionDelegate {
 					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
 					if(dialog.open() == TagSelectionDialog.OK){
 						final Object[] selectedTags = dialog.getResult();
-						for (Object tag : selectedTags) {
-							final Tag t = (Tag)tag;
-							for(ITaggable taggable : taggables){
-								taggable.setTag(t.getId());
+						try {
+							for (Object tag : selectedTags) {
+								final Tag t = (Tag)tag;
+								for(ITaggable taggable : taggables){
+									taggable.setTag(t.getId());
+								}
 							}
+						} catch(TagAssociationException tae){
+							ExceptionDialogFactory.create(activePart.getSite().getShell(), tae).open();
 						}
 					}
 				} catch(Exception ex){

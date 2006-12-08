@@ -294,8 +294,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			saveAssociations();
 			
 		} catch(CoreException ce){
-			// FIXME: this should be passed to user
 			TaggerLog.error("Unable to create tag association: " + ce.getMessage(),ce);
+			throw new TagAssociationException("Unable to add tag association due to errors.",ce);	// FIXME: externalize
 		}
 	}
 
@@ -407,7 +407,6 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				// find all associations that contain the removed tag and remove that tagid
 				final UUID[] removedTagIds = TagManager.extractTagIds(tme.getTags());
 				
-				// TODO: another useage of the searching... need to commonize
 				final ITagSearchResult result = new TagSearchResult();
 				ResourcesPlugin.getWorkspace().getRoot().accept(new TaggableResourceVisitor(removedTagIds,false,result), IResource.NONE);
 				for(IResource resource : result.getMatches()){
