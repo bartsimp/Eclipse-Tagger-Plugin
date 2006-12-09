@@ -36,7 +36,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 
 public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAssociationManagerListener {
 
-	private static final ImageDescriptor OVERLAY = TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.getDefault().getBundle().getSymbolicName(),"icons/labeldeco.gif");
+	private static final ImageDescriptor OVERLAY = TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.getDefault().getBundle().getSymbolicName(),"icons/tagger_labeldeco.gif");
 
 	private final List<ILabelProviderListener> labelProviderListeners = new LinkedList<ILabelProviderListener>();
 

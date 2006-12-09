@@ -10,7 +10,7 @@
             allowMultiple="false"
             category="net.sourceforge.taggerplugin.Category"
             class="net.sourceforge.taggerplugin.view.TagView"
-            icon="icons/taggerview.gif"
+            icon="icons/tagger_logo_20x20.gif"
             id="net.sourceforge.taggerplugin.TagView"
             name="Tags"/>
    </extension>
@@ -22,7 +22,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.DeleteTagAction"
                helpContextId="net.sourceforge.taggerplugin.help.DeleteTagAction"
-               icon="icons/Delete.gif"
+               icon="icons/delete.gif"
                id="net.sourceforge.taggerplugin.action.DeleteTagAction"
                label="Delete Tag"
                menubarPath="additions"
@@ -32,7 +32,7 @@
          </action>
          <action
                class="net.sourceforge.taggerplugin.action.NewTagAction"
-               icon="icons/Plus.gif"
+               icon="icons/plus.gif"
                id="net.sourceforge.taggerplugin.action.NewTagAction"
                label="New Tag"
                menubarPath="additions"
@@ -41,7 +41,7 @@
                tooltip="Create a new tag."/>
          <action
                class="net.sourceforge.taggerplugin.action.ModifyTagAction"
-               icon="icons/Draw.gif"
+               icon="icons/modify.gif"
                id="net.sourceforge.taggerplugin.action.ModifyTagAction"
                label="Modify Tag"
                menubarPath="additions"
@@ -51,7 +51,7 @@
          </action>
          <action
                class="net.sourceforge.taggerplugin.action.CreateWorkingSetFromTagsAction"
-               icon="icons/NewFolder.gif"
+               icon="icons/workset.gif"
                id="net.sourceforge.taggerplugin.action.CreateWorkingSet"
                label="Create Working Set"
                menubarPath="additions"
@@ -90,6 +90,7 @@
                class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
                enablesFor="+"
                helpContextId="net.sourceforge.taggerplugin.help.AddTagAssociation"
+               icon="icons/plus.gif"
                id="net.sourceforge.taggerplugin.action.AddTagAssociation"
                label="Add Tag Association(s)"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
@@ -97,6 +98,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.ClearTagAssociationsAction"
                enablesFor="+"
+               icon="icons/trash.gif"
                id="net.sourceforge.taggerplugin.action.ClearTagAssociations"
                label="Clear Tag Associations"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
@@ -104,6 +106,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.RemoveTagAssociationAction"
                enablesFor="+"
+               icon="icons/delete.gif"
                id="net.sourceforge.taggerplugin.action.RemoveTagAssociation"
                label="Remove Tag Association(s)"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
@@ -135,7 +138,7 @@
       <page
             adaptable="true"
             class="net.sourceforge.taggerplugin.ui.TaggableResourcePropertyPage"
-            icon="icons/taggerview.gif"
+            icon="icons/tagger_logo_20x20.gif"
             id="net.sourceforge.taggerplugin.TaggedResourceProperties"
             name="Tagger Plug-in"
             objectClass="org.eclipse.core.resources.IResource"/>
@@ -147,7 +150,7 @@
             class="net.sourceforge.taggerplugin.search.TagSearchPage"
             enabled="true"
             extensions="*"
-            icon="icons/taggerview.gif"
+            icon="icons/tagger_logo_20x20.gif"
             id="net.sourceforge.taggerplugin.TagSearchPage"
             label="Tag Search"
             showScopeSection="true"
@@ -157,7 +160,7 @@
          point="org.eclipse.search.searchResultViewPages">
       <viewPage
             class="net.sourceforge.taggerplugin.search.TagSearchResultPage"
-            icon="icons/taggerview.gif"
+            icon="icons/tagger_logo_20x20.gif"
             id="net.sourceforge.taggerplugin.search.TagSearchResultPage"
             label="Tag Search Results"
             searchResultClass="net.sourceforge.taggerplugin.search.TagSearchResult"/>
@@ -167,7 +170,7 @@
       <wizard
             category="net.sourceforge.taggerplugin.TagExportCategory"
             class="net.sourceforge.taggerplugin.wizard.TagExportWizard"
-            icon="icons/DataExtract.gif"
+            icon="icons/synced.gif"
             id="net.sourceforge.taggerplugin.wizard.TagSetExport"
             name="Resource Tag Set"/>
       <category
@@ -182,7 +185,7 @@
       <wizard
             category="net.sourceforge.taggerplugin.TagImportCategory"
             class="net.sourceforge.taggerplugin.wizard.TagImportWizard"
-            icon="icons/DataStore.gif"
+            icon="icons/synced.gif"
             id="net.sourceforge.taggerplugin.wizard.TagSetImport"
             name="Resource Tag Set"/>
    </extension>
