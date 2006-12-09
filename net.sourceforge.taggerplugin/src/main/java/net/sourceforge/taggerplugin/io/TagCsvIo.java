@@ -13,7 +13,7 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.wizard;
+package net.sourceforge.taggerplugin.io;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,12 +29,16 @@ import net.sourceforge.taggerplugin.model.TagFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class TagCsvIo implements ITagIo {
+class TagCsvIo implements ITagIo {
 
 	private static final char LINEBREAK = '\n';
 	private static final String QUOTE_COMMA_QUOTE = "\",\"";
 	private static final char QUOTE = '"';
 	private static final String HEADER_LINE = "\"Id\",\"Name\",\"Description\"";
+	
+	TagCsvIo(){
+		super();
+	}
 
 	public Tag[] readTags(Reader reader, IProgressMonitor monitor) throws IOException {
 		monitor.beginTask(TaggerMessages.TagIo_Reading, 1);	// not very accurate but not sure what else can be used

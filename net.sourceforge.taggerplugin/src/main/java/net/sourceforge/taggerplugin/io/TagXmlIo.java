@@ -13,7 +13,7 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.wizard;
+package net.sourceforge.taggerplugin.io;
 
 import java.io.IOException;
 import java.io.Reader;

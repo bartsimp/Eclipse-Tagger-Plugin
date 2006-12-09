@@ -18,6 +18,8 @@ package net.sourceforge.taggerplugin.wizard;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sourceforge.taggerplugin.io.TagIoFormat;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -73,14 +75,4 @@ public abstract class AbstractTagIoWizard extends Wizard {
 	}
 
 	protected abstract void doFinish(IProgressMonitor monitor, File file, TagIoFormat format) throws CoreException;
-
-	protected ITagIo getTagIo(TagIoFormat format) throws Exception {
-		if(format.equals(TagIoFormat.XML)){
-			return(new TagXmlIo());
-		} else if(format.equals(TagIoFormat.CSV)){
-			return(new TagCsvIo());
-		} else {
-			return(null);
-		}
-	}
 }

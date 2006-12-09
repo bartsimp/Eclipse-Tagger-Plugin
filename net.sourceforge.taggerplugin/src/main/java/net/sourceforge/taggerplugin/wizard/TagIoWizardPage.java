@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.wizard;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.util.StringUtils;
 
 import org.eclipse.jface.wizard.WizardPage;

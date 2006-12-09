@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileReader;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.io.TagIoFactory;
+import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.util.IoUtils;
@@ -42,7 +44,7 @@ public class TagImportWizard extends AbstractTagIoWizard implements IImportWizar
 		try {
 			reader = new BufferedReader(new FileReader(file));
 
-			final Tag[] tags = getTagIo(format).readTags(reader, monitor);
+			final Tag[] tags = TagIoFactory.create(format).readTags(reader, monitor);
 
 			SynchWithDisplay.synch(new Runnable(){
 				public void run() {

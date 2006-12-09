@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.io.TagIoFactory;
+import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.util.IoUtils;
 
@@ -44,7 +46,7 @@ public class TagExportWizard extends AbstractTagIoWizard implements IExportWizar
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(exportFile));
-			getTagIo(exportFormat).writeTags(writer, TagManager.getInstance().getTags(), monitor);
+			TagIoFactory.create(exportFormat).writeTags(writer, TagManager.getInstance().getTags(), monitor);
 		} catch(Exception ex){
 			throw new CoreException(new Status(IStatus.ERROR, TaggerActivator.PLUGIN_ID, IStatus.OK, ex.getMessage(), ex));
 		} finally {
