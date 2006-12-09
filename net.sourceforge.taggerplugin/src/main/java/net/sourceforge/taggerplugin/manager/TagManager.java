@@ -129,21 +129,6 @@ public class TagManager {
 		}
 	}
 
-	/**
-	 * Used to remove the tag with the specified id from the tag set.
-	 *
-	 * @param tagId the id of the tag to be removed.
-	 */
-	public void deleteTag(UUID tagId){
-		if(tags == null) return;
-
-		final Tag removedTag = tags.remove(tagId);
-		if(removedTag != null){
-			fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.REMOVED,new Tag[]{removedTag}));
-			saveTags();
-		}
-	}
-	
 	public void deleteTags(Tag[] ts){
 		if(tags == null || ts == null) return;
 		

@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
 import java.io.PrintWriter;
@@ -21,7 +36,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-//FIXME: check book for usage rules
+/**
+ * 	Dialog for displaying error messages to the user with additional details information available by clicking the
+ * 	"Show Details" button. Generally the details will be the stack trace from the exception.
+ * 
+ * 	Note: This original source of this code was taken from the book "Eclipse: Building Commercial-Quality Plug-ins"
+ * 	which is provided under the Eclipse Common Public License.
+ * 
+ *	@author Eric Clayberg (qualityeclipse.org)
+ *	@author Dan Rubel (qualityeclipse.org)
+ *	@author Christopher J. Stehno (chris@stehno.com)
+ */
 public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 
 	/**

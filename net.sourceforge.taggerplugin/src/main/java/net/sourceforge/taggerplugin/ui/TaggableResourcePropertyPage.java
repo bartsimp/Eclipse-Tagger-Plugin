@@ -15,7 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
-import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
@@ -23,7 +22,6 @@ import net.sourceforge.taggerplugin.resource.ITaggedMarker;
 import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -72,8 +70,8 @@ public class TaggableResourcePropertyPage extends PropertyPage {
 					return(TagManager.extractTagNames(tags,LIST_SEPARATOR));
 				}	
 			}
-		} catch(CoreException ce){
-			TaggerLog.error("Unable to display properties: " + ce.getMessage(),ce);
+		} catch(Exception tae){
+			ExceptionDialogFactory.create(getShell(),tae).open();
 		}
 		return(TaggerMessages.TaggableResourcePropertyPage_NoAssociations);
 	}

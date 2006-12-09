@@ -16,9 +16,11 @@
 package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
+import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.view.TagView;
 
 import org.eclipse.jface.action.IAction;
@@ -46,7 +48,11 @@ public class DeleteTagAction implements IViewActionDelegate {
 		final Tag[] deletedTags = tagView.getSelectedTags();
 		if(deleteConfirmed(deletedTags.length)){
 			if(deletedTags != null && deletedTags.length != 0){
-				TagManager.getInstance().deleteTags(deletedTags);
+				try {
+					TagManager.getInstance().deleteTags(deletedTags);
+				} catch(TagAssociationException te){
+					ExceptionDialogFactory.create(view.getSite().getShell(), te).open();
+				}
 			}
 		}
 	}

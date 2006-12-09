@@ -17,6 +17,8 @@ package net.sourceforge.taggerplugin.search;
 
 import java.util.UUID;
 
+import net.sourceforge.taggerplugin.TaggerLog;
+import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.resource.ITaggable;
 
 import org.eclipse.core.resources.IResource;
@@ -46,8 +48,16 @@ public class TaggableResourceVisitor implements IResourceProxyVisitor {
 		final IResource resource = proxy.requestResource();
 		final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
 		
-		if(requireAll ? matchesAll(taggable,tagIds) : matchesAny(taggable,tagIds)){
-			result.addMatch(resource);
+		try {
+			if(requireAll ? matchesAll(taggable,tagIds) : matchesAny(taggable,tagIds)){
+				result.addMatch(resource);
+			}
+		} catch(TagAssociationException tae){
+			if(tae.getCause() instanceof CoreException){
+				throw (CoreException)tae.getCause();
+			} else {
+				TaggerLog.error(tae);
+			}
 		}
 		
 		return true;
