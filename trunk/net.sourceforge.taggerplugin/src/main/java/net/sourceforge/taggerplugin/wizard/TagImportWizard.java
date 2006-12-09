@@ -23,12 +23,12 @@ import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.util.IoUtils;
+import net.sourceforge.taggerplugin.util.SynchWithDisplay;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IImportWizard;
 
 public class TagImportWizard extends AbstractTagIoWizard implements IImportWizard {
@@ -44,9 +44,7 @@ public class TagImportWizard extends AbstractTagIoWizard implements IImportWizar
 
 			final Tag[] tags = getTagIo(format).readTags(reader, monitor);
 
-			// NOTE: this is a bit hacky but there are NO good search examples on line and SWT is single-threaded and
-			// throws an error if you access the ui from another thread
-			Display.getDefault().asyncExec(new Runnable(){
+			SynchWithDisplay.synch(new Runnable(){
 				public void run() {
 					final TagManager mgr = TagManager.getInstance();
 					for(Tag tag : tags){

@@ -37,7 +37,7 @@ public class TagCsvIo implements ITagIo {
 	private static final String HEADER_LINE = "\"Id\",\"Name\",\"Description\"";
 
 	public Tag[] readTags(Reader reader, IProgressMonitor monitor) throws IOException {
-		monitor.beginTask(TaggerMessages.TagIo_Reading, 1);	// TODO: find a more accurate mesurement
+		monitor.beginTask(TaggerMessages.TagIo_Reading, 1);	// not very accurate but not sure what else can be used
 
 		final List<Tag> tags = new LinkedList<Tag>();
 

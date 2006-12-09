@@ -17,13 +17,13 @@ package net.sourceforge.taggerplugin.search;
 
 import net.sourceforge.taggerplugin.event.TagSearchResultEvent;
 import net.sourceforge.taggerplugin.event.TagSearchResultEvent.Type;
+import net.sourceforge.taggerplugin.util.SynchWithDisplay;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.search.ui.ISearchResultListener;
 import org.eclipse.search.ui.SearchResultEvent;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Content provider for the tableviewer in the Tag Search Result page.
@@ -62,9 +62,7 @@ class TagSearchResultsViewContentProvider implements IStructuredContentProvider,
 	public void searchResultChanged(SearchResultEvent e) {
 		final TagSearchResultEvent evt = (TagSearchResultEvent)e;
 
-		// NOTE: this is a bit hacky but there are NO good search examples on line and SWT is single-threaded and
-		// throws an error if you access the ui from another thread
-		Display.getDefault().asyncExec(new Runnable(){
+		SynchWithDisplay.synch(new Runnable(){
 			public void run() {
 				viewer.getTable().setRedraw(false);
 				try {
