@@ -88,6 +88,13 @@ public class TaggerMessages extends NLS {
 	public static String TaggerPreferencePage_Label_LabelDecoration_TopRight;
 	public static String TaggerPreferencePage_Label_LabelDecoration_BottomLeft;
 	public static String TaggerPreferencePage_Label_LabelDecoration_BottomRight;	
+
+	public static String ExceptionDialogFactory_Title;
+	
+	public static String TagAssociationManager_Error_Create;
+	public static String TagAssociationManager_Error_Remove;
+	public static String TagAssociationManager_Error_Has;
+	public static String TagAssociationManager_Error_List;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, TaggerMessages.class);

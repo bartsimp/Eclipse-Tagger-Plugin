@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -14,7 +29,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-//FIXME: check usage rules from book
+/**
+ * 	Abstract base class for dialogs with additional "details" content that can be opened/closed by clicking
+ * 	a "Show Details" button.
+ * 
+ * 	Note: This original source of this code was taken from the book "Eclipse: Building Commercial-Quality Plug-ins"
+ * 	which is provided under the Eclipse Common Public License.
+ * 
+ *	@author Eric Clayberg (qualityeclipse.org)
+ *	@author Dan Rubel (qualityeclipse.org)
+ *	@author Christopher J. Stehno (chris@stehno.com)
+ */
 public abstract class AbstractDetailsDialog extends Dialog {
 
 	private final String title,message;

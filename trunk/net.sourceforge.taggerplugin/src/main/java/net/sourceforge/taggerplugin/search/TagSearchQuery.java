@@ -97,7 +97,6 @@ class TagSearchQuery implements ISearchQuery {
 
 			return(new Status(IStatus.OK,TaggerActivator.PLUGIN_ID,IStatus.OK,TaggerMessages.TagSearchQuery_Status_Complete,null));
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to perform search: " + ce.getMessage(), ce);
 			return(new Status(IStatus.ERROR,TaggerActivator.PLUGIN_ID,ce.getStatus().getCode(),TaggerMessages.TagSearchQuery_Status_Error,ce));
 		}

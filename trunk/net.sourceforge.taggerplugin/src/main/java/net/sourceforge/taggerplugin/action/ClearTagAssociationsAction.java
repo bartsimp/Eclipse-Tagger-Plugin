@@ -17,8 +17,10 @@ package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
 import net.sourceforge.taggerplugin.resource.ITaggable;
+import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
@@ -45,10 +47,14 @@ public class ClearTagAssociationsAction implements IObjectActionDelegate {
 			if(!sel.isEmpty()){
 				final Object[] selectedObjs = sel.toArray();
 				if(deleteConfirmed(selectedObjs.length)){
-					for (Object obj : selectedObjs) {
-						final IResource resource = (IResource)obj;
-						final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
-						taggable.clearTags();
+					try {
+						for (Object obj : selectedObjs) {
+							final IResource resource = (IResource)obj;
+							final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
+							taggable.clearTags();
+						}
+					} catch(TagAssociationException tae){
+						ExceptionDialogFactory.create(workbenchPart.getSite().getShell(), tae).open();
 					}
 				}
 			}

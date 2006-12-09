@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.ITagManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
@@ -136,8 +137,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				}
 			}
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to find associations: " + ce.getMessage(),ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_List,ce);
 		}
 		return(shared);
 	}
@@ -169,8 +170,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				}
 			}
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to clear tag associations: " + ce.getMessage(), ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Remove,ce);
 		}
 	}
 	
@@ -197,8 +198,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				}
 			}
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to clear tag associations: " + ce.getMessage(), ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Remove,ce);
 		}
 	}
 	
@@ -244,8 +245,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				}
 			}
 		} catch(CoreException ce){
-			// FIXME: pass to user
 			TaggerLog.error("Unable to clear tag association: " + ce.getMessage(), ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Remove,ce);
 		}
 	}
 
@@ -260,8 +261,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				hasAssoc = tags != null && tags.hasAssociations() && tags.containsAssociation(tagid);
 			}
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to determine association: " + ce.getMessage(), ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Has,ce);
 		}
 		return(hasAssoc);
 	}
@@ -272,8 +273,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		try {
 			hasAssoc = TaggedMarkerHelper.getMarker(resource) != null;
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to determine association: " + ce.getMessage(), ce);
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Has,ce);
 		}
 		return(hasAssoc);
 	}
@@ -295,7 +296,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			
 		} catch(CoreException ce){
 			TaggerLog.error("Unable to create tag association: " + ce.getMessage(),ce);
-			throw new TagAssociationException("Unable to add tag association due to errors.",ce);	// FIXME: externalize
+			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Create,ce);
 		}
 	}
 
@@ -307,8 +308,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				return(associations.get(marker.getResourceId()).getAssociations());
 			}
 		} catch(CoreException ce){
-			// FIXME: send to user
 			TaggerLog.error("Unable to retrive association: " + ce.getMessage(), ce);
+			throw new TagAssociationException("",ce);
 		}
 		return(new UUID[0]);
 	}
