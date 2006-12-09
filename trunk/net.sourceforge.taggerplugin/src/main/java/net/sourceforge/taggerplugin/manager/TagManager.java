@@ -20,7 +20,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -35,13 +34,12 @@ import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.event.ITagManagerListener;
 import net.sourceforge.taggerplugin.event.TagManagerEvent;
+import net.sourceforge.taggerplugin.io.TagIoFactory;
+import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagFactory;
 import net.sourceforge.taggerplugin.util.IoUtils;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.XMLMemento;
 
 /**
  * Manages the tag set available to the plugin.
@@ -50,9 +48,6 @@ import org.eclipse.ui.XMLMemento;
  */
 public class TagManager {
 
-	private static final String TAG_TAGS = "tags";
-	private static final String TAG_TAG = "tag";
-	private static final String TAG_NAME = "name";
 	private static final String TAGSETFILENAME = "tags.xml";
 	private static TagManager instance;
 	private List<ITagManagerListener> listeners;
@@ -214,10 +209,9 @@ public class TagManager {
 			try {
 				reader = new BufferedReader(new FileReader(file));
 
-				final IMemento [] children = XMLMemento.createReadRoot(reader).getChildren(TAG_TAG);
-				for (IMemento mem : children) {
-					final Tag tag = TagFactory.create(mem.getID(), mem.getString(TAG_NAME), mem.getTextData());
-					tags.put(tag.getId(),tag);
+				final Tag[] _tags = TagIoFactory.create(TagIoFormat.MEMENTO).readTags(reader, null);
+				for(Tag tag : _tags){
+					tags.put(tag.getId(), tag);
 				}
 
 			} catch(Exception ex){
@@ -234,18 +228,11 @@ public class TagManager {
 	public void saveTags() {
 		if(tags == null){return;}
 
-		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_TAGS);
-		for (Tag tag : tags.values()) {
-			final IMemento mem = memento.createChild(TAG_TAG,String.valueOf(tag.getId()));
-			mem.putString(TAG_NAME, tag.getName());
-			mem.putTextData(tag.getDescription());
-		}
-
 		Writer writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(getTagFile()));
-			memento.save(writer);
-		} catch (IOException e) {
+			TagIoFactory.create(TagIoFormat.MEMENTO).writeTags(writer, tags.values().toArray(new Tag[tags.size()]), null);
+		} catch (Exception e) {
 			TaggerLog.error(e);
 		} finally {
 			IoUtils.closeQuietly(writer);

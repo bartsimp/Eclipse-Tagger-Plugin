@@ -13,8 +13,8 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.wizard;
+package net.sourceforge.taggerplugin.io;
 
-enum TagIoFormat {
-	XML,CSV
+public enum TagIoFormat {
+	XML,CSV,MEMENTO
 }
