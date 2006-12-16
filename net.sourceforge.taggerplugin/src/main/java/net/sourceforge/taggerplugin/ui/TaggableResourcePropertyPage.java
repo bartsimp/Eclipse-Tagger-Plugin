@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.ui;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.resource.ITaggedMarker;

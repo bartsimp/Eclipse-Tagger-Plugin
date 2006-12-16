@@ -33,7 +33,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -70,7 +69,7 @@ class TagXmlIo implements ITagIo {
 				final Element tagNameElt = (Element)tagElt.getFirstChild();
 				final Element tagDescElt = (Element)tagElt.getLastChild();
 
-				tags.add(TagFactory.create(tagElt.getAttribute(ATTRNAME_ID),tagNameElt.getTextContent(),tagDescElt.getTextContent()));
+				tags.add(new Tag(tagElt.getAttribute(ATTRNAME_ID),tagNameElt.getTextContent(),tagDescElt.getTextContent()));
 
 				monitor.worked(1);
 

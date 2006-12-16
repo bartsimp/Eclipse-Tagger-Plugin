@@ -15,8 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
-import java.util.UUID;
-
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
@@ -82,7 +80,7 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {}
 
 	private IResource[] findResourcesWithTags(final Tag[] selectedTags) throws CoreException {
-		final UUID[] tagids = new UUID[selectedTags.length];
+		final String[] tagids = new String[selectedTags.length];
 		for(int t=0; t<selectedTags.length; t++){
 			tagids[t] = selectedTags[t].getId();
 		}

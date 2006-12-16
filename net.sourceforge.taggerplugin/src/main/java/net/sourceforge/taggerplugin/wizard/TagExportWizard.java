@@ -36,10 +36,10 @@ import org.eclipse.ui.IExportWizard;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-public class TagExportWizard extends AbstractTagIoWizard implements IExportWizard {
+public class TagExportWizard extends AbstractTagExternalizationWizard implements IExportWizard {
 
 	public TagExportWizard(){
-		super(TagIoWizardType.EXPORT);
+		super(TagExternalizationWizardType.EXPORT);
 	}
 
 	protected void doFinish(final IProgressMonitor monitor, final File exportFile, final TagIoFormat exportFormat) throws CoreException {

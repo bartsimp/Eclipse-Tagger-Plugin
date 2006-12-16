@@ -1,3 +1,18 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.io;
 
 import java.io.IOException;
@@ -7,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IMemento;
@@ -29,7 +43,7 @@ class TagMementoIo implements ITagIo {
 		try {
 			final IMemento [] children = XMLMemento.createReadRoot(reader).getChildren(TAG_TAG);
 			for (IMemento mem : children) {
-				final Tag tag = TagFactory.create(mem.getID(), mem.getString(TAG_NAME), mem.getTextData());
+				final Tag tag = new Tag(mem.getID(), mem.getString(TAG_NAME), mem.getTextData());
 				tags.add(tag);
 			}
 		} catch(WorkbenchException we){

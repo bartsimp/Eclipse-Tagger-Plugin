@@ -18,7 +18,6 @@ package net.sourceforge.taggerplugin.search;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.manager.TagManager;
@@ -97,13 +96,13 @@ public class TagSearchPage extends DialogPage implements ISearchPage {
 		return(query);
 	}
 
-	private UUID[] extractSelectedTagIds(){
-		final List<UUID> ids = new LinkedList<UUID>();
+	private String[] extractSelectedTagIds(){
+		final List<String> ids = new LinkedList<String>();
 		for(TableItem item : tableItems){
 			if(item.getChecked()){
-				ids.add((UUID)item.getData());
+				ids.add((String)item.getData());
 			}
 		}
-		return(ids.toArray(new UUID[ids.size()]));
+		return(ids.toArray(new String[ids.size()]));
 	}
 }

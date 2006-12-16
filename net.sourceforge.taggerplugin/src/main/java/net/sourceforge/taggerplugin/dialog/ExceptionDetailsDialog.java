@@ -13,7 +13,7 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.ui;
+package net.sourceforge.taggerplugin.dialog;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

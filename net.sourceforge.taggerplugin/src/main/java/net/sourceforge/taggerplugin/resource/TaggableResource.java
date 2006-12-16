@@ -15,8 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.resource;
 
-import java.util.UUID;
-
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 
 import org.eclipse.core.resources.IResource;
@@ -35,11 +33,11 @@ class TaggableResource implements ITaggable {
 		this.resource = resource;
 	}
 
-	public void setTag(UUID id) {
+	public void setTag(String id) {
 		TagAssociationManager.getInstance().addAssociation(resource, id);
 	}
 
-	public void clearTag(UUID id) {
+	public void clearTag(String id) {
 		TagAssociationManager.getInstance().clearAssociation(resource, id);
 	}
 
@@ -47,11 +45,11 @@ class TaggableResource implements ITaggable {
 		TagAssociationManager.getInstance().clearAssociations(resource);
 	}
 
-	public boolean hasTag(UUID id) {
+	public boolean hasTag(String id) {
 		return(TagAssociationManager.getInstance().hasAssociation(resource, id));
 	}
 
-	public UUID[] listTags() {
+	public String[] listTags() {
 		return(TagAssociationManager.getInstance().getAssociations(resource));
 	}
 

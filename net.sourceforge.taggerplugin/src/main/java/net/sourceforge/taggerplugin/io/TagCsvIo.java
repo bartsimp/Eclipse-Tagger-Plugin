@@ -25,7 +25,6 @@ import java.util.List;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -49,7 +48,7 @@ class TagCsvIo implements ITagIo {
 		for(String line = breader.readLine(); line != null; line = breader.readLine()){
 			if(!line.equalsIgnoreCase(HEADER_LINE)){
 				final String[] parts = (line.substring(1,line.length()-1)).split(QUOTE_COMMA_QUOTE);
-				tags.add(TagFactory.create(parts[0],parts[1],parts[2]));
+				tags.add(new Tag(parts[0],parts[1],parts[2]));
 			}
 		}
 

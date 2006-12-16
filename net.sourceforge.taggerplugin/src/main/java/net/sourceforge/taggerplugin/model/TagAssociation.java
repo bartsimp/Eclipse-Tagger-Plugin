@@ -1,39 +1,53 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
 package net.sourceforge.taggerplugin.model;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.UUID;
 
-public class TagAssociation implements Iterable<UUID> {
+public class TagAssociation implements Iterable<String> {
 
-	private UUID resourceId;
-	private Set<UUID> tagIds;
+	private String resourceId;
+	private Set<String> tagIds;
 	
 	public TagAssociation(){
 		super();
-		this.tagIds = new HashSet<UUID>();
+		this.tagIds = new HashSet<String>();
 	}
 	
-	public TagAssociation(UUID resourceId){
+	public TagAssociation(String resourceId){
 		this();
 		this.resourceId = resourceId;
 	}
 	
-	public UUID getResourceId(){
+	public String getResourceId(){
 		return this.resourceId;
 	}
 
-	public Iterator<UUID> iterator() {
+	public Iterator<String> iterator() {
 		return tagIds.iterator();
 	}
 	
-	public UUID[] getAssociations(){
-		return(tagIds.toArray(new UUID[tagIds.size()]));
+	public String[] getAssociations(){
+		return(tagIds.toArray(new String[tagIds.size()]));
 	}
 	
-	public void addTagId(UUID tagid){
+	public void addTagId(String tagid){
 		tagIds.add(tagid);
 	}
 	
@@ -45,15 +59,15 @@ public class TagAssociation implements Iterable<UUID> {
 		return(tagIds.isEmpty());
 	}
 	
-	public boolean containsAssociation(UUID tagid){
+	public boolean containsAssociation(String tagid){
 		return(tagIds.contains(tagid));
 	}
 	
-	public boolean removeAssociation(UUID tagid){
+	public boolean removeAssociation(String tagid){
 		return(tagIds.remove(tagid));
 	}
 	
-	public boolean removeAssociations(UUID[] tagids){
+	public boolean removeAssociations(String[] tagids){
 		return(tagIds.removeAll(Arrays.asList(tagids)));
 	}
 

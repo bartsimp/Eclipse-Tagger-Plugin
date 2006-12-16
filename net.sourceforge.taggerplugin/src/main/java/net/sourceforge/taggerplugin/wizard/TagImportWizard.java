@@ -33,10 +33,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IImportWizard;
 
-public class TagImportWizard extends AbstractTagIoWizard implements IImportWizard {
+public class TagImportWizard extends AbstractTagExternalizationWizard implements IImportWizard {
 
 	public TagImportWizard(){
-		super(TagIoWizardType.IMPORT);
+		super(TagExternalizationWizardType.IMPORT);
 	}
 
 	protected void doFinish(final IProgressMonitor monitor, final File file, final TagIoFormat format) throws CoreException {
