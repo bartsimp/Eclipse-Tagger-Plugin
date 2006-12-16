@@ -7,18 +7,9 @@ body {
 	font-size:		12pt;
 }
 
-img {
-	border:			none;
-}
-
-A {
-	text-decoration: 	none;
-	color:				#EE7600;
-}
-
-A:hover {
-	text-decoration: underline;
-	color:			#FF8C00;
+#layout-container {
+	height:100%;
+	width:100%;
 }
 
 #header {
@@ -29,37 +20,67 @@ A:hover {
 	font-variant: 	small-caps;
 	border-bottom:	1px solid black;
 	margin-bottom:	0px;
-}
-
-#header .title {
 	font-size:		18pt;
 	font-weight: 	bold;
 }
 
-#header .menu {
-	font-size:		11pt;
+#footer {
+	padding:		4px;
+	text-align: 	right;
 }
 
-#content {
-	margin-top:		-15px;
-	padding:		5px;
+#tab-container {
+	width:		100%;
+	height: 	100%;
 }
 
-#content h1 {
+.tab-content {
+	width:		100%;
+	height: 	100%;
+	overflow:	auto;
+}
+
+#tab-container h1 {
 	font-size:		16pt;
 	font-weight:	bold;
 	color:			#CD661D;
 	border-bottom:	1px dotted black;
 }
 
-#content h2 {
+#tab-container h2 {
 	font-size:		14pt;
 	font-weight:	bold;
 	font-style:		italic;
 	color:			#CD661D;
 }
 
-#footer {
-	padding:		4px;
-	text-align: 	right;
+#content {
+	margin-top:		5px;
+}
+
+#tab-container img {
+	border:			none;
+}
+
+#tab-container .thumb {
+	height:			100px;
+}
+
+#tab-container A {
+	text-decoration: 	none;
+	color:				#EE7600;
+}
+
+#tab-container A:hover {
+	text-decoration: underline;
+	color:			#FF8C00;
+}
+
+.dojoTabPaneWrapper {
+ 	padding : 5px 5px 5px 5px;
+}
+
+#dialog-content {
+	border:		4px solid gray;
+	text-align: center;
 }
