@@ -16,11 +16,11 @@
 package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
-import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.view.TagView;
 
 import org.eclipse.jface.action.IAction;

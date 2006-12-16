@@ -30,14 +30,14 @@ public class TaggedResourceMarker implements ITaggedMarker {
 		this.marker = marker;
 	}
 
-	public UUID getResourceId() throws CoreException {
+	public String getResourceId() throws CoreException {
 		final String rcid = (String)marker.getAttribute(KEY_RESOURCEID);
 		if(rcid == null){
-			final UUID resourceId = UUID.randomUUID();
-			marker.setAttribute(KEY_RESOURCEID, resourceId.toString());
+			final String resourceId = UUID.randomUUID().toString();
+			marker.setAttribute(KEY_RESOURCEID, resourceId);
 			return(resourceId);
 		} else {
-			return(UUID.fromString(rcid));
+			return(rcid);
 		}
 	}
 	

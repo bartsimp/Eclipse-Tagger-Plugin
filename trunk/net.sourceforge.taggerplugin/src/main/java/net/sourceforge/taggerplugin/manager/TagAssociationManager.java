@@ -30,7 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.Map.Entry;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
@@ -73,7 +72,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	private static final String TAGASSOCIATIONFILENAME = "tag-associations.xml";
 	private static final String TAG_ASSOCIATION = "assoc";
 	private static TagAssociationManager instance;
-	private Map<UUID, TagAssociation> associations;
+	private Map<String, TagAssociation> associations;
 	private final List<ITagAssociationManagerListener> listeners;
 
 	private TagAssociationManager(){
@@ -96,12 +95,12 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resourceIds
 	 * @return
 	 */
-	public Set<UUID> findSharedAssociations(ITaggable[] taggables){
+	public Set<String> findSharedAssociations(ITaggable[] taggables){
 		ensureAssociations();
 
-		final Set<UUID> shared = new HashSet<UUID>();
+		final Set<String> shared = new HashSet<String>();
 		try {
-			final Set<UUID> masterSet = new HashSet<UUID>();
+			final Set<String> masterSet = new HashSet<String>();
 			for (ITaggable taggable : taggables){
 				final ITaggedMarker marker = TaggedMarkerHelper.getMarker(taggable.getResource());
 				if(marker != null){
@@ -112,7 +111,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 				}
 			}
 
-			for(UUID uuid : masterSet){
+			for(String uuid : masterSet){
 				boolean allhave = false;
 				for(ITaggable taggable : taggables){
 					final ITaggedMarker marker = TaggedMarkerHelper.getMarker(taggable.getResource());
@@ -143,8 +142,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		return(shared);
 	}
 	
-	public Set<UUID> findAllAssociations(ITaggable[] taggables){
-		final Set<UUID> set = new HashSet<UUID>();
+	public Set<String> findAllAssociations(ITaggable[] taggables){
+		final Set<String> set = new HashSet<String>();
 		for(ITaggable taggable : taggables){
 			set.addAll(Arrays.asList(taggable.listTags()));
 		}
@@ -181,7 +180,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resource
 	 * @param tagIds
 	 */
-	public void clearAssociations(IResource resource, UUID[] tagIds){
+	public void clearAssociations(IResource resource, String[] tagIds){
 		ensureAssociations();
 		try {
 			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
@@ -210,7 +209,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 *
 	 * @param resourceId the id of the resource being deleted
 	 */
-	public void deleteAssociations(UUID resourceId){
+	public void deleteAssociations(String resourceId){
 		ensureAssociations();
 		
 		associations.remove(resourceId);
@@ -225,7 +224,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resource the resource
 	 * @param tagid the id of the tag association being cleared
 	 */
-	public void clearAssociation(IResource resource, UUID tagid){
+	public void clearAssociation(IResource resource, String tagid){
 		ensureAssociations();
 
 		try {
@@ -250,7 +249,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 	}
 
-	public boolean hasAssociation(IResource resource, UUID tagid){
+	public boolean hasAssociation(IResource resource, String tagid){
 		ensureAssociations();
 
 		boolean hasAssoc = false;
@@ -285,7 +284,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resource the resource
 	 * @param tagid the id of the tag being associated with the resource
 	 */
-	public void addAssociation(IResource resource, UUID tagid){
+	public void addAssociation(IResource resource, String tagid){
 		ensureAssociations();
 		try {
 			final TagAssociation tags = getOrCreateAssociation(TaggedMarkerHelper.getOrCreateMarker(resource).getResourceId());
@@ -300,7 +299,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 	}
 
-	public UUID[] getAssociations(IResource resource){
+	public String[] getAssociations(IResource resource){
 		ensureAssociations();
 		try {
 			final ITaggedMarker marker = TaggedMarkerHelper.getMarker(resource);
@@ -311,12 +310,12 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			TaggerLog.error("Unable to retrive association: " + ce.getMessage(), ce);
 			throw new TagAssociationException("",ce);
 		}
-		return(new UUID[0]);
+		return(new String[0]);
 	}
 
 	private void ensureAssociations(){
 		if(associations == null){
-			associations = new HashMap<UUID,TagAssociation>();
+			associations = new HashMap<String,TagAssociation>();
 			loadAssociations();
 		}
 	}
@@ -329,7 +328,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @param resourceId
 	 * @return
 	 */
-	private TagAssociation getOrCreateAssociation(UUID resourceId){
+	private TagAssociation getOrCreateAssociation(String resourceId){
 		TagAssociation tagAssoc = associations.get(resourceId);
 		if(tagAssoc == null){
 			tagAssoc = new TagAssociation(resourceId);
@@ -347,7 +346,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 
 				final IMemento[] children = XMLMemento.createReadRoot(reader).getChildren(TAG_ASSOCIATION);
 				for (IMemento mem : children) {
-					final UUID resourceId = UUID.fromString(mem.getID());
+					final String resourceId = mem.getID();
 
 					TagAssociation tagAssoc = associations.get(resourceId);
 					if(tagAssoc == null){
@@ -357,7 +356,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 
 					final IMemento[] resourceChildren = mem.getChildren(TAG_TAG);
 					for(IMemento rchild : resourceChildren){
-						tagAssoc.addTagId(UUID.fromString(rchild.getString(TAG_REFID)));
+						tagAssoc.addTagId(rchild.getString(TAG_REFID));
 					}
 				}
 
@@ -373,10 +372,10 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		if(associations == null){return;}
 
 		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_ASSOCIATIONS);
-		for (Entry<UUID,TagAssociation> entry : associations.entrySet()) {
+		for (Entry<String,TagAssociation> entry : associations.entrySet()) {
 			final IMemento mem = memento.createChild(TAG_ASSOCIATION,String.valueOf(entry.getKey()));
 
-			for (UUID tagId : entry.getValue()){
+			for (String tagId : entry.getValue()){
 				final IMemento tagMem = mem.createChild(TAG_TAG);
 				tagMem.putString(TAG_REFID, tagId.toString());
 			}
@@ -406,7 +405,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		if(tme.getType().equals(TagManagerEvent.Type.REMOVED)){
 			try {
 				// find all associations that contain the removed tag and remove that tagid
-				final UUID[] removedTagIds = TagManager.extractTagIds(tme.getTags());
+				final String[] removedTagIds = TagManager.extractTagIds(tme.getTags());
 				
 				final ITagSearchResult result = new TagSearchResult();
 				ResourcesPlugin.getWorkspace().getRoot().accept(new TaggableResourceVisitor(removedTagIds,false,result), IResource.NONE);

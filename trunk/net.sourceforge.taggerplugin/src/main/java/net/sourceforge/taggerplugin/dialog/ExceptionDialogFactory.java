@@ -1,4 +1,4 @@
-package net.sourceforge.taggerplugin.ui;
+package net.sourceforge.taggerplugin.dialog;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;

@@ -15,8 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
-import java.util.UUID;
-
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.resource.ITaggable;
@@ -33,11 +31,11 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class TaggableResourceVisitor implements IResourceProxyVisitor {
 	
-	private final UUID[] tagIds;
+	private final String[] tagIds;
 	private final boolean requireAll;
 	private final ITagSearchResult result;
 	
-	public TaggableResourceVisitor(final UUID[] tagIds, final boolean requireAll, final ITagSearchResult result){
+	public TaggableResourceVisitor(final String[] tagIds, final boolean requireAll, final ITagSearchResult result){
 		super();
 		this.tagIds = tagIds;
 		this.requireAll = requireAll;
@@ -63,9 +61,9 @@ public class TaggableResourceVisitor implements IResourceProxyVisitor {
 		return true;
 	}
 	
-	private boolean matchesAny(ITaggable taggable, UUID[] ids){
+	private boolean matchesAny(ITaggable taggable, String[] ids){
 		if(taggable.hasTags()){
-			for(UUID id : ids){
+			for(String id : ids){
 				if(taggable.hasTag(id)){
 					return(true);
 				}
@@ -74,10 +72,10 @@ public class TaggableResourceVisitor implements IResourceProxyVisitor {
 		return(false);
 	}
 	
-	private boolean matchesAll(ITaggable taggable, UUID[] ids){
+	private boolean matchesAll(ITaggable taggable, String[] ids){
 		boolean hasAll = false;
 		if(taggable.hasTags()){
-			for(UUID id : ids){
+			for(String id : ids){
 				hasAll = taggable.hasTag(id);
 				if(!hasAll){
 					return(false);

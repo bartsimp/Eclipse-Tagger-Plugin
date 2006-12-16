@@ -28,12 +28,17 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 
-public abstract class AbstractTagIoWizard extends Wizard {
+/**
+ * Base wizard class for the tag externalization wizards (import/export).
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
+abstract class AbstractTagExternalizationWizard extends Wizard {
 
-	private TagIoWizardPage page;
-	private final TagIoWizardType wizardType;
+	private TagExternalizationWizardPage page;
+	private final TagExternalizationWizardType wizardType;
 
-	protected AbstractTagIoWizard(TagIoWizardType type){
+	protected AbstractTagExternalizationWizard(TagExternalizationWizardType type){
 		super();
 		this.wizardType = type;
 	}
@@ -42,7 +47,7 @@ public abstract class AbstractTagIoWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		this.page = new TagIoWizardPage(wizardType);
+		this.page = new TagExternalizationWizardPage(wizardType);
 		addPage(page);
 	}
 
@@ -68,11 +73,19 @@ public abstract class AbstractTagIoWizard extends Wizard {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (InvocationTargetException e) {
-			MessageDialog.openError(getShell(), "Error", e.getTargetException().getMessage());
+			MessageDialog.openError(getShell(), "Error", e.getTargetException().getMessage());	// FIXME: externalize
 			return false;
 		}
 		return true;
 	}
 
+	/**
+	 * Performs the actual finishing step action of the externalizer (import/export).
+	 *
+	 * @param monitor the progress monitor
+	 * @param file the target file
+	 * @param format the target file format
+	 * @throws CoreException if there is a problem finishing the wizard.
+	 */
 	protected abstract void doFinish(IProgressMonitor monitor, File file, TagIoFormat format) throws CoreException;
 }

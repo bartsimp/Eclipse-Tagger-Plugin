@@ -13,11 +13,10 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.ui;
+package net.sourceforge.taggerplugin.dialog;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagFactory;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -113,7 +112,7 @@ public class TagDialog extends Dialog {
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
         	if(tag == null){
-        		tag = TagFactory.create(nameTxt.getText(),descTxt.getText());
+        		tag = new Tag(nameTxt.getText(),descTxt.getText());
         	} else {
         		tag.setName(nameTxt.getText());
         		tag.setDescription(descTxt.getText());

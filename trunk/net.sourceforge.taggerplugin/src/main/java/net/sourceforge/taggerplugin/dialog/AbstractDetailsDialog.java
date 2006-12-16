@@ -13,7 +13,7 @@
 **                                                                          **
 **   This copyright notice MUST APPEAR in all copies of the file!           **
 **  **********************************************************************  */
-package net.sourceforge.taggerplugin.ui;
+package net.sourceforge.taggerplugin.dialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

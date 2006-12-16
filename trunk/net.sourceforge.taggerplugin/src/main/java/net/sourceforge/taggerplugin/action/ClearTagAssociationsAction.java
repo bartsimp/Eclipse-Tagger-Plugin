@@ -17,10 +17,10 @@ package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.preferences.PreferenceConstants;
 import net.sourceforge.taggerplugin.resource.ITaggable;
-import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;

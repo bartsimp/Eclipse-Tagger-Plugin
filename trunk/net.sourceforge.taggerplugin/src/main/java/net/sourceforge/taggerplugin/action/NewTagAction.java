@@ -15,8 +15,8 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
+import net.sourceforge.taggerplugin.dialog.TagDialog;
 import net.sourceforge.taggerplugin.manager.TagManager;
-import net.sourceforge.taggerplugin.ui.TagDialog;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;

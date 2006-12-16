@@ -15,14 +15,14 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.wizard;
 
-enum TagIoWizardType {
+enum TagExternalizationWizardType {
 
 	IMPORT("TagImportWizardPage"),
 	EXPORT("TagExportWizardPage");
 
 	private final String pageId;
 
-	private TagIoWizardType(final String pageId){
+	private TagExternalizationWizardType(final String pageId){
 		this.pageId = pageId;
 	}
 

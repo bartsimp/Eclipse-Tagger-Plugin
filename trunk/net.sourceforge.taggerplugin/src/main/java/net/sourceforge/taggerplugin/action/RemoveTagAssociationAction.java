@@ -16,15 +16,14 @@
 package net.sourceforge.taggerplugin.action;
 
 import java.util.Set;
-import java.util.UUID;
 
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
+import net.sourceforge.taggerplugin.dialog.TagSelectionDialog;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.resource.ITaggable;
-import net.sourceforge.taggerplugin.ui.ExceptionDialogFactory;
-import net.sourceforge.taggerplugin.ui.TagSelectionDialog;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
@@ -53,8 +52,8 @@ public class RemoveTagAssociationAction implements IObjectActionDelegate {
 				try {
 					final ITaggable[] taggables = extractTaggables(sel);
 
-					final Set<UUID> associations = TagAssociationManager.getInstance().findAllAssociations(taggables);
-					final Tag[] taglist = TagManager.getInstance().findTags(associations.toArray(new UUID[associations.size()]));
+					final Set<String> associations = TagAssociationManager.getInstance().findAllAssociations(taggables);
+					final Tag[] taglist = TagManager.getInstance().findTags(associations.toArray(new String[associations.size()]));
 
 					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
 					if(dialog.open() == TagSelectionDialog.OK){

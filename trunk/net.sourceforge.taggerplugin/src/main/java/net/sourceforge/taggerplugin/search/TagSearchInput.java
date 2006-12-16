@@ -15,8 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.search;
 
-import java.util.UUID;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,14 +29,14 @@ import org.eclipse.ui.IWorkingSet;
  */
 class TagSearchInput {
 
-	private final UUID[] tagIds;
+	private final String[] tagIds;
 	private final boolean required;
 	private final int scope;
 	private String[] projectNames;
 	private IWorkingSet[] workingSets;
 	private IResource[] selectedResources;
 
-	TagSearchInput(UUID[] tagIds, boolean required, final ISearchPageContainer container){
+	TagSearchInput(String[] tagIds, boolean required, final ISearchPageContainer container){
 		super();
 		this.tagIds = tagIds;
 		this.required = required;
@@ -83,7 +81,7 @@ class TagSearchInput {
 		return this.selectedResources;
 	}
 
-	public UUID[] getTagIds() {
+	public String[] getTagIds() {
 		return this.tagIds;
 	}
 

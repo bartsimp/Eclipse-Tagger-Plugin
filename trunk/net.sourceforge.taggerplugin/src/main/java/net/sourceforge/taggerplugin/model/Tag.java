@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.model;
 
 import java.util.UUID;
 
+
 /**
  *	Model object representing a single tag in the tag set.
  *
@@ -24,16 +25,22 @@ import java.util.UUID;
  */
 public class Tag implements Comparable<Tag> {
 
-	private UUID id;
-	private String name, description;
-
-	Tag(UUID id){
+	private String id, name, description;
+	
+	public Tag(){
 		super();
-		this.id = id;
+		this.id = UUID.randomUUID().toString();
+	}
+	
+	public Tag(String name, String description){
+		this();
+		this.name = name;
+		this.description = description;
 	}
 
-	Tag(UUID id, String name, String description){
-		this(id);
+	public Tag(String id, String name, String description){
+		super();
+		this.id = id;
 		this.name = name;
 		this.description = description;
 	}
@@ -46,11 +53,11 @@ public class Tag implements Comparable<Tag> {
 		this.description = description;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return(id);
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

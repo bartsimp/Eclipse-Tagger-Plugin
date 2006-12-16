@@ -33,15 +33,20 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-class TagIoWizardPage extends WizardPage {
+/**
+ * Tag externalization wizard page used by both the import and export wizard. 
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
+class TagExternalizationWizardPage extends WizardPage {
 
 	private static final String EMPTY_STRING = "";
 	private Text filePath;
 	private Button xmlFormatBtn,csvFormatBtn;
-	private final TagIoWizardType descriptor;
-
-	TagIoWizardPage(final TagIoWizardType descriptor){
-		super(descriptor.getPageId(),descriptor.equals(TagIoWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Title : TaggerMessages.TagExportWizardPage_Title,null);
+	private final TagExternalizationWizardType descriptor;
+	
+	TagExternalizationWizardPage(final TagExternalizationWizardType descriptor){
+		super(descriptor.getPageId(),descriptor.equals(TagExternalizationWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Title : TaggerMessages.TagExportWizardPage_Title,null);
 		this.descriptor = descriptor;
 	}
 
@@ -72,7 +77,7 @@ class TagIoWizardPage extends WizardPage {
 		panel.setLayout(new GridLayout(3,false));
 
 		// path
-		createLabel(panel,TaggerMessages.TagIoWizardPage_Label_File,descriptor.equals(TagIoWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Tooltip_File : TaggerMessages.TagExportWizardPage_Tooltip_File,1);
+		createLabel(panel,TaggerMessages.TagIoWizardPage_Label_File,descriptor.equals(TagExternalizationWizardType.IMPORT) ? TaggerMessages.TagImportWizardPage_Tooltip_File : TaggerMessages.TagExportWizardPage_Tooltip_File,1);
 
 		filePath = new Text(panel,SWT.BORDER | SWT.SINGLE);
 		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

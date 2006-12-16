@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
@@ -51,7 +50,7 @@ public class TagManager {
 	private static final String TAGSETFILENAME = "tags.xml";
 	private static TagManager instance;
 	private List<ITagManagerListener> listeners;
-	private Map<UUID,Tag> tags;
+	private Map<String,Tag> tags;
 
 	private TagManager(){
 		super();
@@ -75,11 +74,11 @@ public class TagManager {
 	 * @param tagids the tag ids to find tags for
 	 * @return the array of tags found with the given ids.
 	 */
-	public Tag[] findTags(UUID[] tagids){
+	public Tag[] findTags(String[] tagids){
 		ensureTags();
 
 		List<Tag> list = new LinkedList<Tag>();
-		for (UUID uuid : tagids) {
+		for (String uuid : tagids) {
 			final Tag tag = tags.get(uuid);
 			if(tag != null){
 				list.add(tag);
@@ -88,10 +87,10 @@ public class TagManager {
 		return(list.toArray(new Tag[list.size()]));
 	}
 
-	public Tag[] findTagsNotIn(UUID[] tagids){
+	public Tag[] findTagsNotIn(String[] tagids){
 		ensureTags();
 
-		final List<UUID> ids = new ArrayList<UUID>(tags.keySet());
+		final List<String> ids = new ArrayList<String>(tags.keySet());
 		ids.removeAll(Arrays.asList(tagids));
 
 		final Tag[] matching = new Tag[ids.size()];
@@ -180,8 +179,8 @@ public class TagManager {
 		return(str.toString());
 	}
 	
-	public static UUID[] extractTagIds(Tag[] tags){
-		final UUID[] uuids = new UUID[tags.length];
+	public static String[] extractTagIds(Tag[] tags){
+		final String[] uuids = new String[tags.length];
 		for(int i=0; i<tags.length; i++){
 			uuids[i] = tags[i].getId();
 		}
@@ -194,7 +193,7 @@ public class TagManager {
 	 */
 	private void ensureTags(){
 		if(tags == null){
-			tags = new HashMap<UUID, Tag>();
+			tags = new HashMap<String, Tag>();
 			loadTags();
 		}
 	}
@@ -239,7 +238,7 @@ public class TagManager {
 		}
 	}
 
-	public boolean tagExists(UUID tagId) {
+	public boolean tagExists(String tagId) {
 		ensureTags();
 		return(tags.containsKey(tagId));
 	}

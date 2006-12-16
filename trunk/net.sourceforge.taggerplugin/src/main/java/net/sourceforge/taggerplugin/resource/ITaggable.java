@@ -15,8 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.resource;
 
-import java.util.UUID;
-
 import org.eclipse.core.resources.IResource;
 
 /**
@@ -31,14 +29,14 @@ public interface ITaggable {
 	 *
 	 * @param id the id of the tag
 	 */
-	public void setTag(UUID id);
+	public void setTag(String id);
 
 	/**
 	 * Used to remove the association with the tag with the specified id.
 	 *
 	 * @param id the tag id
 	 */
-	public void clearTag(UUID id);
+	public void clearTag(String id);
 
 	/**
 	 * Used to remove all tag associations from the tagged object.
@@ -50,7 +48,7 @@ public interface ITaggable {
 	 *
 	 * @return an array of all tag ids associated with the taggable object
 	 */
-	public UUID[] listTags();
+	public String[] listTags();
 
 	/**
 	 * Used to determine whether the tag with a specified id is associated with the taggable
@@ -59,7 +57,7 @@ public interface ITaggable {
 	 * @param id the tag id
 	 * @return a value of true if the tag with the specified id is associated with the taggable object.
 	 */
-	public boolean hasTag(UUID id);
+	public boolean hasTag(String id);
 
 	public boolean hasTags();
 	
