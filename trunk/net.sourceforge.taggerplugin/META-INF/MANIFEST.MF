@@ -4,7 +4,7 @@ Bundle-Name: Resource Tagger Plug-in
 Bundle-SymbolicName: net.sourceforge.taggerplugin;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: net.sourceforge.taggerplugin.TaggerActivator
-Bundle-Vendor: Christopher J. Stehno (chris@stehno.com)
+Bundle-Vendor: http://taggerplugin.sourceforge.net
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
