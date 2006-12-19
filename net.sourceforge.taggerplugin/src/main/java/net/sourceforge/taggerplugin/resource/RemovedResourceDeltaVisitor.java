@@ -25,7 +25,8 @@ import org.eclipse.core.runtime.CoreException;
 public class RemovedResourceDeltaVisitor implements IResourceDeltaVisitor {
 
 	public boolean visit(IResourceDelta delta) throws CoreException {
-		if(delta.getKind() == IResourceDelta.REMOVED){
+		int kind = delta.getKind();
+		if(kind == IResourceDelta.REMOVED){
 			final IMarkerDelta[] markers = delta.getMarkerDeltas();
 			if(markers != null){
 				for(IMarkerDelta md : markers){

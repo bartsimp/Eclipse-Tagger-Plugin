@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.resource;
 
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
@@ -39,7 +40,7 @@ public class TaggedMarkerHelper {
 	 */
 	public static final ITaggedMarker getOrCreateMarker(IResource resource) throws CoreException {
 		ITaggedMarker marker = getMarker(resource);
-		if(marker == null){
+		if(marker == null && isMarkable(resource)){
 			marker = (ITaggedMarker)resource.createMarker(ITaggedMarker.MARKER_TYPE).getAdapter(ITaggedMarker.class);
 		}
 		return(marker);
@@ -58,7 +59,16 @@ public class TaggedMarkerHelper {
 	 * @throws CoreException if there is a problem retrieving the marker
 	 */
 	public static final ITaggedMarker getMarker(IResource resource) throws CoreException {
-		final IMarker[] markers = resource.findMarkers(ITaggedMarker.MARKER_TYPE, false, IResource.DEPTH_ZERO);
-		return(markers != null && markers.length != 0 ? (ITaggedMarker)markers[0].getAdapter(ITaggedMarker.class) : null);
+		if(isMarkable(resource)){
+			final IMarker[] markers = resource.findMarkers(ITaggedMarker.MARKER_TYPE, false, IResource.DEPTH_ZERO);
+			return(markers != null && markers.length != 0 ? (ITaggedMarker)markers[0].getAdapter(ITaggedMarker.class) : null);	
+		} else {
+			return(null);
+		}
+	}
+	
+	private static boolean isMarkable(IResource resource){
+		final IProject project = (IProject)resource.getAdapter(IProject.class);
+		return((project == null) || (project != null && project.isOpen()));
 	}
 }
