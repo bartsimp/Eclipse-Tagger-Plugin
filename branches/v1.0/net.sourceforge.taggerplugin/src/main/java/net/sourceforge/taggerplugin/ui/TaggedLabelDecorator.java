@@ -50,7 +50,8 @@ public class TaggedLabelDecorator implements ILightweightLabelDecorator,ITagAsso
 
 	public void decorate(Object element, IDecoration decoration) {
 		try {
-			if(TaggedMarkerHelper.getMarker((IResource)element) != null){
+			final IResource resource = (IResource)element;
+			if(resource.exists() && TaggedMarkerHelper.getMarker(resource) != null){
 				decoration.addOverlay(OVERLAY,TaggerActivator.getDefault().getPreferenceStore().getInt(PreferenceConstants.POSITION_LABEL_DECORATION.getKey()));
 			}
 		} catch(CoreException ce){

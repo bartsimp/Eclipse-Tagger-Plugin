@@ -43,9 +43,10 @@ public class TaggerActivator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		
+
 		TagAssociationManager tagAssocMgr = TagAssociationManager.getInstance();
 		TagManager.getInstance().addTagManagerListener(tagAssocMgr);
+		// FIXME: http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/resAdv_events.htm
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(tagAssocMgr, IResourceChangeEvent.POST_CHANGE);
 	}
 
@@ -55,7 +56,7 @@ public class TaggerActivator extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
-		
+
 		TagAssociationManager tagAssocMgr = TagAssociationManager.getInstance();
 		TagManager.getInstance().removeTagManagerListener(tagAssocMgr);
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(tagAssocMgr);
