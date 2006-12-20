@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://taggerplugin.sourceforge.net/update">
+      Update site for the &quot;Resource Tagger Plug-in&quot;.
+   </description>
+   <feature url="features/net.sourceforge.taggerplugin_feature_1.0.1.jar" id="net.sourceforge.taggerplugin_feature" version="1.0.1"/>
+</site>

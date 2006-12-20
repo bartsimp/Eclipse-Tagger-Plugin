@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>Eclipse Resource Tagger Plug-in</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+
+		<script type="text/javascript">
+			// var djConfig = { isDebug: true };
+		</script>
+		<script type="text/javascript" src="rc/js/prototype.js"></script>
+		<script type="text/javascript" src="dojo.js"></script>
+		<script type="text/javascript">
+			dojo.require("dojo.widget.TabContainer");
+			dojo.require("dojo.widget.LinkPane");
+			dojo.require("dojo.widget.ContentPane");
+			dojo.require("dojo.widget.LayoutContainer");
+			dojo.require("dojo.widget.HtmlWidget");
+			dojo.require("dojo.widget.Dialog");
+
+			Event.observe(window,"load",init,true);
+
+			var dlg;
+			function init() {
+				dlg = dojo.widget.byId("dialog-content");
+				dlg.setCloseControl($("hider"));
+			}
+
+			function show(elt){
+				$("dialog-panel").innerHTML = "<img src='" + elt.src + "'/>";
+				dlg.show();
+			}
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="rc/css/common.css" />
+	</head>
+	<body>
+
+		<div id="layout-container" dojoType="LayoutContainer" layoutChildPriority="none">
+			<div id="header" dojoType="ContentPane" layoutAlign="top">
+				Eclipse Resource Tagger Plug-In
+			</div>
+
+			<div id="footer" dojoType="ContentPane" layoutAlign="bottom">
+				<a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=182210&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+			</div>
+
+			<div id="content" dojoType="ContentPane" layoutAlign="client">
+				<div id="tab-container" dojoType="TabContainer" selectedChild="tab-intro" >
+					<a id="tab-intro" dojoType="LinkPane" href="intro.html" refreshOnShow="true" style="display:none;">Introduction</a>
+					<a id="tab-features" dojoType="LinkPane" href="features.html" refreshOnShow="true" style="display:none;">Features</a>
+					<a id="tab-screens" dojoType="LinkPane" href="screenshots.html" refreshOnShow="true" style="display:none;">Screenshots</a>
+					<a id="tab-downloads" dojoType="LinkPane" href="downloads.html" refreshOnShow="true" style="display:none;">Downloads</a>
+					<a id="tab-install" dojoType="LinkPane" href="install.html" refreshOnShow="true" style="display:none;">Installation</a>
+					<a id="tab-links" dojoType="LinkPane" href="links.html" refreshOnShow="true" style="display:none;">Links</a>
+				</div>
+			</div>
+		</div>
+
+		<div dojoType="dialog" id="dialog-content" bgColor="white" bgOpacity="0.5" toggle="fade" toggleDuration="250">
+			<div id="dialog-panel"></div>
+			<button id="hider">Hide</button>
+		</div>
+
+	</body>
+</html>
