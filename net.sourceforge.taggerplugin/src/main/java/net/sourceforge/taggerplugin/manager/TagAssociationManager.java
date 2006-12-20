@@ -52,7 +52,6 @@ import net.sourceforge.taggerplugin.util.IoUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMemento;
@@ -107,7 +106,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 					final TagAssociation assocs = associations.get(marker.getResourceId());
 					if(assocs != null && assocs.hasAssociations()){
 						masterSet.addAll(Arrays.asList(assocs.getAssociations()));
-					}	
+					}
 				}
 			}
 
@@ -125,7 +124,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 						} else {
 							allhave = false;
 							break;
-						}						
+						}
 					} else {
 						break;
 					}
@@ -141,7 +140,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 		return(shared);
 	}
-	
+
 	public Set<String> findAllAssociations(ITaggable[] taggables){
 		final Set<String> set = new HashSet<String>();
 		for(ITaggable taggable : taggables){
@@ -149,7 +148,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 		return(set);
 	}
-	
+
 
 	/**
 	 * Used to clear all associations of the given resource.
@@ -173,7 +172,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Remove,ce);
 		}
 	}
-	
+
 	/**
 	 * does not save the state
 	 *
@@ -201,19 +200,19 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Remove,ce);
 		}
 	}
-	
+
 	/**
-	 * This method should only be called by the resource event listener. It does not handle the 
+	 * This method should only be called by the resource event listener. It does not handle the
 	 * marker removal (as the resource deletion should take care of it. This method also does not
-	 * fire any TagAssociationEvent. 
+	 * fire any TagAssociationEvent.
 	 *
 	 * @param resourceId the id of the resource being deleted
 	 */
 	public void deleteAssociations(String resourceId){
 		ensureAssociations();
-		
+
 		associations.remove(resourceId);
-		
+
 		saveAssociations();
 	}
 
@@ -287,12 +286,14 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	public void addAssociation(IResource resource, String tagid){
 		ensureAssociations();
 		try {
-			final TagAssociation tags = getOrCreateAssociation(TaggedMarkerHelper.getOrCreateMarker(resource).getResourceId());
-			tags.addTagId(tagid);
+			final ITaggedMarker marker = TaggedMarkerHelper.getOrCreateMarker(resource);
+			if(marker != null){
+				final TagAssociation tags = getOrCreateAssociation(marker.getResourceId());
+				tags.addTagId(tagid);
 
-			fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.ADDED,resource));
-			saveAssociations();
-			
+				fireTagAssociationEvent(new TagAssociationEvent(this,TagAssociationEvent.Type.ADDED,resource));
+				saveAssociations();
+			}
 		} catch(CoreException ce){
 			TaggerLog.error("Unable to create tag association: " + ce.getMessage(),ce);
 			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Create,ce);
@@ -391,28 +392,35 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			IoUtils.closeQuietly(writer);
 		}
 	}
-	
+
 	public void resourceChanged(IResourceChangeEvent event) {
 		try {
-			final IResourceDelta delta = event.getDelta();
-			delta.accept(new RemovedResourceDeltaVisitor());
+	         switch (event.getType()) {
+	            case IResourceChangeEvent.PRE_CLOSE:
+	            	break;
+	            case IResourceChangeEvent.PRE_DELETE:
+	            	event.getDelta().accept(new RemovedResourceDeltaVisitor());
+	            	break;
+	            default:
+	            	break;
+	         }
 		} catch(CoreException ce){
 			TaggerLog.error("Unable to handle resource change event: " + ce.getMessage(), ce);
 		}
 	}
-	
+
 	public void handleTagManagerEvent(TagManagerEvent tme) {
 		if(tme.getType().equals(TagManagerEvent.Type.REMOVED)){
 			try {
 				// find all associations that contain the removed tag and remove that tagid
 				final String[] removedTagIds = TagManager.extractTagIds(tme.getTags());
-				
+
 				final ITagSearchResult result = new TagSearchResult();
 				ResourcesPlugin.getWorkspace().getRoot().accept(new TaggableResourceVisitor(removedTagIds,false,result), IResource.NONE);
 				for(IResource resource : result.getMatches()){
 					clearAssociations(resource,removedTagIds);
 				}
-				
+
 				saveAssociations();
 			} catch(CoreException ce){
 				TaggerLog.error("Unable to handler tag removal event: " + ce.getMessage(),ce);
