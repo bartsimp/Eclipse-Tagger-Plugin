@@ -65,7 +65,20 @@
          <action
                class="net.sourceforge.taggerplugin.action.FilterUsingTagsAction"
                icon="icons/tagger_filter.gif"
-               id="net.sourceforge.taggerplugin.action.FilterUsingTagsAction"
+               id="net.sourceforge.taggerplugin.action.FilterUsingTagsAction_Navigator"
+               label="Filter by Tags..."
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Filter the view by tag associations."/>
+      </viewContribution>
+      <viewContribution
+            id="net.sourceforge.taggerplugin.ExplorerViewActions"
+            targetID="org.eclipse.ui.navigator.ProjectExplorer">
+         <action
+               class="net.sourceforge.taggerplugin.action.FilterUsingTagsAction"
+               icon="icons/tagger_filter.gif"
+               id="net.sourceforge.taggerplugin.action.FilterUsingTagsAction_Explorer"
                label="Filter by Tags..."
                menubarPath="additions"
                style="push"
