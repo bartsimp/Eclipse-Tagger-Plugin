@@ -1,0 +1,82 @@
+/*   ********************************************************************** **
+**   Copyright (c) 2006-2007 Christopher J. Stehno (chris@stehno.com)       **
+**   http://www.stehno.com                                                  **
+**                                                                          **
+**   All rights reserved                                                    **
+**                                                                          **
+**   This program and the accompanying materials are made available under   **
+**   the terms of the Eclipse Public License v1.0 which accompanies this    **
+**   distribution, and is available at:                                     **
+**   http://www.stehno.com/legal/epl-1_0.html                               **
+**                                                                          **
+**   A copy is found in the file license.txt.                               **
+**                                                                          **
+**   This copyright notice MUST APPEAR in all copies of the file!           **
+**  **********************************************************************  */
+package net.sourceforge.taggerplugin.action;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import net.sourceforge.taggerplugin.TaggerMessages;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.IWorkingSetManager;
+import org.eclipse.ui.PlatformUI;
+
+/**
+ * Action to create a new working set from the resources in the search results view.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
+public class CreateWorkingSetFromResultsAction extends Action {
+
+	private Viewer viewer;
+	
+	public void setViewer(Viewer viewer){
+		this.viewer = viewer;
+	}
+	
+	@Override
+	public void run() {
+		final ISelection selection = ((TableViewer)viewer).getSelection();
+		if(selection instanceof IStructuredSelection){
+			final IStructuredSelection sel = (IStructuredSelection)selection;
+			if(!sel.isEmpty()){
+				final IResource[] resources = new IResource[sel.size()];
+				int i = 0;
+				for(Object obj : sel.toArray()){
+					resources[i++] = (IResource)obj;
+				}
+
+				createWorkingSet(resources);
+			}
+		}
+	}
+
+	// TODO: merge this with the other CreateWorkingSet action's ws create method to share duty
+	private void createWorkingSet(final IResource[] resources){
+		final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
+
+		String wsName = "Tag Search Results Working Set (" + createDateStamp() + ")";	// FIXME: externalized
+		final IWorkingSet workingSet = workingSetMgr.createWorkingSet(wsName,resources);
+		workingSetMgr.addWorkingSet(workingSet);
+
+		MessageDialog.openInformation(
+			viewer.getControl().getShell(),
+			TaggerMessages.CreateWorkingSetFromResultsAction_Dialog_Title,
+			TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromResultsAction_Dialog_Text,workingSet.getName())
+		);
+	}
+	
+	private String createDateStamp(){
+		return(new SimpleDateFormat("M/d/yyyy HH:mm").format(new Date()));
+	}
+}

@@ -28,9 +28,15 @@ public class TaggerMessages extends NLS {
 	public static String TagDialog_Error_NoName;
 	public static String TagDialog_Error_NoDescription;
 
-	public static String TagSelectionDialog_Title;
-	public static String TagSelectionDialog_Message;
+	public static String AddTagAssociationAction_Title;
+	public static String AddTagAssociationAction_Message;
 
+	public static String RemoveTagAssociationAction_Title;
+	public static String RemoveTagAssociationAction_Message;
+	
+	public static String FilterUsingTagsAction_Title;
+	public static String FilterUsingTagsAction_Message;
+	
 	public static String TaggableResourcePropertyPage_NoAssociations;
 	public static String TaggableResourcePropertyPage_Label_Associations;
 
@@ -76,6 +82,9 @@ public class TaggerMessages extends NLS {
 	public static String CreateWorkingSetFromTagsAction_Dialog_Text;	
 	public static String CreateWorkingSetFromTagsAction_Error_Title;
 	public static String CreateWorkingSetFromTagsAction_Error_Text;
+	
+	public static String CreateWorkingSetFromResultsAction_Dialog_Title;
+	public static String CreateWorkingSetFromResultsAction_Dialog_Text;
 	
 	public static String ClearTagAssociationsAction_Confirm_Title;
 	public static String ClearTagAssociationsAction_Confirm_Message;	

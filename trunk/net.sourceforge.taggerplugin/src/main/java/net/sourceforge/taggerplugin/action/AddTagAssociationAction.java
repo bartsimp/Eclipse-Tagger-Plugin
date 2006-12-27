@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.action;
 
 import java.util.Set;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.dialog.TagSelectionDialog;
 import net.sourceforge.taggerplugin.manager.TagAssociationManager;
@@ -56,7 +57,7 @@ public class AddTagAssociationAction implements IObjectActionDelegate {
 					final Set<String> sharedAssociations = TagAssociationManager.getInstance().findSharedAssociations(taggables);
 					final Tag[] taglist = TagManager.getInstance().findTagsNotIn(sharedAssociations.toArray(new String[sharedAssociations.size()]));
 
-					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
+					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist,TaggerMessages.AddTagAssociationAction_Title,TaggerMessages.AddTagAssociationAction_Message);
 					if(dialog.open() == TagSelectionDialog.OK){
 						final Object[] selectedTags = dialog.getResult();
 						for (Object tag : selectedTags) {
