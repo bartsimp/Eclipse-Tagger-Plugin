@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.search.ITagSearchResult;
 import net.sourceforge.taggerplugin.search.TagSearchResult;
@@ -68,11 +69,13 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 			} catch(CoreException ce){
 				TaggerLog.error("Unable to create working set: " + ce.getMessage(),ce);
-				MessageDialog.openError(
-					viewPart.getSite().getShell(),
+				
+				ExceptionDialogFactory.create(
+						viewPart.getSite().getShell(),
 					TaggerMessages.CreateWorkingSetFromTagsAction_Error_Title,
-					TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromTagsAction_Error_Text,wsName,ce.getMessage())
-				);
+					TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromTagsAction_Error_Text,wsName,ce.getMessage()),
+					ce
+				).open();
 			}
 		}
 	}

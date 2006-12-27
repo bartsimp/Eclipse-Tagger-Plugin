@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.action;
 
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.TagSelectionDialog;
 import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
@@ -56,7 +57,7 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 		
 		TagAssociationFilter tagFilter = findTagFilter(viewer);
 			
-		final TagSelectionDialog dialog = new TagSelectionDialog(view.getSite().getShell(),TagManager.getInstance().getTags());
+		final TagSelectionDialog dialog = new TagSelectionDialog(view.getSite().getShell(),TagManager.getInstance().getTags(),TaggerMessages.FilterUsingTagsAction_Title,TaggerMessages.FilterUsingTagsAction_Message);
 		if(tagFilter != null){
 			dialog.setInitialSelections(tagFilter.getTags());
 		}

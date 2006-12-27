@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.action;
 
 import java.util.Set;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.dialog.TagSelectionDialog;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
@@ -55,7 +56,7 @@ public class RemoveTagAssociationAction implements IObjectActionDelegate {
 					final Set<String> associations = TagAssociationManager.getInstance().findAllAssociations(taggables);
 					final Tag[] taglist = TagManager.getInstance().findTags(associations.toArray(new String[associations.size()]));
 
-					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist);
+					final TagSelectionDialog dialog = new TagSelectionDialog(activePart.getSite().getShell(),taglist,TaggerMessages.RemoveTagAssociationAction_Title,TaggerMessages.RemoveTagAssociationAction_Message);
 					if(dialog.open() == TagSelectionDialog.OK){
 						final Object[] selectedTags = dialog.getResult();
 						try {

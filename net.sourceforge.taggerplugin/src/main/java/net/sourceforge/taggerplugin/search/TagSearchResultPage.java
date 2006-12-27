@@ -16,7 +16,9 @@
 package net.sourceforge.taggerplugin.search;
 
 
+import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
+import net.sourceforge.taggerplugin.action.CreateWorkingSetFromResultsAction;
 import net.sourceforge.taggerplugin.util.MementoUtils;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -116,7 +118,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 		final Composite panel = new Composite(parent,SWT.NONE);
 		panel.setLayout(new GridLayout(1,false));
 
-		resultViewer = new TableViewer(panel, SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+		resultViewer = new TableViewer(panel, SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		resultViewer.setContentProvider(new TagSearchResultsViewContentProvider());
 		resultViewer.setLabelProvider(new TagSearchResultsViewLabelProvider());
 
@@ -167,7 +169,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 //		}
 //		
 //		public int compare(IResource r1, IResource r2){
-//			if(field.equals(Field.NAME)){
+//			if(field.equals(Field.NAME))
 //				return(r1.getName().compareTo(r2.getName()));
 //			} else {
 //				return(String.valueOf(r1.getLocation()).compareTo(String.valueOf(r2.getLocation())));
@@ -189,7 +191,18 @@ public class TagSearchResultPage implements ISearchResultPage {
 
 	public Control getControl() {return control;}
 
-	public void setActionBars(IActionBars actionBars) {/* nothing for now */}
+	public void setActionBars(IActionBars actionBars) {
+		// FIXME: externalize
+		final CreateWorkingSetFromResultsAction action = new CreateWorkingSetFromResultsAction();
+		action.setId("net.sourceforge.taggerplugin.action.CreateWorkingSetFromResultsAction");
+		action.setText("Create Working Set...");
+		action.setToolTipText("Create working set from search results.");
+		action.setImageDescriptor(TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.PLUGIN_ID, "icons/workset.gif"));
+		action.setViewer(resultViewer);
+		
+		actionBars.getToolBarManager().appendToGroup("additions", action);
+		actionBars.getMenuManager().appendToGroup("additions", action);
+	}
 
 	public void setFocus() {resultViewer.getTable().setFocus();}
 }

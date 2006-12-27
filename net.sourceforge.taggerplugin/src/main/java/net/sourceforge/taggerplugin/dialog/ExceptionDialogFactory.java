@@ -10,6 +10,10 @@ public class ExceptionDialogFactory {
 	private ExceptionDialogFactory(){super();}
 	
 	public static final ExceptionDetailsDialog create(Shell shell, Exception ex){
-		return(new ExceptionDetailsDialog(shell,TaggerMessages.ExceptionDialogFactory_Title,null,ex.getMessage(),ex,TaggerActivator.getDefault()));
+		return(create(shell,TaggerMessages.ExceptionDialogFactory_Title,ex.getMessage(),ex));
+	}
+	
+	public static final ExceptionDetailsDialog create(Shell shell, String title, String msg, Exception ex){
+		return(new ExceptionDetailsDialog(shell,title,null,msg,ex,TaggerActivator.getDefault()));
 	}
 }

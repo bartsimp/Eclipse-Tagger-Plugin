@@ -15,7 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.dialog;
 
-import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
 
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -33,9 +32,9 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
  */
 public class TagSelectionDialog extends ListSelectionDialog {
 
-	public TagSelectionDialog(Shell parentShell, Tag[] tags){
-		super(parentShell,tags, new TagListContentProvider(),new TagLabelProvider(),TaggerMessages.TagSelectionDialog_Message);
-		setTitle(TaggerMessages.TagSelectionDialog_Title);
+	public TagSelectionDialog(Shell parentShell, Tag[] tags, String title, String text){
+		super(parentShell,tags, new TagListContentProvider(),new TagLabelProvider(),text);
+		setTitle(title);
 	}
 
 	private static final class TagListContentProvider implements IStructuredContentProvider {
