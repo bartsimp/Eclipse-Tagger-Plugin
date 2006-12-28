@@ -97,6 +97,15 @@
                style="push"
                toolbarPath="additions"
                tooltip="Create working set from selected search resutls."/>
+         <action
+               class="net.sourceforge.taggerplugin.action.OpenAllResultsAction"
+               icon="icons/openall.gif"
+               id="net.sourceforge.taggerplugin.action.OpenAllResults"
+               label="Open All Results"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Open all selected search results."/>
       </viewContribution>
    </extension>
    <extension
