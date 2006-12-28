@@ -24,7 +24,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle.
+ * Base plug-in class that controls the plug-in life cycle.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
@@ -38,7 +38,6 @@ public class TaggerActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
@@ -50,7 +49,6 @@ public class TaggerActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
@@ -68,7 +66,7 @@ public class TaggerActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns the shared instance
+	 * Returns the shared instance for this plug-in.
 	 *
 	 * @return the shared instance
 	 */

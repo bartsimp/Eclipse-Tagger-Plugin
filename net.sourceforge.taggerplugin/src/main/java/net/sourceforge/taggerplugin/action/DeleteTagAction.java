@@ -31,7 +31,8 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 
 /**
- *
+ *	This action is used to delete a tag associtaion from a resource. When fired, this action will open
+ *	the Tag Selection Dialog so that the associations may be selected.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
@@ -39,10 +40,16 @@ public class DeleteTagAction implements IViewActionDelegate {
 
 	private IViewPart view;
 
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.view = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		final TagView tagView = (TagView)view;
 		final Tag[] deletedTags = tagView.getSelectedTags();
@@ -57,9 +64,16 @@ public class DeleteTagAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * Used to determine (based on preferences) if the delete should be confirmed. If no tags
+	 * are selected, this will always return false.
+	 *
+	 * @param tagCnt the number of selected tags
+	 * @return a value of true if the deletion is confirmed
+	 */
 	private boolean deleteConfirmed(int tagCnt){
 		if(tagCnt == 0){return(false);}
-
+		// FIXME: needs externalization
 		final IPreferenceStore store = TaggerActivator.getDefault().getPreferenceStore();
 		if(store.getBoolean(PreferenceConstants.CONFIRM_DELETE_TAG.getKey())){
 			return(MessageDialog.openConfirm(view.getSite().getShell(),"Confirm Tag Deletion","Are you sure you want to delete the selected tag(s)?"));
@@ -68,5 +82,8 @@ public class DeleteTagAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 }

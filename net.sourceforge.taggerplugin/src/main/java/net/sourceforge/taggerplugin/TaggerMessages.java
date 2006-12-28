@@ -17,6 +17,11 @@ package net.sourceforge.taggerplugin;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * Externalized strings accessor for the Resource Tagger plug-in.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TaggerMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "net.sourceforge.taggerplugin.messages";

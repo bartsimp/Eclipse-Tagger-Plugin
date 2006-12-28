@@ -33,18 +33,21 @@ import org.eclipse.jface.viewers.ViewerFilter;
  * ViewerFilter used to filter the ResourceNavigator and CommonNavigator so that only resources with 
  * the specified tags are shown.
  * 
+ * This filter will accept elements whose children match the filter criteria so that child elements will 
+ * not be obscured simply because their parents do not match the criteria.
+ * 
  * Currently, this filter only matches resources that have any of the selected tag associations.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
 final class TagAssociationFilter extends ViewerFilter {
+	// TODO: the child-matching criteria may be a candidate for a preference, maybe some users would want the obscuring behavior
 	
 	private final List<Tag> tags = new LinkedList<Tag>();
 	
-	TagAssociationFilter(){
-		super();
-	}
-	
+	/**
+	 * @see ViewerFilter#select(Viewer, Object, Object)
+	 */
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		final IResource resource = (IResource)element;
@@ -77,14 +80,31 @@ final class TagAssociationFilter extends ViewerFilter {
 		return(tagged);
 	}
 
+	/**
+	 * Used to add accepted tags to the view filter.
+	 *
+	 * @param tag the tag to be added
+	 */
 	void addTag(Tag tag){
 		tags.add(tag);
 	}
 	
+	/**
+	 * Used to retrieve the tags accepted by the filter.
+	 *
+	 * @return the accepted tags
+	 */
 	Tag[] getTags(){
 		return(tags.toArray(new Tag[tags.size()]));
 	}
 	
+	/**
+	 * Used to determine if the given resource is tagged with any of the given tags.
+	 *
+	 * @param resource the resource being tested
+	 * @param tags the tags
+	 * @return a value of true if the resource is tagged
+	 */
 	private static boolean isTagged(final IResource resource, final List<Tag> tags){
 		final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
 		if(taggable != null){
@@ -97,11 +117,22 @@ final class TagAssociationFilter extends ViewerFilter {
 		return(false);
 	}
 	
+	/**
+	 * Used to determine if the resource is a closed project.
+	 *
+	 * @param resource the resource to be tested
+	 * @return true if the resource is a project that is closed
+	 */
 	private boolean isClosedProject(IResource resource){
 		final IProject project = (IProject)resource.getAdapter(IProject.class);
 		return(project != null && !project.isOpen());
 	}
 	
+	/**
+	 * A holder for a boolean to be dynamically modified.
+	 *
+	 * @author Christopher J. Stehno (chris@stehno.com)
+	 */
 	private static final class Holder {
 		public boolean accept = false;
 	}
