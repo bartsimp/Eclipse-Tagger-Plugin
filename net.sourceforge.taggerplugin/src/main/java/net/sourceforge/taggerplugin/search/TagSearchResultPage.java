@@ -16,16 +16,28 @@
 package net.sourceforge.taggerplugin.search;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
-import net.sourceforge.taggerplugin.action.CreateWorkingSetFromResultsAction;
 import net.sourceforge.taggerplugin.util.MementoUtils;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.ISearchResultPage;
 import org.eclipse.search.ui.ISearchResultViewPart;
@@ -38,16 +50,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.OpenFileAction;
-import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.part.Page;
 
 /**
  * Search results page viewer for the Tag Search.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-public class TagSearchResultPage implements ISearchResultPage {
+public class TagSearchResultPage extends Page implements ISearchResultPage {
 
 	private static final String TAG_COLWIDTH_TAGS = "col-width-tags";
 	private static final String TAG_COLWIDTH_PATH = "col-width-path";
@@ -56,18 +68,28 @@ public class TagSearchResultPage implements ISearchResultPage {
 	private String id;
 	private Object uiState;
 	private Composite control;
-	private IPageSite site;
 	private TagSearchResultsViewContentProvider viewContentProvider;
 	private ISearchResult result;
 	private TableViewer resultViewer;
 	private TableColumn nameCol,pathCol,tagsCol;
 	private int nameColWidth = 100,pathColWidth = 100,tagsColWidth = 100;
+	private ISearchResultViewPart searchResultViewPart;
+	private MenuManager menuManager;
+	private SelectionProviderAdapter selectionProviderAdapter;
 	
-	public String getID() {return id;}
+	@Override
+	public Control getControl() {return(control);}
+
+	@Override
+	public void setFocus() {resultViewer.getTable().setFocus();}
+
+	public void setID(String id) {this.id = id;}
+	
+	public String getID() {return(id);}
 
 	public String getLabel() {return(TaggerMessages.TagSearchResultPage_Label);}
 
-	public Object getUIState() {return uiState;}
+	public Object getUIState() {return(uiState);}
 
 	public void saveState(IMemento memento){
 		final IMemento mem = memento.createChild(TAG_SEARCHVIEWSTATE);
@@ -75,7 +97,7 @@ public class TagSearchResultPage implements ISearchResultPage {
 		mem.putInteger(TAG_COLWIDTH_PATH,pathCol.getWidth());
 		mem.putInteger(TAG_COLWIDTH_TAGS,tagsCol.getWidth());
 	}
-	
+
 	public void restoreState(IMemento memento) {
 		if(memento != null){
 			final IMemento mem = memento.getChild(TAG_SEARCHVIEWSTATE);
@@ -86,8 +108,6 @@ public class TagSearchResultPage implements ISearchResultPage {
 			}
 		}
 	}
-
-	public void setID(String id) {this.id = id;}
 
 	public void setInput(ISearchResult newSearch, Object uiState) {
 		if(newSearch == null){
@@ -106,22 +126,35 @@ public class TagSearchResultPage implements ISearchResultPage {
 		// TODO: what to do with state
 	}
 
-	public void setViewPart(ISearchResultViewPart part) {}
+	public void setViewPart(ISearchResultViewPart part) {this.searchResultViewPart = part;}
 
-	public IPageSite getSite() {return site;}
-
-	public void init(IPageSite site) throws PartInitException {
-		this.site = site;
-	}
-
+	@Override
 	public void createControl(Composite parent) {
+		// setup the context menu
+		this.menuManager = new MenuManager("#PopUp");
+		menuManager.setRemoveAllWhenShown(true);
+		menuManager.setParent(getSite().getActionBars().getMenuManager());
+		menuManager.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager mgr) {
+				createContextMenuGroups(mgr);
+				fillContextMenu(mgr);
+				searchResultViewPart.fillContextMenu(mgr);
+			}
+		});
+		
+		selectionProviderAdapter = new SelectionProviderAdapter();
+		getSite().setSelectionProvider(selectionProviderAdapter);
+		
+		getSite().registerContextMenu(searchResultViewPart.getViewSite().getId(), menuManager,selectionProviderAdapter);
+		
+		// build the page controls
 		final Composite panel = new Composite(parent,SWT.NONE);
 		panel.setLayout(new GridLayout(1,false));
 
 		resultViewer = new TableViewer(panel, SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		resultViewer.setContentProvider(new TagSearchResultsViewContentProvider());
 		resultViewer.setLabelProvider(new TagSearchResultsViewLabelProvider());
-
+		
 		final Table table = resultViewer.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		table.setHeaderVisible(true);
@@ -130,16 +163,6 @@ public class TagSearchResultPage implements ISearchResultPage {
 		this.pathCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Path,pathColWidth);
 		this.tagsCol = createTableColumn(table,TaggerMessages.TagSearchResultPage_Column_Tags,tagsColWidth);
 
-		// FIXME: this currently does not work - when col is clicked, content disappears
-//		resultViewer.setSorter(
-//			new GenericViewSorter(
-//				"tagsearch",
-//				resultViewer,
-//				new TableColumn[]{nameCol,pathCol},
-//				new Comparator[]{new ResourceComparator(ResourceComparator.Field.NAME),new ResourceComparator(ResourceComparator.Field.PATH)}
-//			)
-//		);
-		
 		resultViewer.setInput(null);
 
 		resultViewer.addDoubleClickListener(new IDoubleClickListener(){
@@ -148,34 +171,67 @@ public class TagSearchResultPage implements ISearchResultPage {
 				if(!selection.isEmpty() && selection instanceof IStructuredSelection){
 					final IStructuredSelection iss = (IStructuredSelection)selection;
 
-					final OpenFileAction action = new OpenFileAction(site.getWorkbenchWindow().getActivePage());
+					final OpenFileAction action = new OpenFileAction(getSite().getWorkbenchWindow().getActivePage());
 					action.selectionChanged(iss);
 					action.run();
 				}
 			}
 		});
 
+		resultViewer.addSelectionChangedListener(selectionProviderAdapter);
+		
 		this.control = panel;
 	}
 	
-//	This goes with the commented out sorter code above
-//	private static final class ResourceComparator implements Comparator<IResource> {
-//
-//		private static enum Field {NAME,PATH};
-//		private final Field field;
+	@Override
+	public void setActionBars(IActionBars actionBars) {
+		super.setActionBars(actionBars);
+		searchResultViewPart.fillContextMenu(actionBars.getMenuManager());
+	}
+	
+	private void fillContextMenu(IMenuManager imm){
+		final Action testAction = new Action(){
+			@Override
+			public void run() {
+				System.out.println("I am running!");
+			}
+		};
+		testAction.setId("fake.testAction");
+		testAction.setImageDescriptor(TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.PLUGIN_ID, "icons/plus.gif"));
+		testAction.setText("Testing");
+		testAction.setToolTipText("This is a test...");
+		imm.appendToGroup("additions", testAction);
+		
+		// NOTE: work related to getting the context menu to work
+//		imm.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fCopyToClipboardAction);
+//		imm.appendToGroup(IContextMenuConstants.GROUP_SHOW, fShowNextAction);
+//		imm.appendToGroup(IContextMenuConstants.GROUP_SHOW, fShowPreviousAction);
 //		
-//		private ResourceComparator(Field field){
-//			this.field = field;
+//		if (getCurrentMatch() != null){
+//			imm.appendToGroup(IContextMenuConstants.GROUP_REMOVE_MATCHES, fRemoveCurrentMatch);
 //		}
 //		
-//		public int compare(IResource r1, IResource r2){
-//			if(field.equals(Field.NAME))
-//				return(r1.getName().compareTo(r2.getName()));
-//			} else {
-//				return(String.valueOf(r1.getLocation()).compareTo(String.valueOf(r2.getLocation())));
-//			}
+//		if (canRemoveMatchesWith(getViewer().getSelection())){
+//			imm.appendToGroup(IContextMenuConstants.GROUP_REMOVE_MATCHES, fRemoveSelectedMatches);
 //		}
-//	}
+//		
+//		imm.appendToGroup(IContextMenuConstants.GROUP_REMOVE_MATCHES, fRemoveAllResultsAction);
+	}
+	
+	private static void createContextMenuGroups(IMenuManager menu) {
+		menu.add(new Separator(IContextMenuConstants.GROUP_NEW));
+		menu.add(new GroupMarker(IContextMenuConstants.GROUP_GOTO));
+		menu.add(new GroupMarker(IContextMenuConstants.GROUP_OPEN));
+		menu.add(new Separator(IContextMenuConstants.GROUP_SHOW));
+		menu.add(new Separator(IContextMenuConstants.GROUP_REMOVE_MATCHES));
+		menu.add(new Separator(IContextMenuConstants.GROUP_REORGANIZE));
+		menu.add(new GroupMarker(IContextMenuConstants.GROUP_GENERATE));
+		menu.add(new Separator(IContextMenuConstants.GROUP_SEARCH));
+		menu.add(new Separator(IContextMenuConstants.GROUP_BUILD));
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menu.add(new Separator(IContextMenuConstants.GROUP_VIEWER_SETUP));
+		menu.add(new Separator(IContextMenuConstants.GROUP_PROPERTIES));
+	}
 
 	private TableColumn createTableColumn(Table table, String name, int width){
 		final TableColumn col = new TableColumn(table,SWT.LEFT);
@@ -184,25 +240,44 @@ public class TagSearchResultPage implements ISearchResultPage {
 		return(col);
 	}
 
+	@Override
 	public void dispose() {
+		super.dispose();
+		
+		resultViewer.removeSelectionChangedListener(selectionProviderAdapter);
+		
 		viewContentProvider.dispose();
 		control.dispose();
-	}
-
-	public Control getControl() {return control;}
-
-	public void setActionBars(IActionBars actionBars) {
-		// FIXME: externalize
-		final CreateWorkingSetFromResultsAction action = new CreateWorkingSetFromResultsAction();
-		action.setId("net.sourceforge.taggerplugin.action.CreateWorkingSetFromResultsAction");
-		action.setText("Create Working Set...");
-		action.setToolTipText("Create working set from search results.");
-		action.setImageDescriptor(TaggerActivator.imageDescriptorFromPlugin(TaggerActivator.PLUGIN_ID, "icons/workset.gif"));
-		action.setViewer(resultViewer);
 		
-		actionBars.getToolBarManager().appendToGroup("additions", action);
-		actionBars.getMenuManager().appendToGroup("additions", action);
+		getSite().setSelectionProvider(null);
 	}
+	
+	private class SelectionProviderAdapter implements ISelectionProvider, ISelectionChangedListener {
+		
+		private List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>(5);
+		
+		public void addSelectionChangedListener(ISelectionChangedListener listener) {
+			listeners.add(listener);
+		}
 
-	public void setFocus() {resultViewer.getTable().setFocus();}
+		public ISelection getSelection() {
+			return resultViewer.getSelection();
+		}
+
+		public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+			listeners.remove(listener);
+		}
+
+		public void setSelection(ISelection selection) {
+			resultViewer.setSelection(selection);
+		}
+
+		public void selectionChanged(SelectionChangedEvent event) {
+			SelectionChangedEvent wrappedEvent = new SelectionChangedEvent(this, event.getSelection());
+			for(ISelectionChangedListener listener : listeners){
+				listener.selectionChanged(wrappedEvent);
+			}
+		}
+
+	}	
 }
