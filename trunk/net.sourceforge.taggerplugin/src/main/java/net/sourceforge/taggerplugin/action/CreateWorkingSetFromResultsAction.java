@@ -21,12 +21,12 @@ import java.util.Date;
 import net.sourceforge.taggerplugin.TaggerMessages;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PlatformUI;
@@ -36,17 +36,18 @@ import org.eclipse.ui.PlatformUI;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-public class CreateWorkingSetFromResultsAction extends Action {
+public class CreateWorkingSetFromResultsAction implements IViewActionDelegate {
 
-	private Viewer viewer;
+	private IViewPart viewPart;
 	
-	public void setViewer(Viewer viewer){
-		this.viewer = viewer;
+	public void init(IViewPart view) {
+		this.viewPart = view;
 	}
+
+	public void selectionChanged(IAction action, ISelection selection) {}
 	
-	@Override
-	public void run() {
-		final ISelection selection = ((TableViewer)viewer).getSelection();
+	public void run(IAction action) {
+		final ISelection selection = viewPart.getSite().getSelectionProvider().getSelection();
 		if(selection instanceof IStructuredSelection){
 			final IStructuredSelection sel = (IStructuredSelection)selection;
 			if(!sel.isEmpty()){
@@ -65,12 +66,12 @@ public class CreateWorkingSetFromResultsAction extends Action {
 	private void createWorkingSet(final IResource[] resources){
 		final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
 
-		String wsName = "Tag Search Results Working Set (" + createDateStamp() + ")";	// FIXME: externalized
+		String wsName = "Search Results Working Set (" + createDateStamp() + ")";	// FIXME: externalized
 		final IWorkingSet workingSet = workingSetMgr.createWorkingSet(wsName,resources);
 		workingSetMgr.addWorkingSet(workingSet);
 
 		MessageDialog.openInformation(
-			viewer.getControl().getShell(),
+			viewPart.getSite().getShell(),
 			TaggerMessages.CreateWorkingSetFromResultsAction_Dialog_Title,
 			TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromResultsAction_Dialog_Text,workingSet.getName())
 		);

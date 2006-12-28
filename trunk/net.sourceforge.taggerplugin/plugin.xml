@@ -85,6 +85,19 @@
                toolbarPath="additions"
                tooltip="Filter the view by tag associations."/>
       </viewContribution>
+      <viewContribution
+            id="net.sourceforge.taggerplugin.SearchViewActions"
+            targetID="org.eclipse.search.ui.views.SearchView">
+         <action
+               class="net.sourceforge.taggerplugin.action.CreateWorkingSetFromResultsAction"
+               icon="icons/workset.gif"
+               id="net.sourceforge.taggerplugin.action.CreateWorkingSet_Results"
+               label="Create Working Set..."
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Create working set from selected search resutls."/>
+      </viewContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
