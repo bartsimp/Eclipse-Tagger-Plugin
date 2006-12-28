@@ -40,12 +40,21 @@ public class CreateWorkingSetFromResultsAction implements IViewActionDelegate {
 
 	private IViewPart viewPart;
 	
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.viewPart = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 	
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		final ISelection selection = viewPart.getSite().getSelectionProvider().getSelection();
 		if(selection instanceof IStructuredSelection){
@@ -62,8 +71,13 @@ public class CreateWorkingSetFromResultsAction implements IViewActionDelegate {
 		}
 	}
 
-	// TODO: merge this with the other CreateWorkingSet action's ws create method to share duty
+	/**
+	 * Creates a new working set from the given resources.
+	 *
+	 * @param resources the resources to be added to the working set
+	 */
 	private void createWorkingSet(final IResource[] resources){
+		// TODO: merge this with the other CreateWorkingSet action's ws create method to share duty
 		final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
 
 		String wsName = "Search Results Working Set (" + createDateStamp() + ")";	// FIXME: externalized
@@ -77,6 +91,11 @@ public class CreateWorkingSetFromResultsAction implements IViewActionDelegate {
 		);
 	}
 	
+	/**
+	 * Creates a date stamp string for the working set title.
+	 *
+	 * @return a string representation of the current date and time
+	 */
 	private String createDateStamp(){
 		return(new SimpleDateFormat("M/d/yyyy HH:mm").format(new Date()));
 	}

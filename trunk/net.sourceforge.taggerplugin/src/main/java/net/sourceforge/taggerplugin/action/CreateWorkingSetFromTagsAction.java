@@ -45,10 +45,16 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 
 	private IViewPart viewPart;
 
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.viewPart = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		final TagView tagView = (TagView)viewPart;
 		final Tag[] selectedTags = tagView.getSelectedTags();
@@ -80,8 +86,18 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 
+	/**
+	 * Used to find the resources with the selected tags.
+	 *
+	 * @param selectedTags the selected tags
+	 * @return the resources with the selected tags
+	 * @throws CoreException if there is a problem finding the resources
+	 */
 	private IResource[] findResourcesWithTags(final Tag[] selectedTags) throws CoreException {
 		final String[] tagids = new String[selectedTags.length];
 		for(int t=0; t<selectedTags.length; t++){
@@ -94,7 +110,14 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 		return(result.getMatches());
 	}
 	
+	/**
+	 * Used to create the name of the working set from the selected tags.
+	 *
+	 * @param tags the selected tags
+	 * @return the name to be used by the working set being created
+	 */
 	private String createWsName(final Tag[] tags){
+		// FIXME: externalize
 		StringBuilder str = new StringBuilder("Working Set (");
 		for(Tag t : tags){
 			str.append(t.getName()).append(",");
