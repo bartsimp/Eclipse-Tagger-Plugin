@@ -26,6 +26,14 @@ public class TaggerMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "net.sourceforge.taggerplugin.messages";
 
+	public static String DeleteTagAction_Confirm_Title;
+	public static String DeleteTagAction_Confirm_Text;
+	
+	public static String ExceptionDetailsDialog_Label_Provider;
+	public static String ExceptionDetailsDialog_Label_PluginName;
+	public static String ExceptionDetailsDialog_Label_PluginId;
+	public static String ExceptionDetailsDialog_Label_Version;
+			
 	public static String TagDialog_Title_Create;
 	public static String TagDialog_Title_Modify;
 	public static String TagDialog_Label_Name;
@@ -87,9 +95,11 @@ public class TaggerMessages extends NLS {
 	public static String CreateWorkingSetFromTagsAction_Dialog_Text;	
 	public static String CreateWorkingSetFromTagsAction_Error_Title;
 	public static String CreateWorkingSetFromTagsAction_Error_Text;
+	public static String CreateWorkingSetFromTagsAction_Name;
 	
 	public static String CreateWorkingSetFromResultsAction_Dialog_Title;
 	public static String CreateWorkingSetFromResultsAction_Dialog_Text;
+	public static String CreateWorkingSetFromResultsAction_Name;
 	
 	public static String ClearTagAssociationsAction_Confirm_Title;
 	public static String ClearTagAssociationsAction_Confirm_Message;	

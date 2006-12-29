@@ -80,8 +80,7 @@ public class CreateWorkingSetFromResultsAction implements IViewActionDelegate {
 		// TODO: merge this with the other CreateWorkingSet action's ws create method to share duty
 		final IWorkingSetManager workingSetMgr = PlatformUI.getWorkbench().getWorkingSetManager();
 
-		String wsName = "Search Results Working Set (" + createDateStamp() + ")";	// FIXME: externalized
-		final IWorkingSet workingSet = workingSetMgr.createWorkingSet(wsName,resources);
+		final IWorkingSet workingSet = workingSetMgr.createWorkingSet(TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromResultsAction_Name, createDateStamp()),resources);
 		workingSetMgr.addWorkingSet(workingSet);
 
 		MessageDialog.openInformation(

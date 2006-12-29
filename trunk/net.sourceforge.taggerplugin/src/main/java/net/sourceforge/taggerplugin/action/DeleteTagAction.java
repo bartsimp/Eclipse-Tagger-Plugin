@@ -16,6 +16,7 @@
 package net.sourceforge.taggerplugin.action;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.manager.TagAssociationException;
 import net.sourceforge.taggerplugin.manager.TagManager;
@@ -73,10 +74,9 @@ public class DeleteTagAction implements IViewActionDelegate {
 	 */
 	private boolean deleteConfirmed(int tagCnt){
 		if(tagCnt == 0){return(false);}
-		// FIXME: needs externalization
 		final IPreferenceStore store = TaggerActivator.getDefault().getPreferenceStore();
 		if(store.getBoolean(PreferenceConstants.CONFIRM_DELETE_TAG.getKey())){
-			return(MessageDialog.openConfirm(view.getSite().getShell(),"Confirm Tag Deletion","Are you sure you want to delete the selected tag(s)?"));
+			return(MessageDialog.openConfirm(view.getSite().getShell(),TaggerMessages.DeleteTagAction_Confirm_Title,TaggerMessages.DeleteTagAction_Confirm_Text));
 		} else {
 			return(true);
 		}

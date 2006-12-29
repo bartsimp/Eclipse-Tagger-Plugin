@@ -21,6 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Dictionary;
 
+import net.sourceforge.taggerplugin.TaggerMessages;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
@@ -48,8 +50,10 @@ import org.eclipse.swt.widgets.Text;
  *	@author Christopher J. Stehno (chris@stehno.com)
  */
 public class ExceptionDetailsDialog extends AbstractDetailsDialog {
-	// FIXME: needs externalization
-	
+
+	private static final String BUNDLE_VERSION = "Bundle-Version";
+	private static final String BUNDLE_NAME = "Bundle-Name";
+	private static final String BUNDLE_VENDOR = "Bundle-Vendor";
 	private final Object details;
 	private final Plugin plugin;
 
@@ -112,21 +116,16 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 		layout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
 		composite.setLayout(layout);
 
-		Dictionary bundleHeaders = plugin.getBundle().getHeaders();
-		String pluginId = plugin.getBundle().getSymbolicName();
-		String pluginVendor = (String) bundleHeaders.get("Bundle-Vendor");
-		String pluginName = (String) bundleHeaders.get("Bundle-Name");
-		String pluginVersion = (String) bundleHeaders
-		.get("Bundle-Version");
+		final Dictionary bundleHeaders = plugin.getBundle().getHeaders();
 
-		new Label(composite, SWT.NONE).setText("Provider:");
-		new Label(composite, SWT.NONE).setText(pluginVendor);
-		new Label(composite, SWT.NONE).setText("Plug-in Name:");
-		new Label(composite, SWT.NONE).setText(pluginName);
-		new Label(composite, SWT.NONE).setText("Plug-in ID:");
-		new Label(composite, SWT.NONE).setText(pluginId);
-		new Label(composite, SWT.NONE).setText("Version:");
-		new Label(composite, SWT.NONE).setText(pluginVersion);
+		new Label(composite, SWT.NONE).setText(TaggerMessages.ExceptionDetailsDialog_Label_Provider);
+		new Label(composite, SWT.NONE).setText((String)bundleHeaders.get(BUNDLE_VENDOR));
+		new Label(composite, SWT.NONE).setText(TaggerMessages.ExceptionDetailsDialog_Label_PluginName);
+		new Label(composite, SWT.NONE).setText((String)bundleHeaders.get(BUNDLE_NAME));
+		new Label(composite, SWT.NONE).setText(TaggerMessages.ExceptionDetailsDialog_Label_PluginId);
+		new Label(composite, SWT.NONE).setText(plugin.getBundle().getSymbolicName());
+		new Label(composite, SWT.NONE).setText(TaggerMessages.ExceptionDetailsDialog_Label_Version);
+		new Label(composite, SWT.NONE).setText((String)bundleHeaders.get(BUNDLE_VERSION));
 
 		return composite;
 	}

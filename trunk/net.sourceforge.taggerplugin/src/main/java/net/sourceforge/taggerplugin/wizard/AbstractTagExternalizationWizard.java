@@ -18,11 +18,11 @@ package net.sourceforge.taggerplugin.wizard;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.io.TagIoFormat;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -79,7 +79,7 @@ abstract class AbstractTagExternalizationWizard extends Wizard {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (InvocationTargetException e) {
-			MessageDialog.openError(getShell(), "Error", e.getTargetException().getMessage());	// FIXME: externalize
+			ExceptionDialogFactory.create(getShell(), e.getTargetException()).open();
 			return false;
 		}
 		return true;

@@ -38,8 +38,6 @@ import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.util.IoUtils;
 
-import org.eclipse.core.runtime.Assert;
-
 /**
  * Manages the tag set available to the plugin.
  *
@@ -112,7 +110,6 @@ public class TagManager {
 	 * @param tag the tag to be added.
 	 */
 	public void addTag(Tag tag){
-		Assert.isNotNull(tag, "Attempted to add a null tag!");	// FIXME: externalize
 		ensureTags();
 		tags.put(tag.getId(), tag);
 		fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.ADDED,new Tag[]{tag}));
@@ -125,7 +122,6 @@ public class TagManager {
 	 * @param tag the tag being updated
 	 */
 	public void updateTag(Tag tag){
-		Assert.isNotNull(tag, "Attempted to update a null tag!");	// FIXME: externalize
 		ensureTags();
 		if(tags.containsKey(tag.getId())){
 			tags.put(tag.getId(), tag);
