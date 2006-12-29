@@ -36,7 +36,7 @@ public class ExceptionDialogFactory {
 	 * @param ex the exception
 	 * @return a populated {@link ExceptionDetailsDialog}
 	 */
-	public static final ExceptionDetailsDialog create(Shell shell, Exception ex){
+	public static final ExceptionDetailsDialog create(Shell shell, Throwable ex){
 		return(create(shell,TaggerMessages.ExceptionDialogFactory_Title,ex.getMessage(),ex));
 	}
 	
@@ -50,7 +50,7 @@ public class ExceptionDialogFactory {
 	 * @param ex the exception
 	 * @return a populated {@link ExceptionDetailsDialog}
 	 */
-	public static final ExceptionDetailsDialog create(Shell shell, String title, String msg, Exception ex){
+	public static final ExceptionDetailsDialog create(Shell shell, String title, String msg, Throwable ex){
 		return(new ExceptionDetailsDialog(shell,title,null,msg,ex,TaggerActivator.getDefault()));
 	}
 }

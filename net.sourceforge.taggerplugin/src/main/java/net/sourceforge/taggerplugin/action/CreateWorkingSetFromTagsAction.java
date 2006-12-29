@@ -18,6 +18,7 @@ package net.sourceforge.taggerplugin.action;
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
+import net.sourceforge.taggerplugin.manager.TagManager;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.search.ITagSearchResult;
 import net.sourceforge.taggerplugin.search.TagSearchResult;
@@ -117,15 +118,6 @@ public class CreateWorkingSetFromTagsAction implements IViewActionDelegate {
 	 * @return the name to be used by the working set being created
 	 */
 	private String createWsName(final Tag[] tags){
-		// FIXME: externalize
-		StringBuilder str = new StringBuilder("Working Set (");
-		for(Tag t : tags){
-			str.append(t.getName()).append(",");
-		}
-		if(tags.length != 0){
-			str.deleteCharAt(str.length()-1);
-		}
-		str.append(")");
-		return(str.toString());
+		return(TaggerMessages.bind(TaggerMessages.CreateWorkingSetFromTagsAction_Name, TagManager.extractTagNames(tags, ",")));
 	}
 }
