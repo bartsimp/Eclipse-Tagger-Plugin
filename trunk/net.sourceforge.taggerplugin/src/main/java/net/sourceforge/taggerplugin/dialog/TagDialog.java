@@ -64,6 +64,11 @@ public class TagDialog extends Dialog {
     private Tag tag;
     private Text nameTxt,descTxt,errorMessageText;
 
+    /**
+     * Creates a new tag dialog using the given parent shell.
+     * 
+     * @param parentShell the parent shell
+     */
     public TagDialog(Shell parentShell) {
         super(parentShell);
     }
@@ -88,10 +93,20 @@ public class TagDialog extends Dialog {
     	return(open());
     }
 
+    /**
+     * Used to specify the tag data.
+     *
+     * @param tag the tag data
+     */
     public void setTag(Tag tag) {
 		this.tag = tag;
 	}
 
+    /**
+     * Used to retrive the tag data.
+     *
+     * @return the tag data
+     */
     public Tag getTag() {
 		return this.tag;
 	}
@@ -107,7 +122,7 @@ public class TagDialog extends Dialog {
     }
 
     /**
-     *
+     *	@see Dialog#buttonPressed(int)
      */
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
@@ -141,6 +156,7 @@ public class TagDialog extends Dialog {
     }
 
     /**
+     * @see org.eclipse.jface.dialogs.Dialog#eateDialogArea(Composite)
      */
     protected Control createDialogArea(Composite parent) {
         final Composite composite = (Composite) super.createDialogArea(parent);
@@ -162,6 +178,11 @@ public class TagDialog extends Dialog {
         return composite;
     }
 
+    /**
+     * Used to create the error message text area.
+     *
+     * @param composite the working composite
+     */
 	private void createErrorMessageText(final Composite composite) {
 		errorMessageText = new Text(composite, SWT.READ_ONLY);
         final GridData errData = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
@@ -171,6 +192,11 @@ public class TagDialog extends Dialog {
         errorMessageText.setForeground(composite.getDisplay().getSystemColor(SWT.COLOR_RED));
 	}
 
+	/**
+	 * Used to create the description text box.
+	 *
+	 * @param composite the working composite
+	 */
 	private void createDescriptionText(final Composite composite) {
 		descTxt = new Text(composite,SWT.MULTI | SWT.WRAP | SWT.BORDER);
         descTxt.setTextLimit(250);
@@ -191,6 +217,12 @@ public class TagDialog extends Dialog {
         });
 	}
 
+	/**
+	 * Used to create the description label.
+	 *
+	 * @param composite the working composite
+	 * @param labelFont the label font
+	 */
 	private void createDescriptionLabel(final Composite composite, final Font labelFont) {
 		final Label descLbl = new Label(composite,SWT.LEFT);
         descLbl.setText(TaggerMessages.TagDialog_Label_Description);
@@ -198,6 +230,11 @@ public class TagDialog extends Dialog {
         descLbl.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 	}
 
+	/**
+	 * Used to create the name text box.
+	 *
+	 * @param composite the working composite
+	 */
 	private void createNameText(final Composite composite) {
 		nameTxt = new Text(composite,SWT.SINGLE | SWT.BORDER);
         nameTxt.setTextLimit(25);
@@ -217,6 +254,12 @@ public class TagDialog extends Dialog {
         });
 	}
 
+	/**
+	 * Used to create the name label.
+	 *
+	 * @param composite the working composite
+	 * @param labelFont the label font
+	 */
 	private void createNameLabel(final Composite composite, final Font labelFont) {
 		final Label nameLbl = new Label(composite,SWT.LEFT);
         nameLbl.setText(TaggerMessages.TagDialog_Label_Name);
@@ -235,20 +278,15 @@ public class TagDialog extends Dialog {
     }
 
     /**
-     * Sets or clears the error message.
-     * If not <code>null</code>, the OK button is disabled.
+     * Sets or clears the error message. If not <code>null</code>, the OK button is disabled.
      *
-     * @param errorMessage
-     *            the error message, or <code>null</code> to clear
-     * @since 3.0
+     * @param errorMessage the error message, or <code>null</code> to clear
      */
     public void setErrorMessage(String errorMessage) {
     	this.errorMessage = errorMessage;
     	if (errorMessageText != null && !errorMessageText.isDisposed()) {
     		errorMessageText.setText(errorMessage == null ? "" : errorMessage); //$NON-NLS-1$
     		errorMessageText.getParent().update();
-    		// Access the ok button by id, in case clients have overridden button creation.
-    		// See https://bugs.eclipse.org/bugs/show_bug.cgi?id=113643
     		Control button = getButton(IDialogConstants.OK_ID);
     		if (button != null) {
     			button.setEnabled(errorMessage == null);
@@ -257,7 +295,8 @@ public class TagDialog extends Dialog {
     }
 
     /**
-     * InputValidator implementation used to validate the text inputs.
+     * InputValidator implementation used to validate the text inputs. The input is considered valid
+     * if the text is not null and not empty.
      *
      * @author Christopher J. Stehno (chris@stehno.com)
      */
@@ -265,11 +304,19 @@ public class TagDialog extends Dialog {
 
     	private final String msg;
 
+    	/**
+    	 * Creates a new input validator with the given error message.
+    	 * 
+    	 * @param msg the error message
+    	 */
     	private TextInputValidator(final String msg){
     		super();
     		this.msg = msg;
     	}
 
+		/**
+		 * @see org.eclipse.jface.dialogs.IInputValidator#isValid(java.lang.String)
+		 */
 		public String isValid(String newText){
 			return(newText != null && newText.length() > 0 ? null : msg);
 		}

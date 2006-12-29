@@ -46,6 +46,9 @@ public class RemoveTagAssociationAction implements IObjectActionDelegate {
 	private IWorkbenchPart activePart;
 	private ISelection selection;
 
+	/**
+	 * @see IObjectActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		if(selection instanceof IStructuredSelection){
 			final IStructuredSelection sel = (IStructuredSelection)selection;
@@ -77,14 +80,26 @@ public class RemoveTagAssociationAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
+	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.activePart = targetPart;
 	}
 
+	/**
+	 * @see IObjectActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
 	}
 	
+	/**
+	 * Used to extract the taggable items from the selection.
+	 *
+	 * @param sel the selection
+	 * @return the taggable items selected
+	 */
 	private ITaggable[] extractTaggables(IStructuredSelection sel){
 		final Object[] resources = sel.toArray();
 		final ITaggable[] taggables = new ITaggable[resources.length];

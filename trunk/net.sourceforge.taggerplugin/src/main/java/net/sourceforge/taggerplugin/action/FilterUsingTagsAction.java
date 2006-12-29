@@ -15,7 +15,6 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.action;
 
-
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.dialog.TagSelectionDialog;
 import net.sourceforge.taggerplugin.manager.TagManager;
@@ -32,7 +31,7 @@ import org.eclipse.ui.views.navigator.ResourceNavigator;
 
 /**
  * When triggered, this action will open a tag selection dialog to filter the associated view by the 
- * selected tag associtaions.
+ * selected tag associtaions. The current associations used for filtering, if any, will be displayed.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
@@ -40,10 +39,16 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 
 	private IViewPart view;
 
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.view = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		// TODO: look into this... there is probably a better way
 		TreeViewer viewer = null;
@@ -86,6 +91,18 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
+	public void selectionChanged(IAction action, ISelection selection) {}
+	
+	/**
+	 * Used to find the tag filter in those registered to the viewer; if none is found
+	 * a null value is returned.
+	 *
+	 * @param viewer the viewer
+	 * @return a TagAssocitaionFilter if one is registered, or null
+	 */
 	private TagAssociationFilter findTagFilter(final TreeViewer viewer) {
 		TagAssociationFilter tagFilter = null;
 		final ViewerFilter[] filters = viewer.getFilters();
@@ -97,6 +114,4 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 		}
 		return(tagFilter);
 	}
-
-	public void selectionChanged(IAction action, ISelection selection) {}
 }

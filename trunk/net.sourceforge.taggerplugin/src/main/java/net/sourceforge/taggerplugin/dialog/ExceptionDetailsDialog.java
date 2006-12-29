@@ -48,38 +48,22 @@ import org.eclipse.swt.widgets.Text;
  *	@author Christopher J. Stehno (chris@stehno.com)
  */
 public class ExceptionDetailsDialog extends AbstractDetailsDialog {
-
-	/**
-	 * The details to be shown ({@link Exception}, {@link IStatus},
-	 * or <code>null</code> if no details).
-	 */
+	// FIXME: needs externalization
+	
 	private final Object details;
-
-	/**
-	 * The plugin triggering this deatils dialog and whose information
-	 * is to be shown in the details area or <code>null</code> if no
-	 * plugin details should be shown.
-	 */
 	private final Plugin plugin;
 
 	/**
-	 * Construct a new instance with the specified elements. Note that
-	 * the window will have no visual representation (no widgets) until
-	 * it is told to open. By default, <code>open</code> blocks for
-	 * dialogs.
+	 * Construct a new instance with the specified elements. Note that the window will have no 
+	 * visual representation (no widgets) until it is told to open. By default, <code>open</code> 
+	 * blocks for dialogs.
 	 * 
-	 * @param parentShell the parent shell, or <code>null</code> to
-	 *           create a top-level shell
-	 * @param title the title for the dialog or <code>null</code> for
-	 *           none
+	 * @param parentShell the parent shell, or <code>null</code> to create a top-level shell
+	 * @param title the title for the dialog or <code>null</code> for none
 	 * @param image the image to be displayed
 	 * @param message the message to be displayed
-	 * @param details an object whose content is to be displayed in the
-	 *           details area, or <code>null</code> for none
-	 * @param plugin The plugin triggering this deatils dialog and
-	 *           whose information is to be shown in the details area
-	 *           or <code>null</code> if no plugin details should be
-	 *           shown.
+	 * @param details an object whose content is to be displayed in the details area, or <code>null</code> for none
+	 * @param plugin The plugin triggering this deatils dialog and whose information is to be shown in the details area or <code>null</code> if no plugin details should be shown.
 	 */
 	public ExceptionDetailsDialog(Shell parentShell, String title,Image image, String message, Object details, Plugin plugin){
 		super(parentShell, getTitle(title, details), getImage(image,details), getMessage(message, details));
@@ -89,8 +73,7 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 	}
 
 	/**
-	 * Build content for the area of the dialog made visible when the
-	 * Details button is clicked.
+	 * Build content for the area of the dialog made visible when the Details button is clicked.
 	 * 
 	 * @param parent the details area parent
 	 * @return the details area
@@ -112,19 +95,15 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 	}
 
 	/**
-	 * Create fields displaying the plugin information such as name,
-	 * identifer, version and vendor. Do nothing if the plugin is not
+	 * Create fields displaying the plugin information such as name, identifer, version and vendor. Do nothing if the plugin is not
 	 * specified.
 	 * 
 	 * @param parent the details area in which the fields are created
-	 * @return the product info composite or <code>null</code> if no
-	 *         plugin specified.
+	 * @return the product info composite or <code>null</code> if no plugin specified.
 	 */
 	protected Composite createProductInfoArea(Composite parent) {
 		// If no plugin specified, then nothing to display here
-		if (plugin == null){
-			return null;
-		}
+		if (plugin == null){return null;}
 
 		Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayoutData(new GridData());
@@ -153,16 +132,13 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 	}
 
 	/**
-	 * Create the details field based upon the details object. Do
-	 * nothing if the details object is not specified.
+	 * Create the details field based upon the details object. Do nothing if the details object is not specified.
 	 * 
 	 * @param parent the details area in which the fields are created
 	 * @return the details field
 	 */
 	protected Control createDetailsViewer(Composite parent) {
-		if (details == null){
-			return null;
-		}
+		if (details == null){return null;}
 
 		Text text = new Text(parent, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -179,19 +155,11 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 		return text;
 	}
 
-	// //////////////////////////////////////////////////////////////////////////
-	//
-	// Utility methods for building content
-	//
-	// //////////////////////////////////////////////////////////////////////////
-
 	/**
 	 * Answer the title based on the provided title and details object.
 	 */
 	public static String getTitle(String title, Object details) {
-		if (title != null){
-			return title;
-		}
+		if (title != null){return title;}
 		
 		if (details instanceof Throwable) {
 			Throwable e = (Throwable) details;
@@ -208,9 +176,7 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 	 * Answer the image based on the provided image and details object.
 	 */
 	public static Image getImage(Image image, Object details) {
-		if (image != null){
-			return image;
-		}
+		if (image != null){return image;}
 		
 		Display display = Display.getCurrent();
 		if (details instanceof IStatus) {
@@ -229,8 +195,7 @@ public class ExceptionDetailsDialog extends AbstractDetailsDialog {
 	}
 
 	/**
-	 * Answer the message based on the provided message and details
-	 * object.
+	 * Answer the message based on the provided message and details object.
 	 */
 	public static String getMessage(String message, Object details) {
 		if (details instanceof Throwable) {

@@ -41,6 +41,9 @@ public class ClearTagAssociationsAction implements IObjectActionDelegate {
 	private IWorkbenchPart workbenchPart;
 	private ISelection selection;
 
+	/**
+	 * @see IObjectActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		if(selection instanceof IStructuredSelection){
 			final IStructuredSelection sel = (IStructuredSelection)selection;
@@ -61,6 +64,27 @@ public class ClearTagAssociationsAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
+	 */
+	public void setActivePart(IAction action, IWorkbenchPart targetPart){
+		this.workbenchPart = targetPart;
+	}
+
+	/**
+	 * @see IObjectActionDelegate#selectionChanged(IAction,ISelection)
+	 */
+	public void selectionChanged(IAction action, ISelection selection) {
+		this.selection = selection;
+	}
+	
+	/**
+	 * Used to determine if the delete is to be performed, based on number of associations 
+	 * selected and the result of the confirmation dialog (if enabled in preferences).
+	 *
+	 * @param assocCnt the number of associations selected
+	 * @return a value of true if the delete is to be performed
+	 */
 	private boolean deleteConfirmed(int assocCnt){
 		if(assocCnt == 0){return(false);}
 
@@ -70,13 +94,5 @@ public class ClearTagAssociationsAction implements IObjectActionDelegate {
 		} else {
 			return(true);
 		}
-	}
-
-	public void setActivePart(IAction action, IWorkbenchPart targetPart){
-		this.workbenchPart = targetPart;
-	}
-
-	public void selectionChanged(IAction action, ISelection selection) {
-		this.selection = selection;
 	}
 }
