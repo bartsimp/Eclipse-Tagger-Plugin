@@ -42,6 +42,9 @@ public class TagExportWizard extends AbstractTagExternalizationWizard implements
 		super(TagExternalizationWizardType.EXPORT);
 	}
 
+	/**
+	 * @see AbstractTagExternalizationWizard#doFinish(IProgressMonitor, File, TagIoFormat)
+	 */
 	protected void doFinish(final IProgressMonitor monitor, final File exportFile, final TagIoFormat exportFormat) throws CoreException {
 		BufferedWriter writer = null;
 		try {

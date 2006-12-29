@@ -15,22 +15,39 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.manager;
 
+/**
+ * Runtime exception used to denote problems during tag association operations.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagAssociationException extends RuntimeException {
 
 	private static final long serialVersionUID = -3106727165779954211L;
 
+	/**
+	 *	@see RuntimeException#RuntimeException()
+	 */
 	public TagAssociationException() {
 		super();
 	}
 
+	/**
+	 *	@see RuntimeException#RuntimeException(String)
+	 */
 	public TagAssociationException(String msg) {
 		super(msg);
 	}
 
+	/**
+	 *	@see RuntimeException#RuntimeException(Throwable)
+	 */
 	public TagAssociationException(Throwable cause) {
 		super(cause);
 	}
 
+	/**
+	 *	@see RuntimeException#RuntimeException(String,Throwable)
+	 */
 	public TagAssociationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}

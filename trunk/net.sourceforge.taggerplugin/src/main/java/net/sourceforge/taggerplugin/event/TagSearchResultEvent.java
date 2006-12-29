@@ -19,6 +19,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.SearchResultEvent;
 
+/**
+ * Event used to denote tag search results added or removed.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagSearchResultEvent extends SearchResultEvent {
 
 	public static enum Type {ADDED,REMOVED};
@@ -27,16 +32,33 @@ public class TagSearchResultEvent extends SearchResultEvent {
 	private final IResource[] resources;
 	private final Type type;
 
+	/**
+	 * Creates a new tag search result event.
+	 * 
+	 * @param searchResult the search result
+	 * @param resources the resources added/removed
+	 * @param type denotes addition/removal
+	 */
 	public TagSearchResultEvent(ISearchResult searchResult, IResource[] resources, Type type){
 		super(searchResult);
 		this.resources = resources;
 		this.type = type;
 	}
 
+	/**
+	 * Retrieves the type of event.
+	 *
+	 * @return the type of event
+	 */
 	public Type getType() {
 		return this.type;
 	}
 
+	/**
+	 * Retrieves the resources added/removed.
+	 *
+	 * @return
+	 */
 	public IResource[] getResources() {
 		return this.resources;
 	}

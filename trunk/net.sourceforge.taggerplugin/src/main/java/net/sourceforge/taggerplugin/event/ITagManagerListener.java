@@ -24,5 +24,10 @@ import java.util.EventListener;
  */
 public interface ITagManagerListener extends EventListener {
 
+	/**
+	 * Used to allow the listener to handle tag manager events.
+	 *
+	 * @param tme the tag manager event fired
+	 */
 	public void handleTagManagerEvent(TagManagerEvent tme);
 }

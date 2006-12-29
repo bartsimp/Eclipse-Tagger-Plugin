@@ -87,6 +87,12 @@ public class TagManager {
 		return(list.toArray(new Tag[list.size()]));
 	}
 
+	/**
+	 * Used to find all tags that do not have one of the specified tag ids.
+	 *
+	 * @param tagids the tag ids
+	 * @return the tags not having the given ids.
+	 */
 	public Tag[] findTagsNotIn(String[] tagids){
 		ensureTags();
 
@@ -106,15 +112,20 @@ public class TagManager {
 	 * @param tag the tag to be added.
 	 */
 	public void addTag(Tag tag){
-		Assert.isNotNull(tag, "Attempted to add a null tag!");
+		Assert.isNotNull(tag, "Attempted to add a null tag!");	// FIXME: externalize
 		ensureTags();
 		tags.put(tag.getId(), tag);
 		fireTagManagerEvent(new TagManagerEvent(this,TagManagerEvent.Type.ADDED,new Tag[]{tag}));
 		saveTags();
 	}
 
+	/**
+	 * Used to update the data for the tag.
+	 *
+	 * @param tag the tag being updated
+	 */
 	public void updateTag(Tag tag){
-		Assert.isNotNull(tag, "Attempted to update a null tag!");
+		Assert.isNotNull(tag, "Attempted to update a null tag!");	// FIXME: externalize
 		ensureTags();
 		if(tags.containsKey(tag.getId())){
 			tags.put(tag.getId(), tag);
@@ -123,6 +134,11 @@ public class TagManager {
 		}
 	}
 
+	/**
+	 * Used to delete the given tags.
+	 *
+	 * @param ts tags to be deleted
+	 */
 	public void deleteTags(Tag[] ts){
 		if(tags == null || ts == null) return;
 		
@@ -168,6 +184,13 @@ public class TagManager {
 		listeners.remove(listener);
 	}
 	
+	/**
+	 * Helper used to extract tag names as a delimited string suitable for display purposes.
+	 *
+	 * @param tags the tags
+	 * @param delim the delimiter
+	 * @return a string of delimited tag names
+	 */
 	public static String extractTagNames(Tag[] tags, String delim){
 		final StringBuilder str = new StringBuilder();
 		for (Tag tag : tags){
@@ -179,6 +202,12 @@ public class TagManager {
 		return(str.toString());
 	}
 	
+	/**
+	 * Used to extract an array of tag ids from the array of tags.
+	 *
+	 * @param tags the tags
+	 * @return an array of tag ids
+	 */
 	public static String[] extractTagIds(Tag[] tags){
 		final String[] uuids = new String[tags.length];
 		for(int i=0; i<tags.length; i++){
@@ -238,6 +267,12 @@ public class TagManager {
 		}
 	}
 
+	/**
+	 * Used to determine whether a tag exists in the system or not.
+	 *
+	 * @param tagId the tag id
+	 * @return a value of true if the tag exists
+	 */
 	public boolean tagExists(String tagId) {
 		ensureTags();
 		return(tags.containsKey(tagId));

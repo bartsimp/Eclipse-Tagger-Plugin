@@ -28,6 +28,11 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.XMLMemento;
 
+/**
+ * Tag I/O handler for reading/writing tag data using the Eclipse memento API.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagMementoIo implements ITagIo {
 	
 	private static final String TAG_TAGS = "tags";
@@ -38,6 +43,9 @@ class TagMementoIo implements ITagIo {
 		super();
 	}
 
+	/**
+	 * @see ITagIo#readTags(Reader, IProgressMonitor)
+	 */
 	public Tag[] readTags(Reader reader, IProgressMonitor monitor) throws IOException {
 		final List<Tag> tags = new LinkedList<Tag>();
 		try {
@@ -52,6 +60,9 @@ class TagMementoIo implements ITagIo {
 		return(tags.toArray(new Tag[tags.size()]));
 	}
 
+	/**
+	 * @see ITagIo#writeTags(Writer, Tag[], IProgressMonitor)
+	 */
 	public void writeTags(Writer writer, Tag[] tags, IProgressMonitor monitor) throws IOException {
 		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_TAGS);
 		for (Tag tag : tags) {

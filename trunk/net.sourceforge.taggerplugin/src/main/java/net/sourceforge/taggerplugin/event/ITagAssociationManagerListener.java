@@ -17,7 +17,17 @@ package net.sourceforge.taggerplugin.event;
 
 import java.util.EventListener;
 
+/**
+ * Listener for clients that want to recieve tag association events.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public interface ITagAssociationManagerListener extends EventListener {
 
-	public void handleTagAssociationEvent(TagAssociationEvent tme);
+	/**
+	 * Allows clients to handle tag association events.
+	 *
+	 * @param tae the tag association event fired
+	 */
+	public void handleTagAssociationEvent(TagAssociationEvent tae);
 }

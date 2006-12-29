@@ -15,6 +15,24 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.io;
 
+/**
+ * Enumeration of tag data I/O formats.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public enum TagIoFormat {
-	XML,CSV,MEMENTO
+	/**
+	 * XML format.
+	 */
+	XML,
+	
+	/**
+	 * Comma-separated values format.
+	 */
+	CSV,
+	
+	/**
+	 * Eclipse Memento API format.
+	 */
+	MEMENTO
 }
