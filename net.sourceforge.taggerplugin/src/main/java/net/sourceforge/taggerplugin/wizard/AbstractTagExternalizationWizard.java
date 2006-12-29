@@ -45,12 +45,18 @@ abstract class AbstractTagExternalizationWizard extends Wizard {
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {/* nothing */}
 
+	/**
+	 * @see Wizard#addPages()
+	 */
 	@Override
 	public void addPages() {
 		this.page = new TagExternalizationWizardPage(wizardType);
 		addPage(page);
 	}
 
+	/**
+	 * @see Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		final File file = new File(page.getFilePath());

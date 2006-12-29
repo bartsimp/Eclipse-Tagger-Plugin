@@ -15,6 +15,11 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.wizard;
 
+/**
+ * Enumeration used to represent the type of externalization wizard.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 enum TagExternalizationWizardType {
 
 	IMPORT("TagImportWizardPage"),

@@ -33,12 +33,23 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IImportWizard;
 
+/**
+ * Wizard for the importing of tag data.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagImportWizard extends AbstractTagExternalizationWizard implements IImportWizard {
 
+	/**
+	 * Creates a new tag import wizard.
+	 */
 	public TagImportWizard(){
 		super(TagExternalizationWizardType.IMPORT);
 	}
 
+	/**
+	 * @see AbstractTagExternalizationWizard#doFinish(IProgressMonitor, File, TagIoFormat)
+	 */
 	protected void doFinish(final IProgressMonitor monitor, final File file, final TagIoFormat format) throws CoreException {
 		BufferedReader reader = null;
 		try {

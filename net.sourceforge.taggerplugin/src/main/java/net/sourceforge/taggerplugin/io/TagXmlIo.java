@@ -41,6 +41,11 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/**
+ * Tag I/O handler for reading/writing tag data as XML.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagXmlIo implements ITagIo {
 
 	private static final String ATTRNAME_ID = "id";
@@ -56,6 +61,9 @@ class TagXmlIo implements ITagIo {
 		this.builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 	}
 
+	/**
+	 * @see ITagIo#readTags(Reader, IProgressMonitor)
+	 */
 	public Tag[] readTags(Reader reader, IProgressMonitor monitor) throws IOException {
 		final List<Tag> tags = new LinkedList<Tag>();
 		try {
@@ -81,20 +89,23 @@ class TagXmlIo implements ITagIo {
 		return(tags.toArray(new Tag[tags.size()]));
 	}
 
+	/**
+	 * @see ITagIo#writeTags(Writer, Tag[], IProgressMonitor)
+	 */
 	public void writeTags(Writer writer, Tag[] tags, IProgressMonitor monitor) throws IOException {
 		monitor.beginTask(TaggerMessages.TagIo_Writing,tags.length + 1);
 
 		// build the tag document
 		final Document doc = builder.newDocument();
-		final Element tagsElt = appendElement(doc, doc, ELT_TAGS);
+		final Element tagsElt = appendElement(doc, ELT_TAGS);
 		for(Tag tag : tags){
-			final Element tagElt = appendElement(doc, tagsElt, ELT_TAG);
+			final Element tagElt = appendElement(tagsElt, ELT_TAG);
 			tagElt.setAttribute(ATTRNAME_ID,tag.getId().toString());
 
-			final Element nameElt = appendElement(doc,tagElt,ELT_NAME);
+			final Element nameElt = appendElement(tagElt,ELT_NAME);
 			nameElt.appendChild(doc.createCDATASection(tag.getName()));
 
-			final Element descElt = appendElement(doc,tagElt,ELT_DESCRIPTION);
+			final Element descElt = appendElement(tagElt,ELT_DESCRIPTION);
 			descElt.appendChild(doc.createCDATASection(tag.getDescription()));
 
 			monitor.worked(1);
@@ -110,10 +121,23 @@ class TagXmlIo implements ITagIo {
 		}
 	}
 
-	private Element appendElement(Document doc, Node parent, String tagName){
-		return((Element)parent.appendChild(doc.createElement(tagName)));
+	/**
+	 * Appends a child element with the given tag name to the specified parent node.
+	 *
+	 * @param parent the parent node
+	 * @param tagName the tag name
+	 * @return the new element with the given tag name that is a child of the parent node
+	 */
+	private Element appendElement(Node parent, String tagName){
+		return((Element)parent.appendChild(parent.getOwnerDocument().createElement(tagName)));
 	}
 
+	/**
+	 * Used to retrieve the common transformer.
+	 *
+	 * @return the transformer
+	 * @throws TransformerConfigurationException if there is a problem building the transformer
+	 */
 	private Transformer getTransformer() throws TransformerConfigurationException {
 		if(transformer == null){
 			transformer = TransformerFactory.newInstance().newTransformer();

@@ -33,15 +33,37 @@ public class TagManagerEvent extends EventObject {
 	private final Tag[] tags;
 	private final Type type;
 
+	/**
+	 * Creates a new tag manager event.
+	 * 
+	 * @param manager the tag manager
+	 * @param type the type of event
+	 * @param tags the tags affected
+	 */
 	public TagManagerEvent(final TagManager manager,final Type type,final Tag[] tags){
 		super(manager);
 		this.tags = tags;
 		this.type = type;
 	}
 
+	/**
+	 * Retrieves the type of event represented.
+	 *
+	 * @return the type of event
+	 */
 	public Type getType() {return(type);}
 
+	/**
+	 * Retrieves the affected tags.
+	 *
+	 * @return the tags
+	 */
 	public Tag[] getTags(){return(tags);}
 
+	/**
+	 * Retrieves the tag manager.
+	 *
+	 * @return the tag manager
+	 */
 	public TagManager getTagManager(){return((TagManager)getSource());}
 }

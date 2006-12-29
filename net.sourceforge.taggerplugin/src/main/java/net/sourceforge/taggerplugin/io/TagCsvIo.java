@@ -28,6 +28,12 @@ import net.sourceforge.taggerplugin.model.Tag;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+/**
+ * Tag I/O handler for reading/writing tag information as CSV data. The first line of data will be a 
+ * header.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 class TagCsvIo implements ITagIo {
 
 	private static final char LINEBREAK = '\n';
@@ -35,10 +41,16 @@ class TagCsvIo implements ITagIo {
 	private static final char QUOTE = '"';
 	private static final String HEADER_LINE = "\"Id\",\"Name\",\"Description\"";
 	
+	/**
+	 * Creates a tag csv io instance.
+	 */
 	TagCsvIo(){
 		super();
 	}
 
+	/**
+	 * @see ITagIo#readTags(Reader, IProgressMonitor)
+	 */
 	public Tag[] readTags(Reader reader, IProgressMonitor monitor) throws IOException {
 		monitor.beginTask(TaggerMessages.TagIo_Reading, 1);	// not very accurate but not sure what else can be used
 
@@ -57,6 +69,9 @@ class TagCsvIo implements ITagIo {
 		return(tags.toArray(new Tag[tags.size()]));
 	}
 
+	/**
+	 * @see ITagIo#writeTags(Writer, Tag[], IProgressMonitor)
+	 */
 	public void writeTags(Writer writer, Tag[] tags, IProgressMonitor monitor) throws IOException {
 		monitor.beginTask(TaggerMessages.TagIo_Writing, tags.length);
 
