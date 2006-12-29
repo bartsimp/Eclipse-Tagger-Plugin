@@ -54,10 +54,8 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	 * it is told to open. By default, <code>open</code> blocks for
 	 * dialogs.
 	 * 
-	 * @param parentShell the parent shell, or <code>null</code> to
-	 *           create a top-level shell
-	 * @param title the title for the dialog or <code>null</code> for
-	 *           none
+	 * @param parentShell the parent shell, or <code>null</code> to create a top-level shell
+	 * @param title the title for the dialog or <code>null</code> for none
 	 * @param image the image to be displayed
 	 * @param message the message to be displayed
 	 */
@@ -72,8 +70,7 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	}
 
 	/**
-	 * Configures the given shell in preparation for opening this
-	 * window in it. In our case, we set the title if one was provided.
+	 * Configures the given shell in preparation for opening this window in it. In our case, we set the title if one was provided.
 	 */
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
@@ -83,9 +80,7 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	}
 
 	/**
-	 * Creates and returns the contents of the upper part of this
-	 * dialog (above the button bar). This includes an image, if
-	 * specified, and a message.
+	 * Creates and returns the contents of the upper part of this dialog (above the button bar). This includes an image, if specified, and a message.
 	 * 
 	 * @param parent the parent composite to contain the dialog area
 	 * @return the dialog area control
@@ -126,10 +121,8 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	}
 
 	/**
-	 * The buttonPressed() method is called when either the OK or
-	 * Details buttons is pressed. We override this method to
-	 * alternately show or hide the details area if the Details button
-	 * is pressed.
+	 * The buttonPressed() method is called when either the OK or Details buttons is pressed. We override this method to
+	 * alternately show or hide the details area if the Details button is pressed.
 	 */
 	protected void buttonPressed(int id) {
 		if (id == IDialogConstants.DETAILS_ID){
@@ -140,8 +133,7 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	}
 
 	/**
-	 * Toggles the unfolding of the details area. This is triggered by
-	 * the user pressing the Details button.
+	 * Toggles the unfolding of the details area. This is triggered by the user pressing the Details button.
 	 */
 	protected void toggleDetailsArea() {
 		Point oldWindowSize = getShell().getSize();
@@ -182,9 +174,7 @@ public abstract class AbstractDetailsDialog extends Dialog {
 	}
 
 	/**
-	 * subclasses must implement createDetailsArea to provide content
-	 * for the area of the dialog made visible when the Details button
-	 * is clicked.
+	 * subclasses must implement createDetailsArea to provide content for the area of the dialog made visible when the Details button is clicked.
 	 * 
 	 * @param parent the details area parent
 	 * @return the details area

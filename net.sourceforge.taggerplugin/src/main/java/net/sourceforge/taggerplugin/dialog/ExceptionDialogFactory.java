@@ -20,14 +20,36 @@ import net.sourceforge.taggerplugin.TaggerMessages;
 
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Helper utility for creating exception dialogs.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class ExceptionDialogFactory {
 
 	private ExceptionDialogFactory(){super();}
-	
+
+	/**
+	 * Creates an exception dialog with the exception message for text and the exception stack trace as details.
+	 *
+	 * @param shell the shell
+	 * @param ex the exception
+	 * @return a populated {@link ExceptionDetailsDialog}
+	 */
 	public static final ExceptionDetailsDialog create(Shell shell, Exception ex){
 		return(create(shell,TaggerMessages.ExceptionDialogFactory_Title,ex.getMessage(),ex));
 	}
 	
+	/**
+	 * Creates an exception dialog with the given title, and message text. The exception stack trace is used
+	 * for the details.
+	 *
+	 * @param shell the shell
+	 * @param title the dialog title
+	 * @param msg the dialog message
+	 * @param ex the exception
+	 * @return a populated {@link ExceptionDetailsDialog}
+	 */
 	public static final ExceptionDetailsDialog create(Shell shell, String title, String msg, Exception ex){
 		return(new ExceptionDetailsDialog(shell,title,null,msg,ex,TaggerActivator.getDefault()));
 	}

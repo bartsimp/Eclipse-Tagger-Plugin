@@ -24,8 +24,7 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 
 /**
- * Action to create a new tag and add it to the tag set.
- * This action will open the TagDialog in create mode.
+ * Action to create a new tag and add it to the tag set. This action will open the TagDialog in create mode.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
@@ -33,10 +32,16 @@ public class NewTagAction implements IViewActionDelegate {
 
 	private IViewPart view;
 
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.view = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	public void run(IAction action) {
 		final TagDialog dialog = new TagDialog(view.getSite().getShell());
 		if(dialog.showCreate() == TagDialog.OK){
@@ -44,5 +49,8 @@ public class NewTagAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 }

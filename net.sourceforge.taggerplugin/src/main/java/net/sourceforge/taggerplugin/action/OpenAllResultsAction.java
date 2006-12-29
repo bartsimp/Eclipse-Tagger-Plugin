@@ -28,14 +28,25 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.actions.OpenFileAction;
 
+/**
+ * Action used to open all search results (resources, not projects or folders) in their appropriate editors.
+ *
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class OpenAllResultsAction implements IViewActionDelegate {
 
 	private IViewPart viewPart;
-	
+
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.viewPart = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction)
+	 */
 	@SuppressWarnings("unchecked")
 	public void run(IAction action) {
 		final ISelection selection = viewPart.getSite().getSelectionProvider().getSelection();
@@ -59,5 +70,8 @@ public class OpenAllResultsAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 }

@@ -26,6 +26,8 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 
 /**
+ * 	This action opens the tag editor dialog when fired to allow tag data to be modified. If
+ * 	the OK button is pressed, the new data in the dialog will be stored.
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
@@ -33,10 +35,16 @@ public class ModifyTagAction implements IViewActionDelegate {
 
 	private IViewPart view;
 
+	/**
+	 * @see IViewActionDelegate#init(IViewPart)
+	 */
 	public void init(IViewPart view) {
 		this.view = view;
 	}
 
+	/**
+	 * @see IViewActionDelegate#run(IAction action)
+	 */
 	public void run(IAction action) {
 		final TagView tagView = (TagView)view;
 		final Tag selectedTag = tagView.getSelectedTag();
@@ -49,5 +57,8 @@ public class ModifyTagAction implements IViewActionDelegate {
 		}
 	}
 
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
 	public void selectionChanged(IAction action, ISelection selection) {}
 }

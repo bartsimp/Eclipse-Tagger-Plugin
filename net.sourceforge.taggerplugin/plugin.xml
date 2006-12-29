@@ -10,7 +10,7 @@
             allowMultiple="false"
             category="net.sourceforge.taggerplugin.Category"
             class="net.sourceforge.taggerplugin.view.TagView"
-            icon="icons/tagger_logo_20x20.gif"
+            icon="icons/tagger_logo_16x16.gif"
             id="net.sourceforge.taggerplugin.TagView"
             name="Tags"/>
    </extension>
@@ -186,7 +186,7 @@
       <page
             adaptable="true"
             class="net.sourceforge.taggerplugin.ui.TaggableResourcePropertyPage"
-            icon="icons/tagger_logo_20x20.gif"
+            icon="icons/tagger_logo_16x16.gif"
             id="net.sourceforge.taggerplugin.TaggedResourceProperties"
             name="Tagger Plug-in"
             objectClass="org.eclipse.core.resources.IResource"/>
@@ -198,7 +198,7 @@
             class="net.sourceforge.taggerplugin.search.TagSearchPage"
             enabled="true"
             extensions="*"
-            icon="icons/tagger_logo_20x20.gif"
+            icon="icons/tagger_logo_16x16.gif"
             id="net.sourceforge.taggerplugin.TagSearchPage"
             label="Tag Search"
             showScopeSection="true"
@@ -208,7 +208,7 @@
          point="org.eclipse.search.searchResultViewPages">
       <viewPage
             class="net.sourceforge.taggerplugin.search.TagSearchResultPage"
-            icon="icons/tagger_logo_20x20.gif"
+            icon="icons/tagger_logo_16x16.gif"
             id="net.sourceforge.taggerplugin.search.TagSearchResultPage"
             label="Tag Search Results"
             searchResultClass="net.sourceforge.taggerplugin.search.TagSearchResult"/>
