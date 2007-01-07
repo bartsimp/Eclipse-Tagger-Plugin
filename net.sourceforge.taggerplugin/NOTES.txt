@@ -1,4 +1,10 @@
 
+-	docs for 
+	-	view filtering
+	-	working set from search
+	-	open all results
+
+
 -	add any/all checkbox to filter selection list
 -	add version/dev methodology to web site
 -	find tagged like selected (1)
