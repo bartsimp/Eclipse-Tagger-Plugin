@@ -1,0 +1,14 @@
+
+-	add any/all checkbox to filter selection list
+-	add version/dev methodology to web site
+-	find tagged like selected (1)
+
+-	extension to JDT to add tag filtering
+
+
+===== 1.3 =====
+-	folder search result should find-in-resource view
+-	quick searches for similar tags, etc (sim to java references search)
+-	add ability to search by tags and content and extension
+-	associate new tag action
+

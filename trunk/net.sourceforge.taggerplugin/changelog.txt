@@ -1,5 +1,10 @@
 Version 1.1.0
 
+	*	Fixed: [BUG-1617191] site bad in IE
+	*	simplified web site and removed dojo
+	*	cleaned up string externalization
+	*	cleaned up javadocs.
+	*	added new icons and fixed name of logo icon.
 	*	[FR-1616814] Open all search results action added to all search results pages
 	*	[FR-1616812] ability to create working set from any search results page
 	*	added resource view filtering based on tags to Navigator and Project Explorer
