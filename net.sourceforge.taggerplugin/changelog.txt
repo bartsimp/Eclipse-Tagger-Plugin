@@ -1,5 +1,7 @@
 Version 1.1.0
 
+	*	added documentation for new functionality
+	*	added stylesheet to documentation
 	*	Fixed: [BUG-1617191] site bad in IE
 	*	simplified web site and removed dojo
 	*	cleaned up string externalization

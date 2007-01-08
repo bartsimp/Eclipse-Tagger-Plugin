@@ -7,8 +7,6 @@
 		<topic label="New Tag Action" href="help/reference/newtagaction.html" />
 		<topic label="Modify Tag Action" href="help/reference/edittagaction.html" />
 		<topic label="Delete Tag Action" href="help/reference/deletetagaction.html" />
-		<topic label="Create Working Set Action" href="help/reference/createworkingset.html" />
-		<topic label="Filter View by Associations" href="help/reference/filterassociations.html" />
 	</topic>
 	<topic label="Contextual Actions">
 		<topic label="Add Tag Association(s)" href="help/reference/addassocaction.html" />
@@ -16,8 +14,8 @@
 		<topic label="Remove Tag Association(s)" href="help/reference/removeassocaction.html" />
 	</topic>
 	<topic label="Search Results">
-		<topic label="Create Working Set from Results" href="help/reference/filterassociations.html" />
-		<topic label="Open All Search Results" href="help/reference/filterassociations.html" />	
+		<topic label="Create Working Set from Results" href="help/reference/workingsetresults.html" />
+		<topic label="Open All Search Results" href="help/reference/openallresults.html" />	
 	</topic>
 	<topic label="Search" href="help/reference/search.html" />
 </toc>
