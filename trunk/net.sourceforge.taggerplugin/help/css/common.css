@@ -3,3 +3,8 @@ body {
 	font-family: 		Tahoma,Arial,Helvetica;
 	font-size:			11pt;
 }
+
+.screenshot {
+	float:		right;
+	border:		1px solid gray;
+}
