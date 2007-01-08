@@ -1,5 +1,6 @@
 Version 1.1.0
 
+	*	Fixed: [BUG-1624293] Plugin jar deployment bug
 	*	added documentation for new functionality
 	*	added stylesheet to documentation
 	*	Fixed: [BUG-1617191] site bad in IE

@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.taggerplugin_feature"
       label="Resource Tagger Feature"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="http://taggerplugin.sourceforge.net">
 
    <description>
@@ -328,6 +328,7 @@ in any resulting litigation.
       <import plugin="org.eclipse.search"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.ui.navigator"/>
    </requires>
 
    <plugin
