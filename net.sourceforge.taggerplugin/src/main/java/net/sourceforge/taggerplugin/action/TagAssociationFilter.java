@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -40,10 +41,10 @@ import org.eclipse.jface.viewers.ViewerFilter;
  *
  * @author Christopher J. Stehno (chris@stehno.com)
  */
-final class TagAssociationFilter extends ViewerFilter {
+public class TagAssociationFilter extends ViewerFilter {
 	// TODO: the child-matching criteria may be a candidate for a preference, maybe some users would want the obscuring behavior
 	
-	private final List<Tag> tags = new LinkedList<Tag>();
+	protected final List<Tag> tags = new LinkedList<Tag>();
 	
 	/**
 	 * @see ViewerFilter#select(Viewer, Object, Object)
@@ -101,12 +102,12 @@ final class TagAssociationFilter extends ViewerFilter {
 	/**
 	 * Used to determine if the given resource is tagged with any of the given tags.
 	 *
-	 * @param resource the resource being tested
+	 * @param adaptable the resource being tested
 	 * @param tags the tags
 	 * @return a value of true if the resource is tagged
 	 */
-	private static boolean isTagged(final IResource resource, final List<Tag> tags){
-		final ITaggable taggable = (ITaggable)resource.getAdapter(ITaggable.class);
+	protected static boolean isTagged(final IAdaptable adaptable, final List<Tag> tags){
+		final ITaggable taggable = (ITaggable)adaptable.getAdapter(ITaggable.class);
 		if(taggable != null){
 			for(Tag tag : tags){
 				if(taggable.hasTag(tag.getId())){
@@ -123,8 +124,8 @@ final class TagAssociationFilter extends ViewerFilter {
 	 * @param resource the resource to be tested
 	 * @return true if the resource is a project that is closed
 	 */
-	private boolean isClosedProject(IResource resource){
-		final IProject project = (IProject)resource.getAdapter(IProject.class);
+	protected boolean isClosedProject(IAdaptable adaptable){
+		final IProject project = (IProject)adaptable.getAdapter(IProject.class);
 		return(project != null && !project.isOpen());
 	}
 	
@@ -133,7 +134,9 @@ final class TagAssociationFilter extends ViewerFilter {
 	 *
 	 * @author Christopher J. Stehno (chris@stehno.com)
 	 */
-	private static final class Holder {
+	protected static final class Holder {
 		public boolean accept = false;
+		
+		public Holder(){}
 	}
 }

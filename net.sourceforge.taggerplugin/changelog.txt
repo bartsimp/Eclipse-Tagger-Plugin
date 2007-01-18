@@ -1,3 +1,7 @@
+Version 1.2.0
+
+	*	modified to allow JDT plugin extension
+
 Version 1.1.0
 
 	*	Fixed: [BUG-1624293] Plugin jar deployment bug
