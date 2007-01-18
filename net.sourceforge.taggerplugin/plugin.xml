@@ -159,6 +159,14 @@
                label="%tagger.actions.RemoveTagAssociation.label"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
                tooltip="%tagger.actions.RemoveTagAssociation.tooltip"/>
+         <action
+               class="net.sourceforge.taggerplugin.action.AddNewTagAssociationAction"
+               enablesFor="+"
+               icon="icons/tagger_addnew.gif"
+               id="net.sourceforge.taggerplugin.action.AddTagAssociation"
+               label="%tagger.actions.NewTagAssociation.label"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="%tagger.actions.NewTagAssociation.tooltip"/>
       </objectContribution>
    </extension>
    <extension
