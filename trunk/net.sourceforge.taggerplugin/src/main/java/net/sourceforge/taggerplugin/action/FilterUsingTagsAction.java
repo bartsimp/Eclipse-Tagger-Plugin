@@ -45,21 +45,17 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 	public void init(IViewPart view) {
 		this.view = view;
 	}
+	
+	/**
+	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 */
+	public void selectionChanged(IAction action, ISelection selection) {}
 
 	/**
 	 * @see IViewActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
-		// TODO: look into this... there is probably a better way
-		TreeViewer viewer = null;
-		if(view instanceof ResourceNavigator){
-			viewer = ((ResourceNavigator)view).getViewer();	
-		} else if(view instanceof CommonNavigator){
-			viewer = ((CommonNavigator)view).getCommonViewer();	
-		} else {
-			return;
-		}
-		
+		final TreeViewer viewer = extractTreeViewer();
 		TagAssociationFilter tagFilter = findTagFilter(viewer);
 			
 		final TagSelectionDialog dialog = new TagSelectionDialog(view.getSite().getShell(),TagManager.getInstance().getTags(),TaggerMessages.FilterUsingTagsAction_Title,TaggerMessages.FilterUsingTagsAction_Message);
@@ -71,7 +67,7 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 			if(results != null && results.length != 0){
 				if(tagFilter == null){
 					// create a new filter populate it and add it
-					tagFilter = new TagAssociationFilter();
+					tagFilter = createTagFilter();
 					for(Object obj : results){
 						tagFilter.addTag((Tag)obj);
 					}
@@ -90,12 +86,30 @@ public class FilterUsingTagsAction implements IViewActionDelegate {
 			}
 		}
 	}
+	
+	protected IViewPart getViewPart(){
+		return(view);
+	}
 
 	/**
-	 * @see IViewActionDelegate#selectionChanged(IAction,ISelection)
+	 * Used to extract the TreeViewer from the view part.
+	 * 
+	 * @return the TreeViewer to be filtered
 	 */
-	public void selectionChanged(IAction action, ISelection selection) {}
+	protected TreeViewer extractTreeViewer() {
+		TreeViewer viewer = null;
+		if(view instanceof ResourceNavigator){
+			viewer = ((ResourceNavigator)view).getViewer();	
+		} else if(view instanceof CommonNavigator){
+			viewer = ((CommonNavigator)view).getCommonViewer();	
+		}
+		return viewer;
+	}
 	
+	protected TagAssociationFilter createTagFilter(){
+		return(new TagAssociationFilter());
+	}
+
 	/**
 	 * Used to find the tag filter in those registered to the viewer; if none is found
 	 * a null value is returned.
