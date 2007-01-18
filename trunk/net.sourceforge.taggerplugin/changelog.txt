@@ -1,6 +1,7 @@
 Version 1.2.0
 
-	*	modified to allow JDT plugin extension
+	*	externalized meta data strings in configuration files
+	*	[FR-1630811] Add Tag Filtering support to JDT Package View
 
 Version 1.1.0
 
