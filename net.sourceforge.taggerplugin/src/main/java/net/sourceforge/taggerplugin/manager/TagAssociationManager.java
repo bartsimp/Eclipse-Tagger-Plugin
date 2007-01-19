@@ -20,17 +20,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
@@ -39,6 +36,8 @@ import net.sourceforge.taggerplugin.event.ITagAssociationManagerListener;
 import net.sourceforge.taggerplugin.event.ITagManagerListener;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.event.TagManagerEvent;
+import net.sourceforge.taggerplugin.io.TagAssociationIoFactory;
+import net.sourceforge.taggerplugin.io.TagIoFormat;
 import net.sourceforge.taggerplugin.model.TagAssociation;
 import net.sourceforge.taggerplugin.resource.ITaggable;
 import net.sourceforge.taggerplugin.resource.ITaggedMarker;
@@ -54,8 +53,6 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.XMLMemento;
 
 /**
  * Manager used to load and store the tag/resource associations in the workspace.
@@ -65,11 +62,7 @@ import org.eclipse.ui.XMLMemento;
  */
 public class TagAssociationManager implements IResourceChangeListener,ITagManagerListener {
 
-	private static final String TAG_ASSOCIATIONS = "associations";
-	private static final String TAG_REFID = "ref-id";
-	private static final String TAG_TAG = "tag";
 	private static final String TAGASSOCIATIONFILENAME = "tag-associations.xml";
-	private static final String TAG_ASSOCIATION = "assoc";
 	private static TagAssociationManager instance;
 	private Map<String, TagAssociation> associations;
 	private final List<ITagAssociationManagerListener> listeners;
@@ -316,7 +309,6 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 
 	private void ensureAssociations(){
 		if(associations == null){
-			associations = new HashMap<String,TagAssociation>();
 			loadAssociations();
 		}
 	}
@@ -344,23 +336,7 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			Reader reader = null;
 			try {
 				reader = new BufferedReader(new FileReader(file));
-
-				final IMemento[] children = XMLMemento.createReadRoot(reader).getChildren(TAG_ASSOCIATION);
-				for (IMemento mem : children) {
-					final String resourceId = mem.getID();
-
-					TagAssociation tagAssoc = associations.get(resourceId);
-					if(tagAssoc == null){
-						tagAssoc = new TagAssociation(resourceId);
-						associations.put(resourceId, tagAssoc);
-					}
-
-					final IMemento[] resourceChildren = mem.getChildren(TAG_TAG);
-					for(IMemento rchild : resourceChildren){
-						tagAssoc.addTagId(rchild.getString(TAG_REFID));
-					}
-				}
-
+				associations = TagAssociationIoFactory.create(TagIoFormat.MEMENTO).readTagAssociations(reader, null);
 			} catch(Exception ex){
 				TaggerLog.error(ex);
 			} finally {
@@ -372,21 +348,11 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	public void saveAssociations(){
 		if(associations == null){return;}
 
-		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_ASSOCIATIONS);
-		for (Entry<String,TagAssociation> entry : associations.entrySet()) {
-			final IMemento mem = memento.createChild(TAG_ASSOCIATION,String.valueOf(entry.getKey()));
-
-			for (String tagId : entry.getValue()){
-				final IMemento tagMem = mem.createChild(TAG_TAG);
-				tagMem.putString(TAG_REFID, tagId.toString());
-			}
-		}
-
 		Writer writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(getTagAssociationFile()));
-			memento.save(writer);
-		} catch (IOException e) {
+			TagAssociationIoFactory.create(TagIoFormat.MEMENTO).writeTagAssociations(writer,associations, null);
+		} catch (Exception e) {
 			TaggerLog.error(e);
 		} finally {
 			IoUtils.closeQuietly(writer);
