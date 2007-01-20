@@ -269,6 +269,12 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 		}
 		return(hasAssoc);
 	}
+	
+	public boolean associationExists(String resourceId, String tagId){
+		ensureAssociations();
+		final TagAssociation assoc = associations.get(resourceId);
+		return(assoc != null && assoc.containsAssociation(tagId));
+	}
 
 	/**
 	 * Used to associate the tag with the specified id to the given resource.
@@ -291,6 +297,11 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			TaggerLog.error("Unable to create tag association: " + ce.getMessage(),ce);
 			throw new TagAssociationException(TaggerMessages.TagAssociationManager_Error_Create,ce);
 		}
+	}
+	
+	public Map<String,TagAssociation> getAssociationMap(){
+		ensureAssociations();
+		return(associations);
 	}
 
 	public String[] getAssociations(IResource resource){

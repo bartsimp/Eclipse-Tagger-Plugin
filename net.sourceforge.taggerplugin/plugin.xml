@@ -232,6 +232,12 @@
       <category
             id="net.sourceforge.taggerplugin.TagExportCategory"
             name="%tagger.category"/>
+      <wizard
+            category="net.sourceforge.taggerplugin.TagExportCategory"
+            class="net.sourceforge.taggerplugin.wizard.TagAssociationExportWizard"
+            icon="icons/synced.gif"
+            id="net.sourceforge.taggerplugin.wizard.TagAssociationExport"
+            name="%tagger.wizards.AssocExport.name"/>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
@@ -244,6 +250,12 @@
             icon="icons/synced.gif"
             id="net.sourceforge.taggerplugin.wizard.TagSetImport"
             name="%tagger.wizards.Import.name"/>
+      <wizard
+            category="net.sourceforge.taggerplugin.TagImportCategory"
+            class="net.sourceforge.taggerplugin.wizard.TagAssociationImportWizard"
+            icon="icons/synced.gif"
+            id="net.sourceforge.taggerplugin.wizard.TagAssociationImport"
+            name="%tagger.wizards.AssocImport.name"/>
    </extension>
    <extension
          point="org.eclipse.help.toc">

@@ -30,6 +30,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 
+/**
+ *	Tag Association IO handler for reading/writing tag associations in Eclipse memento format. This handler
+ *	should ONLY be used for internal storage, not externalization.
+ * 
+ * @author Christopher J. Stehno (chris@stehno.com)
+ */
 public class TagAssociationMementoIo implements ITagAssociationIo {
 
 	private static final String TAG_ASSOCIATIONS = "associations";

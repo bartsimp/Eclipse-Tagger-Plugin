@@ -15,10 +15,10 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.resource;
 
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -65,6 +65,24 @@ public class TaggedMarkerHelper {
 		} else {
 			return(null);
 		}
+	}
+	
+	/**
+	 * Used to find a specific resource object by its resource id value. If no resource can be found with the id
+	 * a value of null is returned.
+	 * 
+	 * @param resourceId the resource id to be found
+	 * @return the resource with the given id or null
+	 */
+	public static final IResource getResource(String resourceId) throws CoreException {
+		final IMarker[] markers = ResourcesPlugin.getWorkspace().getRoot().findMarkers(ITaggedMarker.MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+		for(IMarker marker : markers){
+			final ITaggedMarker tmarker = (ITaggedMarker)marker.getAdapter(ITaggedMarker.class);
+			if(tmarker != null && tmarker.getResourceId().equals(resourceId)){
+				return(tmarker.getResource());
+			}
+		}
+		return(null);
 	}
 	
 	private static boolean isMarkable(IResource resource){
