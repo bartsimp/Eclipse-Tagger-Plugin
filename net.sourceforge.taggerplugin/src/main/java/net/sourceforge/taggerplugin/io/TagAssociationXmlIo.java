@@ -37,6 +37,7 @@ import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.TagAssociation;
 import net.sourceforge.taggerplugin.resource.ITaggedMarker;
 import net.sourceforge.taggerplugin.resource.TaggedMarkerHelper;
+import net.sourceforge.taggerplugin.util.XmlUtils;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -46,7 +47,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -115,17 +115,17 @@ public class TagAssociationXmlIo implements ITagAssociationIo {
 
 		// build the tag document
 		final Document doc = builder.newDocument();
-		final Element associationsElt = appendElement(doc, ELT_ASSOCIATIONS);
+		final Element associationsElt = XmlUtils.appendElement(doc, ELT_ASSOCIATIONS);
 		
 		try {
 			for(Entry<String, TagAssociation> entry : associations.entrySet()){
 				final IResource resource = TaggedMarkerHelper.getResource(entry.getValue().getResourceId());
 				if(resource != null){
-					final Element assocElt = appendElement(associationsElt, ELT_ASSOC);
+					final Element assocElt = XmlUtils.appendElement(associationsElt, ELT_ASSOC);
 					assocElt.setAttribute(ATTRNAME_PATH,resource.getFullPath().toPortableString());
 		
 					for(String tagid : entry.getValue().getAssociations()){
-						final Element tagElt = appendElement(assocElt,ELT_TAG);
+						final Element tagElt = XmlUtils.appendElement(assocElt,ELT_TAG);
 						tagElt.setAttribute(ATTRNAME_REF,tagid);
 					}				
 				}
@@ -146,17 +146,6 @@ public class TagAssociationXmlIo implements ITagAssociationIo {
 			TaggerLog.error(ce);
 			throw new IOException("Unable to write associations: " + ce.getMessage());
 		}
-	}
-	
-	/**
-	 * Appends a child element with the given tag name to the specified parent node.
-	 *
-	 * @param parent the parent node
-	 * @param tagName the tag name
-	 * @return the new element with the given tag name that is a child of the parent node
-	 */
-	private Element appendElement(Node parent, String tagName){
-		return((Element)parent.appendChild((parent.getOwnerDocument() != null ? parent.getOwnerDocument() : (Document)parent).createElement(tagName)));
 	}
 	
 	/**

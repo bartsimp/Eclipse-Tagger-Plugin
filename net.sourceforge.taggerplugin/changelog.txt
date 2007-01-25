@@ -1,5 +1,6 @@
 Version 1.2.1
 
+	*	Fixed: [BUG-1643992] Tag XML Export not working
 	*	Fixed: [BUG-1643993] Tag Association Import Issues
 	*	Fixed: [BUG-1642724] null pointer exception when using right-click add new tag
 	*	Fixed: [BUG-1642725] right-click add tag is throwing null pointer

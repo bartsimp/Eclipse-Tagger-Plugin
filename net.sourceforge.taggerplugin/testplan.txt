@@ -7,6 +7,8 @@
 -	Install the plugins in clean Eclipse application (not the development installation)
 -	delete tag and tag association files from workspace
 
+-	should export the update site and use update manager to install the plugin
+
 ------------------------------------------------------------
                            Tags
 ------------------------------------------------------------
