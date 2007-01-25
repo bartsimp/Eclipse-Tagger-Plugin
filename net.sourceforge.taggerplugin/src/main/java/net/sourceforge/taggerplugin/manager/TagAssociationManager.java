@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -333,6 +334,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 	 * @return
 	 */
 	private TagAssociation getOrCreateAssociation(String resourceId){
+		ensureAssociations();
+		
 		TagAssociation tagAssoc = associations.get(resourceId);
 		if(tagAssoc == null){
 			tagAssoc = new TagAssociation(resourceId);
@@ -353,6 +356,8 @@ public class TagAssociationManager implements IResourceChangeListener,ITagManage
 			} finally {
 				IoUtils.closeQuietly(reader);
 			}
+		} else {
+			associations = new HashMap<String, TagAssociation>();
 		}
 	}
 
