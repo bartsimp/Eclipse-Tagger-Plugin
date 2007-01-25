@@ -33,11 +33,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
+import net.sourceforge.taggerplugin.util.XmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -97,15 +97,15 @@ class TagXmlIo implements ITagIo {
 
 		// build the tag document
 		final Document doc = builder.newDocument();
-		final Element tagsElt = appendElement(doc, ELT_TAGS);
+		final Element tagsElt = XmlUtils.appendElement(doc, ELT_TAGS);
 		for(Tag tag : tags){
-			final Element tagElt = appendElement(tagsElt, ELT_TAG);
+			final Element tagElt = XmlUtils.appendElement(tagsElt, ELT_TAG);
 			tagElt.setAttribute(ATTRNAME_ID,tag.getId().toString());
 
-			final Element nameElt = appendElement(tagElt,ELT_NAME);
+			final Element nameElt = XmlUtils.appendElement(tagElt,ELT_NAME);
 			nameElt.appendChild(doc.createCDATASection(tag.getName()));
 
-			final Element descElt = appendElement(tagElt,ELT_DESCRIPTION);
+			final Element descElt = XmlUtils.appendElement(tagElt,ELT_DESCRIPTION);
 			descElt.appendChild(doc.createCDATASection(tag.getDescription()));
 
 			monitor.worked(1);
@@ -119,17 +119,6 @@ class TagXmlIo implements ITagIo {
 		} finally {
 			monitor.worked(1);
 		}
-	}
-
-	/**
-	 * Appends a child element with the given tag name to the specified parent node.
-	 *
-	 * @param parent the parent node
-	 * @param tagName the tag name
-	 * @return the new element with the given tag name that is a child of the parent node
-	 */
-	private Element appendElement(Node parent, String tagName){
-		return((Element)parent.appendChild(parent.getOwnerDocument().createElement(tagName)));
 	}
 
 	/**
