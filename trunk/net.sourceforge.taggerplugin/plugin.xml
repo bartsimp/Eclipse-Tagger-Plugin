@@ -135,15 +135,6 @@
             <groupMarker name="tags"/>
          </menu>
          <action
-               class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
-               enablesFor="+"
-               helpContextId="net.sourceforge.taggerplugin.help.AddTagAssociation"
-               icon="icons/plus.gif"
-               id="net.sourceforge.taggerplugin.action.AddTagAssociation"
-               label="%tagger.actions.AddTagAssociation.label"
-               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
-               tooltip="%tagger.actions.AddTagAssociation.tooltip"/>
-         <action
                class="net.sourceforge.taggerplugin.action.ClearTagAssociationsAction"
                enablesFor="+"
                icon="icons/trash.gif"
@@ -159,6 +150,15 @@
                label="%tagger.actions.RemoveTagAssociation.label"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
                tooltip="%tagger.actions.RemoveTagAssociation.tooltip"/>
+         <action
+               class="net.sourceforge.taggerplugin.action.AddTagAssociationAction"
+               enablesFor="+"
+               helpContextId="net.sourceforge.taggerplugin.help.AddTagAssociation"
+               icon="icons/plus.gif"
+               id="net.sourceforge.taggerplugin.action.AddTagAssociation"
+               label="%tagger.actions.AddTagAssociation.label"
+               menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
+               tooltip="%tagger.actions.AddTagAssociation.tooltip"/>
          <action
                class="net.sourceforge.taggerplugin.action.AddNewTagAssociationAction"
                enablesFor="+"

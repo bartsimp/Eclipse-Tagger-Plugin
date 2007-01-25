@@ -1,3 +1,12 @@
+Version 1.2.1
+
+	*	Fixed: [BUG-1643993] Tag Association Import Issues
+	*	Fixed: [BUG-1642724] null pointer exception when using right-click add new tag
+	*	Fixed: [BUG-1642725] right-click add tag is throwing null pointer
+	*	Fixed: [BUG-1642745] externalization error in package manager
+	*	Fixed: [BUG-1642720] Right-click Menu is showing incorrect strings
+	*	added some unit testing and started drafting test plan
+
 Version 1.2.0
 
 	*	Fixed: [BUG-1630810] Update site does not register as update only as new
