@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.taggerplugin_feature"
       label="Resource Tagger Feature"
-      version="1.2.0"
+      version="1.2.1"
       provider-name="http://taggerplugin.sourceforge.net">
 
    <description>
