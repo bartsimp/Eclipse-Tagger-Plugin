@@ -1,3 +1,7 @@
+Version 2.0.0
+
+	*	using new "silk" icon set
+
 Version 1.2.1
 
 	*	Fixed: [BUG-1643992] Tag XML Export not working
