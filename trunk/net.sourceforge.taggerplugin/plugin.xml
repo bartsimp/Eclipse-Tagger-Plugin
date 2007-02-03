@@ -10,7 +10,7 @@
             allowMultiple="false"
             category="net.sourceforge.taggerplugin.Category"
             class="net.sourceforge.taggerplugin.view.TagView"
-            icon="icons/tagger_logo_16x16.gif"
+            icon="icons/tag_blue.png"
             id="net.sourceforge.taggerplugin.TagView"
             name="%tagger.TagsView.name"/>
    </extension>
@@ -22,7 +22,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.DeleteTagAction"
                helpContextId="net.sourceforge.taggerplugin.help.DeleteTagAction"
-               icon="icons/delete.gif"
+               icon="icons/tag_blue_delete.png"
                id="net.sourceforge.taggerplugin.action.DeleteTagAction"
                label="%tagger.actions.DeleteTag.label"
                menubarPath="additions"
@@ -32,7 +32,7 @@
          </action>
          <action
                class="net.sourceforge.taggerplugin.action.NewTagAction"
-               icon="icons/plus.gif"
+               icon="icons/tag_blue_add.png"
                id="net.sourceforge.taggerplugin.action.NewTagAction"
                label="%tagger.actions.NewTag.label"
                menubarPath="additions"
@@ -41,7 +41,7 @@
                tooltip="%tagger.actions.NewTag.tooltip"/>
          <action
                class="net.sourceforge.taggerplugin.action.ModifyTagAction"
-               icon="icons/modify.gif"
+               icon="icons/tag_blue_edit.png"
                id="net.sourceforge.taggerplugin.action.ModifyTagAction"
                label="%tagger.actions.ModifyTag.label"
                menubarPath="additions"
@@ -162,7 +162,7 @@
          <action
                class="net.sourceforge.taggerplugin.action.AddNewTagAssociationAction"
                enablesFor="+"
-               icon="icons/tagger_addnew.gif"
+               icon="icons/tag_blue_add.png"
                id="net.sourceforge.taggerplugin.action.AddTagAssociation"
                label="%tagger.actions.NewTagAssociation.label"
                menubarPath="net.sourceforge.taggerplugin.ContextMenu/tags"
@@ -206,7 +206,7 @@
             class="net.sourceforge.taggerplugin.search.TagSearchPage"
             enabled="true"
             extensions="*"
-            icon="icons/tagger_logo_16x16.gif"
+            icon="icons/tag_blue.png"
             id="net.sourceforge.taggerplugin.TagSearchPage"
             label="%tagger.search.Page.label"
             showScopeSection="true"
@@ -216,26 +216,26 @@
          point="org.eclipse.search.searchResultViewPages">
       <viewPage
             class="net.sourceforge.taggerplugin.search.TagSearchResultPage"
-            icon="icons/tagger_logo_16x16.gif"
+            icon="icons/tag_blue.png"
             id="net.sourceforge.taggerplugin.search.TagSearchResultPage"
             label="%tagger.search.Results.label"
             searchResultClass="net.sourceforge.taggerplugin.search.TagSearchResult"/>
    </extension>
    <extension
          point="org.eclipse.ui.exportWizards">
-      <wizard
-            category="net.sourceforge.taggerplugin.TagExportCategory"
-            class="net.sourceforge.taggerplugin.wizard.TagExportWizard"
-            icon="icons/synced.gif"
-            id="net.sourceforge.taggerplugin.wizard.TagSetExport"
-            name="%tagger.wizards.Export.name"/>
       <category
             id="net.sourceforge.taggerplugin.TagExportCategory"
             name="%tagger.category"/>
       <wizard
             category="net.sourceforge.taggerplugin.TagExportCategory"
+            class="net.sourceforge.taggerplugin.wizard.TagExportWizard"
+            icon="icons/tag_blue.png"
+            id="net.sourceforge.taggerplugin.wizard.TagSetExport"
+            name="%tagger.wizards.Export.name"/>
+      <wizard
+            category="net.sourceforge.taggerplugin.TagExportCategory"
             class="net.sourceforge.taggerplugin.wizard.TagAssociationExportWizard"
-            icon="icons/synced.gif"
+            icon="icons/tag.png"
             id="net.sourceforge.taggerplugin.wizard.TagAssociationExport"
             name="%tagger.wizards.AssocExport.name"/>
    </extension>
@@ -247,13 +247,13 @@
       <wizard
             category="net.sourceforge.taggerplugin.TagImportCategory"
             class="net.sourceforge.taggerplugin.wizard.TagImportWizard"
-            icon="icons/synced.gif"
+            icon="icons/tag_blue.png"
             id="net.sourceforge.taggerplugin.wizard.TagSetImport"
             name="%tagger.wizards.Import.name"/>
       <wizard
             category="net.sourceforge.taggerplugin.TagImportCategory"
             class="net.sourceforge.taggerplugin.wizard.TagAssociationImportWizard"
-            icon="icons/synced.gif"
+            icon="icons/tag.png"
             id="net.sourceforge.taggerplugin.wizard.TagAssociationImport"
             name="%tagger.wizards.AssocImport.name"/>
    </extension>
