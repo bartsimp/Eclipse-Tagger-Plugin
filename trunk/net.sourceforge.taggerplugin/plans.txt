@@ -4,7 +4,7 @@ workspace-scope
 	
 project-scope
 	-	tags/associations defined for the project only
-	-	taggable nature - to define projects that are taggable
+	x	taggable nature - to define projects that are taggable
 	-	tags can only be used in project they are defined
 	-	allow tag/association storage location to be defined (within project only on add of nature)
 	
