@@ -8,8 +8,8 @@
 
 ----- Functionality -----
 
--	handle change of filename/location
 -	handle external update of tagset files
+-	handle change of filename/location
 
 -	create working set from tag(s)
 	-	open ws create window

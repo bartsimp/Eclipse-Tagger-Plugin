@@ -33,7 +33,6 @@ import net.sourceforge.taggerplugin.event.TagSetRegistrationEvent;
 import net.sourceforge.taggerplugin.nature.TaggableProjectNature;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;

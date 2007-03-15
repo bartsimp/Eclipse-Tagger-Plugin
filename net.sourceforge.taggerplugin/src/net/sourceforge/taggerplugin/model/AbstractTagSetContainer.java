@@ -27,12 +27,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
+import net.sourceforge.taggerplugin.dialog.CompareInput;
 import net.sourceforge.taggerplugin.event.TagAssociationEvent;
 import net.sourceforge.taggerplugin.event.TagEvent;
 import net.sourceforge.taggerplugin.event.TagSetContainerEvent;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.compare.CompareConfiguration;
+import org.eclipse.compare.CompareUI;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -211,6 +214,7 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 			 * 		merge file data with my data and then save
 			 */
 			
+			// FIXME: externalize
 			boolean overwrite = MessageDialog.openQuestion(
 				TaggerActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(),
 				"Overwrite Modified TagSet File?", 
@@ -219,8 +223,11 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 			);
 			
 			if(!overwrite){
-				// merge the data
-				System.out.println("you have chosen to merge");
+//				CompareUI.openCompareDialog(new EditorInput(new CompareConfiguration()));
+				final CompareConfiguration config = new CompareConfiguration();
+				config.setRightEditable(true);
+				config.setLeftEditable(true);
+				CompareUI.openCompareDialog(new CompareInput(config));
 				return;
 			}
 		}
