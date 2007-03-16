@@ -1,29 +1,35 @@
-workspace-scope
-	-	tags/associations defined for the workspace only
-	-	allow tag/association storage location to be defined
-	
-project-scope
-	-	tags/associations defined for the project only
-	-	taggable nature - to define projects that are taggable
-	-	tags can only be used in project they are defined
-	-	allow tag/association storage location to be defined (within project only on add of nature)
-	
--	tags/associations may be shared across multiple projects
-	-	should have import/export to/from project-project
--	store tags as id,name,description (should I add date,author?)
--	store associations as path,tagids
--	ability to merge tags (in case duplicates created by others)
-	
--	tags view will be broken down by project/tags/associations
-	-	negates the need for a tag association view
-	-	should be filterable by project, tag(s)
--	break up into multiple smaller plugins based on functionality
+----- v1.3.0 -----
+-	allow specification of tagset file location
+-	add tag associations to tagset view
+-	export tagged files (flatten or maintain)
+!	need icons license
+-	revamp website
+
+----- v1.4.0 -----
+-	add internal merge and conflict resolution for externally modified tagset file
+-	work on documentation
+-	add any/all options to tag-->working set (dynamic)
+-	add options to view filtering
+-	add more options to tag search
+
+----- ???? -----
+-	add "show in" to tagset view
+-	add "open in editor" to tagset view
+-	allow other operations in tagset view
+-	tag quick search
+-	tag open files
+-	copy/paste tags
+-	drag/drop tags
+
+
+
+
+----- Other -----
+-	create working set from search results
+	-	export working set files
+	-	add selected files to working set
+-	open all selected search results in editor
+-	properties
+
 -	break out frills plugins into separate project
 -	add quick search (like CTRL-O) where type in tag name to get list of tags (selection opens all tagged)
-
-!	use new icon set
-!	need to handle open/close of project to add/remove to tag/association active data
-!	need to handle external tag/association update (refresh)
-!	provide a conversion tool to automatcially bring users up-to-date with new specs
-
--	consider integration points with TagSEA
