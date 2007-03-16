@@ -37,7 +37,7 @@ public class TagSetView extends ViewPart implements ISelectionProvider {
 		
 		/////
 		
-		viewer.setInput(TaggerActivator.getDefault().getTagSetContainerManager());
+		viewer.setInput(TaggerActivator.getDefault().getTagSetManager());
 	}
 	
 	@Override

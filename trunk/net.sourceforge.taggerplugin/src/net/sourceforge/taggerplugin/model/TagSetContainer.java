@@ -34,17 +34,16 @@ import net.sourceforge.taggerplugin.event.TagSetContainerEvent;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 
-abstract class AbstractTagSetContainer implements ITagSetContainer {
+class TagSetContainer implements ITagSetContainer {
 
 	private static final String VERSION = "2.0";
 	private static final String ATTR_TAGID = "tag-id";
@@ -58,17 +57,24 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 	private static final String ATTR_RESOURCEID = "resource-id";
 	private static final String ATTR_NAME = "name";
 	private static final String ATTR_VERSION = "version";
-	private final TagSetContainerManager manager;
+	private final TagSetManager manager;
 	private TagSet tagSet;
-	private File tagSetFile;
+	private File file;
 	private long lastModified;
+	private final boolean workspaceRelative;
 
-	protected AbstractTagSetContainer(String name){
-		this.manager = TaggerActivator.getDefault().getTagSetContainerManager();
+	TagSetContainer(TagSetManager manager, String name, File file, boolean workspaceRelative){
+		this.manager = manager;
+		this.file = file;
 		this.tagSet = new TagSet(name);
+		this.workspaceRelative = workspaceRelative;
+	}
+	
+	public boolean isWorkspaceRelative() {
+		return workspaceRelative;
 	}
 
-	public final Tag addTag(String name, String description) {
+	public Tag addTag(String name, String description) {
 		final Tag newTag = new Tag(name,description);
 		tagSet.addTag(newTag);
 
@@ -94,31 +100,31 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		manager.fireTagSetContainerEvent(new TagEvent(this,type,tag));
 	}
 
-	public final TagAssociation[] getAssociations(Tag tag) {
+	public TagAssociation[] getAssociations(Tag tag) {
 		return(tagSet.getAssociations(tag));
 	}
 
-	public final String getName() {
+	public String getName() {
 		return(tagSet.getId());
 	}
 
-	public final Tag[] getTags() {
+	public Tag[] getTags() {
 		return(tagSet.getTags());
 	}
 
-	public final boolean hasAssociations(Tag tag) {
+	public boolean hasAssociations(Tag tag) {
 		return(tagSet.hasAssociation(tag));
 	}
 
-	public final boolean hasTags() {
+	public boolean hasTags() {
 		return(tagSet.hasTags());
 	}
 
-	public final void removeTag(Tag tag) {
+	public void removeTag(Tag tag) {
 		// first remove the associations
 		final TagAssociation[] assocs = tagSet.getAssociations(tag);
 		for(int i=0; i<assocs.length; i++){
-			removeAssociation(extractFile(assocs[i].getResourceId()), tag);
+			removeAssociation(assocs[i].getResource(), tag);
 		}
 
 		// remove the tag
@@ -127,7 +133,7 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		save();
 	}
 
-	public final void updateTag(String tagid, String name, String description) {
+	public void updateTag(String tagid, String name, String description) {
 		final Tag tag = tagSet.getTag(tagid);
 		tag.setName(name);
 		tag.setDescription(description);
@@ -136,11 +142,10 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		manager.fireTagSetContainerEvent(new TagEvent(this,TagSetContainerEvent.Type.UPDATED,tag));
 	}
 
-	public final void addAssociation(IResource resource, Tag tag) {
-		final String resourceId = extractResourceId(resource);
-		TagAssociation ta = tagSet.getAssociation(resourceId);
+	public void addAssociation(IResource resource, Tag tag) {
+		TagAssociation ta = tagSet.getAssociation(resource);
 		if(ta == null){
-			ta = new TagAssociation(resourceId);
+			ta = new TagAssociation(resource);
 			tagSet.addAssociation(ta);
 		}
 		ta.addTag(tag);
@@ -149,12 +154,11 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		manager.fireTagSetContainerEvent(new TagAssociationEvent(this,resource,TagSetContainerEvent.Type.ADDED,ta,tag));
 	}
 
-	public void importAssociations(String resourceId, String[] tagids) {
-		final IFile file = extractFile(resourceId);
+	public void importAssociations(IResource resource, String[] tagids) {
 		if(file.exists()){
-			TagAssociation assoc = tagSet.getAssociation(resourceId);
+			TagAssociation assoc = tagSet.getAssociation(resource);
 			if(assoc == null){
-				assoc = new TagAssociation();
+				assoc = new TagAssociation(resource);
 				tagSet.addAssociation(assoc);
 			}
 			final Tag[] tags = tagSet.getTags(tagids);
@@ -168,31 +172,31 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		}
 	}
 
-	public final void clearAssociations(IResource resource) {
-		final TagAssociation ta = tagSet.removeAssociations(extractResourceId(resource));
+	public void clearAssociations(IResource resource) {
+		final TagAssociation ta = tagSet.removeAssociations(resource);
 		if(ta != null){
 			save();
 			manager.fireTagSetContainerEvent(new TagAssociationEvent(this,resource,TagSetContainerEvent.Type.REMOVED,ta,null));
 		}
 	}
 
-	public final void removeAssociation(IResource resource, Tag tag){
-		final TagAssociation ta = tagSet.removeAssociation(extractResourceId(resource),tag);
+	public void removeAssociation(IResource resource, Tag tag){
+		final TagAssociation ta = tagSet.removeAssociation(resource,tag);
 		save();
 		manager.fireTagSetContainerEvent(new TagAssociationEvent(this,resource,TagSetContainerEvent.Type.REMOVED,ta,tag));
 	}
 
-	public final void load() throws IOException {
-		if(!tagSetFile.exists()) return;
+	public void load() throws IOException {
+		if(!file.exists()) return;
 
 		Reader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(tagSetFile));
+			reader = new BufferedReader(new FileReader(file));
 			final IMemento memento = XMLMemento.createReadRoot(reader);
 			assertVersion(memento.getString(ATTR_VERSION));
 			read(memento);
 			
-			this.lastModified = tagSetFile.lastModified();
+			this.lastModified = file.lastModified();
 			
 		} catch(Exception ioe){
 			throw new IOException(ioe.getMessage());
@@ -201,10 +205,10 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		}
 	}
 
-	public final void save() {
+	public void save() {
 		if(tagSet == null) return;
 		
-		if(tagSetFile.lastModified() != lastModified){
+		if(file.lastModified() != lastModified){
 			// file has been updated externally since last save
 			System.out.println("TagSet file has been modified externally");
 			
@@ -233,7 +237,7 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		}
 		
 		try {
-			tagSetFile.createNewFile();
+			file.createNewFile();
 
 			final XMLMemento memento = XMLMemento.createWriteRoot(TAG_TAGSET);
 			memento.putString(ATTR_VERSION,VERSION);
@@ -241,7 +245,7 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 
 			Writer writer = null;
 			try {
-				writer = new BufferedWriter(new FileWriter(tagSetFile));
+				writer = new BufferedWriter(new FileWriter(file));
 				memento.save(writer);
 			} catch(IOException ioe){
 				throw ioe;
@@ -249,7 +253,7 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 				IOUtils.closeQuietly(writer);
 			}
 			
-			this.lastModified = tagSetFile.lastModified();
+			this.lastModified = file.lastModified();
 			
 		} catch(IOException ioe){
 			throw new RuntimeException("Unable to save tagset: " + ioe.getMessage(),ioe);	// FIXME: externalize
@@ -315,27 +319,31 @@ abstract class AbstractTagSetContainer implements ITagSetContainer {
 		}
 	}
 
-	protected final void setTagSetFile(File tagSetFile){
-		this.tagSetFile = tagSetFile;
+	protected void setFile(File file){
+		this.file = file;
 	}
 
-	protected final String extractResourceId(IResource rc){
-		return(rc.getFullPath().toPortableString());
+	public boolean hasAssociations(IResource resource) {
+		return(tagSet.hasAssociations(resource));
 	}
 
-	protected final IFile extractFile(String resourceId){
-		return(ResourcesPlugin.getWorkspace().getRoot().getFile(Path.fromPortableString(resourceId)));
+	public TagAssociation getAssociation(IResource resource) {
+		return(tagSet.getAssociation(resource));
 	}
-
-	public final boolean hasAssociations(IResource resource) {
-		return(tagSet.hasAssociations(extractResourceId(resource)));
+	
+	@Override
+	public int hashCode() {
+		return(new HashCodeBuilder(7,13).append(file).toHashCode());
 	}
-
-	public final TagAssociation getAssociation(IResource resource) {
-		return(tagSet.getAssociation(extractResourceId(resource)));
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean eq = false;
+		if(obj instanceof TagSetContainer){
+			eq = new EqualsBuilder().append(((TagSetContainer)obj).file,file).isEquals();
+		}
+		return(eq);
 	}
-
-	protected final TagSetContainerManager getManager(){return(manager);}
 
 	/**
 	 * Used to assert the the version of the incoming data is that required by the loader.

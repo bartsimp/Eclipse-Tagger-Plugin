@@ -39,11 +39,11 @@ public class TaggedResourceLabelDecorator implements ILightweightLabelDecorator,
 	private final List<ILabelProviderListener> labelProviderListeners = new LinkedList<ILabelProviderListener>();
 
 	public TaggedResourceLabelDecorator() {
-		TaggerActivator.getDefault().getTagSetContainerManager().addTagSetContainerListener(this);
+		TaggerActivator.getDefault().getTagSetManager().addTagSetContainerListener(this);
 	}
 
 	public void dispose() {
-		TaggerActivator.getDefault().getTagSetContainerManager().removeTagSetContainerListener(this);
+		TaggerActivator.getDefault().getTagSetManager().removeTagSetContainerListener(this);
 	}
 
 	public void decorate(Object element, IDecoration decoration) {

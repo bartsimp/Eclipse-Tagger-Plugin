@@ -17,6 +17,7 @@ package net.sourceforge.taggerplugin.model;
 
 import java.io.IOException;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMemento;
 
@@ -47,7 +48,7 @@ public interface ITagSetContainer {
 
 	public void addAssociation(IResource resource, Tag tag);
 
-	public void importAssociations(String resourceId, String[] tagIds);
+	public void importAssociations(IResource resource, String[] tagIds);
 
 	public void clearAssociations(IResource resource);
 
@@ -60,4 +61,8 @@ public interface ITagSetContainer {
 	public void write(IMemento memento);
 
 	public void read(IMemento memento);
+	
+	public IFile getFile();
+	
+	public boolean isWorkspaceRelative();
 }

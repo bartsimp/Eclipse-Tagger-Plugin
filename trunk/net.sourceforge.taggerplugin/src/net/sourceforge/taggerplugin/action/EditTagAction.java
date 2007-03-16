@@ -21,7 +21,7 @@ import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.dialog.TagDialog;
 import net.sourceforge.taggerplugin.model.ITagSetContainer;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 import net.sourceforge.taggerplugin.view.TagSetView;
 
 import org.eclipse.jface.action.IAction;
@@ -76,6 +76,6 @@ public class EditTagAction implements IViewActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {}
 	
 	private String[] containerNames(){
-		return TagSetContainerManager.extractContainerNames(Arrays.asList(TaggerActivator.getDefault().getTagSetContainerManager().getTagSetContainers()),false);
+		return TagSetManager.extractContainerNames(Arrays.asList(TaggerActivator.getDefault().getTagSetManager().getTagSetContainers()),false);
 	}
 }

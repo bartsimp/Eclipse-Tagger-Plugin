@@ -41,7 +41,7 @@ public class CompareInput extends CompareEditorInput {
 			
 			// FIXME: this is a big test hack!
 			
-			final ITagSetContainer tsc = TaggerActivator.getDefault().getTagSetContainerManager().getTagSetContainer("test-project-a");
+			final ITagSetContainer tsc = TaggerActivator.getDefault().getTagSetManager().getTagSetContainer("test-project-a");
 			
 			final XMLMemento memento = XMLMemento.createWriteRoot("tag-set");
 			tsc.write(memento);

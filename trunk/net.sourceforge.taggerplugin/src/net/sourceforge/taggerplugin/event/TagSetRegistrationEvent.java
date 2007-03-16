@@ -17,7 +17,7 @@ package net.sourceforge.taggerplugin.event;
 
 import java.util.EventObject;
 
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 
 import org.eclipse.core.resources.IProject;
 
@@ -29,7 +29,7 @@ public class TagSetRegistrationEvent extends EventObject {
 	private Type type;
 	private IProject project;
 	
-	public TagSetRegistrationEvent(TagSetContainerManager manager, Type type, IProject project){
+	public TagSetRegistrationEvent(TagSetManager manager, Type type, IProject project){
 		super(manager);
 		this.type = type;
 		this.project = project;
@@ -37,7 +37,7 @@ public class TagSetRegistrationEvent extends EventObject {
 	
 	public IProject getProject(){return(project);}
 	
-	public TagSetContainerManager getManager(){return((TagSetContainerManager)getSource());}
+	public TagSetManager getManager(){return((TagSetManager)getSource());}
 	
 	public Type getType(){return(type);}
 }

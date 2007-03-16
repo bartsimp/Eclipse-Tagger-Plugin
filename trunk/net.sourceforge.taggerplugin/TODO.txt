@@ -8,6 +8,8 @@
 
 ----- Functionality -----
 
+-	handle non-existant or non-loaded resoruces in associations
+
 -	handle external update of tagset files
 -	handle change of filename/location
 

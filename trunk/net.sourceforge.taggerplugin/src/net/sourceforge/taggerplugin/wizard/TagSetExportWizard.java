@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.model.ITagSetContainer;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -89,8 +89,8 @@ public class TagSetExportWizard extends Wizard implements IExportWizard {
 	}
 
 	private ITagSetContainer[] tagSetContainers(String containerId){
-		final TagSetContainerManager manager = TaggerActivator.getDefault().getTagSetContainerManager();
-		return(containerId.equals(TagSetContainerManager.CONTAINERNAME_ALL) ? manager.getTagSetContainers() : new ITagSetContainer[]{manager.getTagSetContainer(containerId)});
+		final TagSetManager manager = TaggerActivator.getDefault().getTagSetManager();
+		return(containerId.equals(TagSetManager.CONTAINERNAME_ALL) ? manager.getTagSetContainers() : new ITagSetContainer[]{manager.getTagSetContainer(containerId)});
 	}
 
 	/**

@@ -18,7 +18,7 @@ package net.sourceforge.taggerplugin.wizard;
 import java.util.Arrays;
 
 import net.sourceforge.taggerplugin.TaggerActivator;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.wizard.WizardPage;
@@ -67,9 +67,9 @@ class TagSetExportWizardPage extends WizardPage {
 		containerCbo = new Combo(panel,SWT.READ_ONLY);
 		containerCbo.setLayoutData(horizFillGrid(2));
 
-		final TagSetContainerManager manager = TaggerActivator.getDefault().getTagSetContainerManager();
-		containerCbo.setItems(TagSetContainerManager.extractContainerNames(Arrays.asList(manager.getTagSetContainers()),true));
-		containerCbo.setText(TagSetContainerManager.CONTAINERNAME_ALL);
+		final TagSetManager manager = TaggerActivator.getDefault().getTagSetManager();
+		containerCbo.setItems(TagSetManager.extractContainerNames(Arrays.asList(manager.getTagSetContainers()),true));
+		containerCbo.setText(TagSetManager.CONTAINERNAME_ALL);
 		containerCbo.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){dialogChanged();}
 		});
