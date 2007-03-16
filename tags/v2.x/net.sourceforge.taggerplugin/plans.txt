@@ -1,0 +1,18 @@
+workspace-scope
+	-	allow tag/association storage location to be defined
+	
+project-scope
+	-	allow tag/association storage location to be defined (within project only on add of nature)
+	
+-	tags/associations may be shared across multiple projects
+	-	should have import/export to/from project-project
+-	ability to merge tags (in case duplicates created by others)
+	
+-	break out frills plugins into separate project
+-	add quick search (like CTRL-O) where type in tag name to get list of tags (selection opens all tagged)
+
+!	need to handle open/close of project to add/remove to tag/association active data
+!	need to handle external tag/association update (refresh)
+!	provide a conversion tool to automatcially bring users up-to-date with new specs
+
+-	consider integration points with TagSEA
