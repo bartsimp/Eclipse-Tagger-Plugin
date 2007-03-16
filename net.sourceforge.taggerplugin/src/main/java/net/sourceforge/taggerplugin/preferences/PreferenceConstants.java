@@ -19,7 +19,8 @@ public enum PreferenceConstants {
 
 	CONFIRM_CLEAR_ASSOCIATIONS("confirm.clearassociations"),
 	CONFIRM_DELETE_TAG("confirm.deletetag"),
-	POSITION_LABEL_DECORATION("position.labeldecoration");
+	POSITION_LABEL_DECORATION("position.labeldecoration"),
+	TAGSET_FILE_LOCATION("tagset.filelocation");
 
 	private String key;
 

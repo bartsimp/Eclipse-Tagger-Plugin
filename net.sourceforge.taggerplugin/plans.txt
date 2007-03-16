@@ -1,5 +1,10 @@
 ----- v1.3.0 -----
 -	allow specification of tagset file location
+	-	refactor tagset file to store association resource path
+	-	ensure refresh of markers on load
+	-	onchange: reload markers?
+	-	need to create default file at start
+	
 -	add tag associations to tagset view
 -	export tagged files (flatten or maintain)
 !	need icons license
