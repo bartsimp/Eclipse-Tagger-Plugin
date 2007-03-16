@@ -15,10 +15,9 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin;
 
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.ITagSetManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -30,7 +29,7 @@ public class TaggerActivator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "net.sourceforge.taggerplugin";
 
 	private static TaggerActivator plugin;
-	private TagSetContainerManager tagRepositoryManager;
+	private ITagSetManager tagSetManager;
 
 	public TaggerActivator() {
 		plugin = this;
@@ -42,11 +41,10 @@ public class TaggerActivator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
-		tagRepositoryManager = new TagSetContainerManager();
-		tagRepositoryManager.init();
+		final TagSetManager tsm = new TagSetManager();
+		tsm.init();
 		
-		// FIXME: event registers should go in trm
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(tagRepositoryManager, IResourceChangeEvent.POST_CHANGE);
+		this.tagSetManager = tsm;
 	}
 
 	/**
@@ -55,10 +53,9 @@ public class TaggerActivator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(tagRepositoryManager);
-		
-		tagRepositoryManager.destroy();
-		tagRepositoryManager = null;
+		final TagSetManager tsm = (TagSetManager)tagSetManager;
+		tsm.destroy();
+		tagSetManager = null;
 
 		plugin = null;
 	}
@@ -72,7 +69,7 @@ public class TaggerActivator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public TagSetContainerManager getTagSetContainerManager(){
-		return(tagRepositoryManager);
+	public ITagSetManager getTagSetManager(){
+		return(tagSetManager);
 	}
 }

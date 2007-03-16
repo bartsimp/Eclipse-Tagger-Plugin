@@ -21,7 +21,7 @@ import java.util.List;
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 import net.sourceforge.taggerplugin.preference.PreferenceConstants;
 import net.sourceforge.taggerplugin.view.TagSetView;
 
@@ -65,7 +65,7 @@ public class DeleteTagAction implements IViewActionDelegate {
 			}
 			
 			if(!tags.isEmpty() && (!showConfirmation() || confirm(tags.size()))){
-				final TagSetContainerManager manager = TaggerActivator.getDefault().getTagSetContainerManager();
+				final TagSetManager manager = TaggerActivator.getDefault().getTagSetManager();
 				for(Tag tag : tags){
 					manager.getTagSetContainer(tag).removeTag(tag);
 				}

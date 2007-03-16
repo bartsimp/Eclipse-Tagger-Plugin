@@ -15,15 +15,25 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.model;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerLog;
 import net.sourceforge.taggerplugin.TaggerMessages;
 import net.sourceforge.taggerplugin.event.ITagSetContainerListener;
@@ -32,6 +42,8 @@ import net.sourceforge.taggerplugin.event.TagSetContainerEvent;
 import net.sourceforge.taggerplugin.event.TagSetRegistrationEvent;
 import net.sourceforge.taggerplugin.nature.TaggableProjectNature;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -39,23 +51,31 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.XMLMemento;
 
-public class TagSetContainerManager implements IResourceChangeListener {
+public class TagSetManager implements ITagSetManager,IResourceChangeListener {
 
 	public static final String CONTAINERNAME_ALL = "All Listed Containers";
-
+	
+	private static final String TAGATTR_WORKSPACE = "workspace";
+	private static final String TAGATTR_FILE = "file";
+	private static final String TAGATTR_NAME = "name";
+	private static final String TAG_TAGSET = "tagset";
+	private static final String TAG_TAGSETS = "tagsets";
+	private final File tagsetsFile;
 	private final Map<String, ITagSetContainer> tagSetContainers;
 	private final Set<ITagSetRegistrationListener> tagSetRegistrationListeners;
 	private final Set<ITagSetContainerListener> tagSetContainerListeners;
 
-	public TagSetContainerManager(){
+	public TagSetManager(){
 		super();
 		this.tagSetContainers = new HashMap<String, ITagSetContainer>();
 		this.tagSetRegistrationListeners = new HashSet<ITagSetRegistrationListener>();
 		this.tagSetContainerListeners = new HashSet<ITagSetContainerListener>();
+		this.tagsetsFile = TaggerActivator.getDefault().getStateLocation().append("/.tagsets").toFile();
 	}
 
 	public static String[] extractContainerNames(final Collection<ITagSetContainer> tscs, boolean includeAll) {
@@ -68,42 +88,36 @@ public class TagSetContainerManager implements IResourceChangeListener {
 	}
 
 	public void init(){
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		try {
-			ITagSetContainer tsc = new WorkspaceTagSetContainer();
-			tsc.load();
-			tagSetContainers.put(tsc.getName(), tsc);
-		} catch(Exception ioe){
-			final String msg = TaggerMessages.bind(TaggerMessages.TagRepositoryManager_LoadWs_Error, ioe.getMessage());
-			TaggerLog.error(msg, ioe);
-			throw new RuntimeException(msg,ioe);
-		}
-
-		// load the porject tagsets
-		for(IProject project : workspace.getRoot().getProjects()){
+		loadState();
+		
+		// load the tagsets
+		for(ITagSetContainer tsc : tagSetContainers.values()){
 			try {
-				if(project.isOpen() && project.hasNature(TaggableProjectNature.ID)){
-					final ITagSetContainer tsc = new ProjectTagSetContainer(project);
-					tsc.load();
-					tagSetContainers.put(tsc.getName(), tsc);
-				}
+				tsc.load();
 			} catch(Exception ioe){
-				final String msg = TaggerMessages.bind(TaggerMessages.TagRepositoryManager_LoadProj_Error,project.getName(),ioe.getMessage());
+				final String msg = TaggerMessages.bind(TaggerMessages.TagRepositoryManager_LoadProj_Error,tsc.getName(),ioe.getMessage());
 				TaggerLog.error(msg, ioe);
 				throw new RuntimeException(msg,ioe);
 			}
 		}
+		
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 	}
-
+	
 	public void destroy(){
-		try {
-			for(ITagSetContainer tsc : tagSetContainers.values()){
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		
+		saveState();
+		
+		// save all tagsets
+		for(ITagSetContainer tsc : tagSetContainers.values()){
+			try {
 				tsc.save();
+			} catch(Exception ioe){
+				final String msg = TaggerMessages.bind(TaggerMessages.TagRepositoryManager_SaveWs_Error, ioe.getMessage());
+				TaggerLog.error(msg, ioe);
+				throw new RuntimeException(msg,ioe);
 			}
-		} catch(Exception ioe){
-			final String msg = TaggerMessages.bind(TaggerMessages.TagRepositoryManager_SaveWs_Error, ioe.getMessage());
-			TaggerLog.error(msg, ioe);
-			throw new RuntimeException(msg,ioe);
 		}
 	}
 
@@ -121,6 +135,34 @@ public class TagSetContainerManager implements IResourceChangeListener {
 
 	public void removeTagSetRegistrationListener(ITagSetRegistrationListener trml){
 		tagSetRegistrationListeners.remove(trml);
+	}
+	
+	public Tag[] getAssociations(IResource resource){
+		final List<Tag> tags = new LinkedList<Tag>();
+		for(ITagSetContainer tsc : tagSetContainers.values()){
+			final TagAssociation assoc = tsc.getAssociation(resource);
+			if(assoc != null && assoc.hasTags()){
+				tags.addAll(Arrays.asList(assoc.getTags()));	
+			}
+		}
+		return(tags.toArray(new Tag[tags.size()]));
+	}
+	
+	public boolean hasAssociations(IResource resource){
+		boolean has = false;
+		for(ITagSetContainer tsc : tagSetContainers.values()){
+			has = tsc.hasAssociations(resource);
+			if(has){
+				break;
+			}
+		}
+		return(has);
+	}
+	
+	public void clearAssociations(IResource resource){
+		for(ITagSetContainer tsc : tagSetContainers.values()){
+			tsc.clearAssociations(resource);
+		}
 	}
 
 	public void registerTagSet(IProject project){
@@ -163,7 +205,7 @@ public class TagSetContainerManager implements IResourceChangeListener {
 	 * @param tag
 	 * @return
 	 */
-	public ITagSetContainer getTagSetContainer(Tag tag){
+	public ITagSetContainer findTagSetContainer(Tag tag){
 		return(tag.getParent() != null ? tagSetContainers.get(tag.getParent().getId()) : null);
 	}
 
@@ -192,7 +234,7 @@ public class TagSetContainerManager implements IResourceChangeListener {
 			TaggerLog.error("Unable to handle resource change event: " + ce.getMessage(), ce);
 		}
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(7,13).toHashCode();
@@ -200,14 +242,69 @@ public class TagSetContainerManager implements IResourceChangeListener {
 
 	@Override
 	public boolean equals(Object obj) {
-		return(obj instanceof TagSetContainerManager);
+		return(obj instanceof TagSetManager);
+	}
+	
+	private void loadState(){
+		if(tagsetsFile.exists()){
+			Reader reader = null;
+			try {
+				reader = new BufferedReader(new FileReader(tagsetsFile));
+				
+				final XMLMemento memento = XMLMemento.createReadRoot(reader);
+				for(IMemento mem : memento.getChild(TAG_TAGSETS).getChildren(TAG_TAGSET)){
+					final String name = mem.getString(TAGATTR_NAME);
+					final boolean workspaceRel = BooleanUtils.toBoolean(mem.getString(TAGATTR_WORKSPACE));
+					
+					final String filepath = mem.getString(TAGATTR_FILE);
+					final File file = workspaceRel ? new File(TaggerActivator.getDefault().getStateLocation().toFile(),filepath) : new File(filepath);
+					
+					tagSetContainers.put(name, new TagSetContainer(this,name,file,workspaceRel));
+				}
+				
+			} catch(Exception ioe){
+				// FIXME: handle
+				ioe.printStackTrace();
+			} finally {
+				IOUtils.closeQuietly(reader);
+			}	
+		}
+	}
+	
+	private void saveState(){
+		// ensure that the tagset manager file exists
+		if(!tagsetsFile.exists()){
+			// TODO: would it be better to use eclipse filesys? 
+			try {tagsetsFile.createNewFile();} 
+			catch(IOException ioe){ioe.printStackTrace();} // FIXME: do better
+		}
+		
+		// save tagset file
+		final XMLMemento memento = XMLMemento.createWriteRoot(TAG_TAGSETS);
+		for(ITagSetContainer tsc: tagSetContainers.values()){
+			final IMemento mem = memento.createChild(TAG_TAGSET);
+			mem.putString(TAGATTR_NAME,tsc.getName());
+			mem.putString(TAGATTR_FILE, tsc.isWorkspaceRelative() ? tsc.getFile().getFullPath().toPortableString() : tsc.getFile().getLocation().toPortableString());
+			mem.putString(TAGATTR_WORKSPACE, String.valueOf(tsc.isWorkspaceRelative()));
+		}
+		
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(tagsetsFile));
+			memento.save(writer);
+		} catch(IOException ioe){
+			// FIXME: handle
+			ioe.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(writer);
+		}
 	}
 
 	private static class DeltaVisitor implements IResourceDeltaVisitor {
 
-		private final TagSetContainerManager manager;
+		private final TagSetManager manager;
 
-		private DeltaVisitor(TagSetContainerManager manager){
+		private DeltaVisitor(TagSetManager manager){
 			super();
 			this.manager = manager;
 		}
@@ -226,7 +323,7 @@ public class TagSetContainerManager implements IResourceChangeListener {
 
 		private void projectRemoved(final IResourceDelta delta) throws CoreException {
 			final IProject project = (IProject)(delta.getResource()).getAdapter(IProject.class);
-			if(project != null && project.hasNature(TaggableProjectNature.ID)){
+			if(project != null){
 				manager.deregisterTagSet(project);
 			}
 		}
@@ -236,7 +333,7 @@ public class TagSetContainerManager implements IResourceChangeListener {
 			if(project != null){
 				int flags = delta.getFlags();
 				if ((flags & IResourceDelta.OPEN) != 0) {
-					if(project.isOpen() && project.hasNature(TaggableProjectNature.ID)){
+					if(project.isOpen()){
 						// taggable project opened, register the tag set
 						manager.registerTagSet(project);
 					} else if(!project.isOpen()){

@@ -24,17 +24,18 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.eclipse.core.resources.IResource;
 
 class TagSet {
 
 	private String id;
 	private Map<String,Tag> tags;
-	private Map<String,TagAssociation> associations;
+	private Map<IResource,TagAssociation> associations;
 
 	TagSet(){
 		super();
 		this.tags = new HashMap<String,Tag>();
-		this.associations = new HashMap<String,TagAssociation>();
+		this.associations = new HashMap<IResource,TagAssociation>();
 	}
 
 	TagSet(String id){
@@ -85,7 +86,7 @@ class TagSet {
 			ta.removeTag(tag);
 			if(!ta.hasTags()){
 				// remove the assocation when you remove the last tag
-				associations.remove(ta.getResourceId());
+				associations.remove(ta.getResource());
 			}
 		}
 		tags.remove(tag.getId());
@@ -96,16 +97,16 @@ class TagSet {
 		return(tags.get(tagid));
 	}
 
-	TagAssociation removeAssociations(String resourceId){
-		return(associations.remove(resourceId));
+	TagAssociation removeAssociations(IResource resource){
+		return(associations.remove(resource));
 	}
 
-	TagAssociation removeAssociation(String resourceId, Tag tag){
-		final TagAssociation ta = getAssociation(resourceId);
+	TagAssociation removeAssociation(IResource resource, Tag tag){
+		final TagAssociation ta = getAssociation(resource);
 		if(ta != null){
 			ta.removeTag(tag);
 			if(!ta.hasTags()){
-				associations.remove(resourceId);
+				associations.remove(resource);
 			}
 		}
 		return(ta);
@@ -113,11 +114,11 @@ class TagSet {
 
 	void addAssociation(TagAssociation association){
 		association.setParent(this);
-		associations.put(association.getResourceId(),association);
+		associations.put(association.getResource(),association);
 	}
 
-	boolean hasAssociations(String resourceId){
-		return(associations.containsKey(resourceId));
+	boolean hasAssociations(IResource resource){
+		return(associations.containsKey(resource));
 	}
 
 	boolean hasAssociation(Tag tag){
@@ -143,10 +144,10 @@ class TagSet {
 		return(assocs.toArray(new TagAssociation[assocs.size()]));
 	}
 
-	TagAssociation getAssociation(String resourceId){
+	TagAssociation getAssociation(IResource resource){
 		TagAssociation assoc = null;
 		for(TagAssociation ta : associations.values()){
-			if(ta.getResourceId().equals(resourceId)){
+			if(ta.getResource().equals(resource)){
 				assoc = ta;
 				break;
 			}

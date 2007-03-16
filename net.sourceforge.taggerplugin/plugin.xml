@@ -2,14 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         id="net.sourceforge.taggerplugin.Nature"
-         name="%tagger.nature.name"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="net.sourceforge.taggerplugin.nature.TaggableProjectNature"/>
-      </runtime>
-   </extension>
-   <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
@@ -91,15 +83,6 @@
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
-            class="net.sourceforge.taggerplugin.ui.TaggableProjectLabelDecorator"
-            id="net.sourceforge.taggerplugin.decorator.TaggableProject"
-            label="%tagger.decorator.project.label"
-            lightweight="true"
-            location="TOP_RIGHT"
-            objectClass="org.eclipse.core.resources.IProject"
-            state="true"/>
-      <decorator
-            adaptable="true"
             class="net.sourceforge.taggerplugin.ui.TaggedResourceLabelDecorator"
             id="net.sourceforge.taggerplugin.decorator.TaggedResource"
             label="%tagger.decorator.taggable.label"
@@ -164,16 +147,6 @@
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.core.resources.IWorkspace"
-            class="net.sourceforge.taggerplugin.model.TagSetContainerAdapterFactory">
-         <adapter type="net.sourceforge.taggerplugin.model.ITagSetContainer"/>
-      </factory>
-      <factory
-            adaptableType="org.eclipse.core.resources.IProject"
-            class="net.sourceforge.taggerplugin.model.TagSetContainerAdapterFactory">
-         <adapter type="net.sourceforge.taggerplugin.model.ITagSetContainer"/>
-      </factory>
       <factory
             adaptableType="org.eclipse.core.resources.IFile"
             class="net.sourceforge.taggerplugin.model.TaggableResourceAdapterFactory">

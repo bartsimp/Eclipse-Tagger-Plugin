@@ -25,7 +25,7 @@ import net.sourceforge.taggerplugin.dialog.TagDialog;
 import net.sourceforge.taggerplugin.model.ITagSetContainer;
 import net.sourceforge.taggerplugin.model.ITaggableResource;
 import net.sourceforge.taggerplugin.model.Tag;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IAction;
@@ -72,12 +72,12 @@ public class CreateAndAddTagAssociationAction implements IObjectActionDelegate {
 
 			final TagDialog dialog = new TagDialog(activePart.getSite().getShell());
 			dialog.setTagContainerEditable(true);
-			dialog.setTagContainers(TagSetContainerManager.extractContainerNames(map.keySet(),true));
-			dialog.setTagContainerId(TagSetContainerManager.CONTAINERNAME_ALL);
+			dialog.setTagContainers(TagSetManager.extractContainerNames(map.keySet(),true));
+			dialog.setTagContainerId(TagSetManager.CONTAINERNAME_ALL);
 
 			if(dialog.showCreate() == TagDialog.OK){
 				final String containerId = dialog.getTagContainerId();
-				if(containerId.equals(TagSetContainerManager.CONTAINERNAME_ALL)){
+				if(containerId.equals(TagSetManager.CONTAINERNAME_ALL)){
 					for(Entry<ITagSetContainer, Set<ITaggableResource>> entry : map.entrySet()){
 						final Tag newTag = entry.getKey().addTag(dialog.getTagName(),dialog.getTagDescription());
 						for(ITaggableResource itr : entry.getValue()){

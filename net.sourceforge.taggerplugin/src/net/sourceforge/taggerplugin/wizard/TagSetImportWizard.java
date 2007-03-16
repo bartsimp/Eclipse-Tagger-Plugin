@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.dialog.ExceptionDialogFactory;
 import net.sourceforge.taggerplugin.model.ITagSetContainer;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 import net.sourceforge.taggerplugin.util.SynchWithDisplay;
 
 import org.apache.commons.io.IOUtils;
@@ -89,7 +89,7 @@ public class TagSetImportWizard  extends Wizard implements IImportWizard {
 	protected void doFinish(final IProgressMonitor monitor, final File importFile) throws CoreException {
 		if(!importFile.exists()) return;	// TODO: should probably be an error
 
-		final TagSetContainerManager manager = TaggerActivator.getDefault().getTagSetContainerManager();
+		final TagSetManager manager = TaggerActivator.getDefault().getTagSetManager();
 
 		SynchWithDisplay.synch(new Runnable(){
 			public void run() {

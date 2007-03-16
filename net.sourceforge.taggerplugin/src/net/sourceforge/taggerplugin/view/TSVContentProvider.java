@@ -24,7 +24,7 @@ import net.sourceforge.taggerplugin.event.TagSetRegistrationEvent;
 import net.sourceforge.taggerplugin.model.ITagSetContainer;
 import net.sourceforge.taggerplugin.model.Tag;
 import net.sourceforge.taggerplugin.model.TagAssociation;
-import net.sourceforge.taggerplugin.model.TagSetContainerManager;
+import net.sourceforge.taggerplugin.model.TagSetManager;
 import net.sourceforge.taggerplugin.util.SynchWithDisplay;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -35,7 +35,7 @@ import org.eclipse.jface.viewers.Viewer;
 class TSVContentProvider implements ITreeContentProvider, ITagSetContainerListener, ITagSetRegistrationListener {
 
 	private TreeViewer viewer;
-	private TagSetContainerManager manager;
+	private TagSetManager manager;
 
 	TSVContentProvider(){
 		super();
@@ -48,7 +48,7 @@ class TSVContentProvider implements ITreeContentProvider, ITagSetContainerListen
 			manager.removeTagSetRegistrationListener(this);
 		}
 
-		manager = (TagSetContainerManager) newInput;
+		manager = (TagSetManager) newInput;
 
 		if (manager != null){
 			manager.addTagSetContainerListener(this);

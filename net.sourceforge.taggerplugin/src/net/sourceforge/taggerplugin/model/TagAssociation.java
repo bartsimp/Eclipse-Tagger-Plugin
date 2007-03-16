@@ -23,21 +23,17 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.eclipse.core.resources.IResource;
 
 public class TagAssociation {
 
 	private TagSet parent;
-	private String resourceId;
+	private IResource resource;
 	private Set<Tag> tags;
 
-	TagAssociation(){
-		super();
+	TagAssociation(IResource resource){
 		this.tags = new HashSet<Tag>();
-	}
-
-	TagAssociation(String resourceId){
-		this();
-		this.resourceId = resourceId;
+		this.resource = resource;
 	}
 
 	TagSet getParent(){return(parent);}
@@ -52,8 +48,8 @@ public class TagAssociation {
 		return(!tags.isEmpty());
 	}
 
-	public String getResourceId() {
-		return resourceId;
+	public IResource getResource() {
+		return resource;
 	}
 
 	Tag[] getTags(){return(tags.toArray(new Tag[tags.size()]));}
@@ -62,7 +58,7 @@ public class TagAssociation {
 
 	@Override
 	public int hashCode() {
-		return(new HashCodeBuilder(7,13).append(resourceId).append(tags).toHashCode());
+		return(new HashCodeBuilder(7,13).append(resource).append(tags).toHashCode());
 	}
 
 	@Override
@@ -70,14 +66,14 @@ public class TagAssociation {
 		boolean eq = false;
 		if(obj instanceof TagAssociation){
 			final TagAssociation ta = (TagAssociation)obj;
-			eq = new EqualsBuilder().append(ta.resourceId,resourceId).isEquals();
+			eq = new EqualsBuilder().append(ta.resource,resource).isEquals();
 		}
 		return(eq);
 	}
 
 	@Override
 	public String toString() {
-		return(new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE).append(resourceId).toString());
+		return(new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE).append(resource).toString());
 	}
 
 	void addTag(Tag tag){
@@ -88,8 +84,8 @@ public class TagAssociation {
 		this.tags.addAll(Arrays.asList(tags));
 	}
 
-	void setResourceId(String resourceId) {
-		this.resourceId = resourceId;
+	void setResourceId(IResource resource) {
+		this.resource = resource;
 	}
 
 	boolean hasTag(Tag tag){

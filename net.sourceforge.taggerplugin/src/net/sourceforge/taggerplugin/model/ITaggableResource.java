@@ -26,8 +26,6 @@ public interface ITaggableResource {
 	
 	public boolean hasAssociations();
 	
-	public ITagSetContainer getTagSetContainer();
-	
 	public void clearAssociations();
 	
 	public void removeAssociation(Tag tag);
