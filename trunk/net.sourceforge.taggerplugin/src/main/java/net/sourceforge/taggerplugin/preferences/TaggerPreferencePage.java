@@ -15,12 +15,16 @@
 **  **********************************************************************  */
 package net.sourceforge.taggerplugin.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.jface.viewers.IDecoration;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
 import net.sourceforge.taggerplugin.TaggerActivator;
 import net.sourceforge.taggerplugin.TaggerMessages;
+
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.viewers.IDecoration;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class TaggerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -52,6 +56,9 @@ public class TaggerPreferencePage extends FieldEditorPreferencePage implements I
 			},
 			getFieldEditorParent()
 		));
+		
+//		 FIXME: externalize
+		addField(new FileFieldEditor(PreferenceConstants.TAGSET_FILE_LOCATION.getKey(),"TagSet Storage File:",	true,getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {}

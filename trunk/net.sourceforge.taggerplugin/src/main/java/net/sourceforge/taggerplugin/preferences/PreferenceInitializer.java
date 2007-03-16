@@ -28,5 +28,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.CONFIRM_CLEAR_ASSOCIATIONS.getKey(),true);
 		store.setDefault(PreferenceConstants.CONFIRM_DELETE_TAG.getKey(),true);
 		store.setDefault(PreferenceConstants.POSITION_LABEL_DECORATION.getKey(),String.valueOf(IDecoration.TOP_RIGHT));
+		store.setDefault(PreferenceConstants.TAGSET_FILE_LOCATION.getKey(),TaggerActivator.getDefault().getStateLocation().append("tags.xml").toFile().toString());
 	}
 }
