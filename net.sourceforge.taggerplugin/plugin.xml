@@ -194,7 +194,6 @@
       <page
             adaptable="true"
             class="net.sourceforge.taggerplugin.ui.TaggableResourcePropertyPage"
-            icon="icons/tagger_logo_16x16.gif"
             id="net.sourceforge.taggerplugin.TaggedResourceProperties"
             name="%tagger.Properties.name"
             objectClass="org.eclipse.core.resources.IResource"/>
