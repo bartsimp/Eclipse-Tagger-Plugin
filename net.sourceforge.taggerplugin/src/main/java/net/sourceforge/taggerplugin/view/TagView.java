@@ -159,7 +159,15 @@ public class TagView extends ViewPart {
 		}
 
 		public int compare(Tag o1, Tag o2) {
-			if(field.equals(Field.NAME)){
+			if (o1 == null ^ o2 == null) {
+		        return (o1 == null) ? -1 : 1;
+		    }
+
+		    if (o1 == null && o2 == null) {
+		        return 0;
+		    }
+
+		    if(field.equals(Field.NAME)){
 				return(o1.getName().compareTo(o2.getName()));
 			} else {
 				return(o1.getDescription().compareTo(o2.getDescription()));
